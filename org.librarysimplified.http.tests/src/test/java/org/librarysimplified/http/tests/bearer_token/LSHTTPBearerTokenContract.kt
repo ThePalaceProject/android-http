@@ -18,11 +18,11 @@ import org.librarysimplified.http.bearer_token.LSHTTPBearerTokenInterceptors
 import org.librarysimplified.http.tests.LSHTTPTestDirectories
 import org.librarysimplified.http.vanilla.LSHTTPProblemReportParsers
 import org.mockito.Mockito
-import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.argThat
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.inOrder
-import org.mockito.kotlin.mock
+import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.inOrder
+import com.nhaarman.mockitokotlin2.mock
 import java.io.File
 import java.util.concurrent.TimeUnit
 
