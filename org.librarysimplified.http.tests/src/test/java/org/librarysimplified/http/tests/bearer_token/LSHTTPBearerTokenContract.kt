@@ -73,6 +73,7 @@ abstract class LSHTTPBearerTokenContract {
     request.execute().use { response ->
       val status = response.status as LSHTTPResponseStatus.Responded.OK
       Assertions.assertEquals("text/html", status.properties.contentType.fullType)
+      Assertions.assertEquals(null, status.properties.authorization)
     }
   }
 
@@ -113,6 +114,7 @@ abstract class LSHTTPBearerTokenContract {
     request.execute().use { response ->
       val status = response.status as LSHTTPResponseStatus.Responded.OK
       Assertions.assertEquals(200, status.properties.status)
+      Assertions.assertEquals("Bearer abcd", status.properties.authorization?.toHeaderValue())
       Assertions.assertEquals("OK!", String(status.bodyStream!!.readBytes()))
     }
 
@@ -167,6 +169,7 @@ abstract class LSHTTPBearerTokenContract {
     request.execute().use { response ->
       val status = response.status as LSHTTPResponseStatus.Responded.OK
       Assertions.assertEquals(200, status.properties.status)
+      Assertions.assertEquals("Bearer abcd", status.properties.authorization?.toHeaderValue())
       Assertions.assertEquals("OK!", String(status.bodyStream!!.readBytes()))
     }
 
@@ -224,6 +227,7 @@ abstract class LSHTTPBearerTokenContract {
     request.execute().use { response ->
       val status = response.status as LSHTTPResponseStatus.Responded.Error
       Assertions.assertEquals(499, status.properties.status)
+      Assertions.assertEquals(null, status.properties.authorization)
       Assertions.assertTrue(status.properties.message.contains("Bearer token interceptor (LSHTTPBearerTokenInterceptor) parser failed"))
     }
 
@@ -249,6 +253,7 @@ abstract class LSHTTPBearerTokenContract {
       val status = response.status as LSHTTPResponseStatus.Responded.OK
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals("application/epub+zip", status.properties.contentType.fullType)
+      Assertions.assertEquals(null, status.properties.authorization)
       Assertions.assertTrue(status.properties.contentLength ?: 0L >= 270000L)
     }
   }
