@@ -54,7 +54,14 @@ data class LSHTTPResponseProperties(
    * The cookies returned
    */
 
-  val cookies: List<LSHTTPCookie>
+  val cookies: List<LSHTTPCookie>,
+
+  /**
+   * The authorization used to complete the request, if any. This may be a Simplified bearer token
+   * that was transparently negotiated by the client.
+   */
+
+  val authorization: LSHTTPAuthorizationType? = null
 ) {
 
   /**

@@ -12,6 +12,7 @@ import org.joda.time.format.ISODateTimeFormat
 import org.librarysimplified.http.api.LSHTTPCookie
 import org.librarysimplified.http.api.LSHTTPProblemReport
 import org.librarysimplified.http.api.LSHTTPProblemReportParserType
+import org.librarysimplified.http.api.LSHTTPRequestProperties
 import org.librarysimplified.http.api.LSHTTPResponseProperties
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.api.LSHTTPResponseType
@@ -84,7 +85,8 @@ class LSHTTPResponse(
           problemReport = problemReport,
           message = responseMessage,
           headers = response.headers.toMultimap(),
-          cookies = cookies
+          cookies = cookies,
+          authorization = request.tag(LSHTTPRequestProperties::class.java)?.authorization
         )
 
       return when {
