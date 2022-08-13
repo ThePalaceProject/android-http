@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <c:changelog project="org.thepalaceproject.http" xmlns:c="urn:com.io7m.changelog:4.0">
   <c:releases>
-    <c:release date="2022-05-13T00:12:58+00:00" is-open="true" ticket-system="org.nypl.jira" version="1.0.0">
+    <c:release date="2022-08-13T04:52:36+00:00" is-open="false" ticket-system="org.nypl.jira" version="1.0.0">
       <c:changes>
-        <c:change date="2022-05-13T00:12:58+00:00" summary="Added request authorization to response properties."/>
+        <c:change date="2022-05-13T00:00:00+00:00" summary="Added request authorization to response properties."/>
       </c:changes>
     </c:release>
   </c:releases>
