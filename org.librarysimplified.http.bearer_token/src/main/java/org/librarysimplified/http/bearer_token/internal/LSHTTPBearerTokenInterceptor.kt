@@ -2,6 +2,7 @@ package org.librarysimplified.http.bearer_token.internal
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import okhttp3.internal.canReuseConnectionFor
 import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPRequestProperties
 import org.librarysimplified.http.bearer_token.LSHTTPBearerTokenInterceptors.Companion.bearerTokenContentType
@@ -46,18 +47,23 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
          * explicitly by making a new request without authorization information.
          */
 
-        if (innerResponse.isRedirect) {
+        val wasRedirected = !response.request.url.canReuseConnectionFor(newRequest0.url)
+
+        if (innerResponse.isRedirect || (!innerResponse.isSuccessful && wasRedirected)) {
           val target =
             innerResponse.header("Location") ?: innerResponse.request.url.toString()
           this.logger.warn("handling HTTP downgrade redirect explicitly {}", target)
 
-          val properties = newRequest0.tag(LSHTTPRequestProperties::class.java)!!
-          val newProperties = properties.copy(authorization = null)
+          // close the inner response so we can avoid having more than one open
+          innerResponse.close()
+
+          val request0Properties = newRequest0.tag(LSHTTPRequestProperties::class.java)!!
+          val request1Properties = request0Properties.copy(authorization = null)
 
           val newRequest1 =
             newRequest0.newBuilder()
               .removeHeader("Authorization")
-              .tag(LSHTTPRequestProperties::class.java, newProperties)
+              .tag(LSHTTPRequestProperties::class.java, request1Properties)
               .url(target)
               .build()
 
