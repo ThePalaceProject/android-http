@@ -6,10 +6,11 @@
         <c:change date="2022-05-13T00:00:00+00:00" summary="Added request authorization to response properties."/>
       </c:changes>
     </c:release>
-    <c:release date="2022-10-27T17:15:02+00:00" is-open="true" ticket-system="org.nypl.jira" version="1.0.1">
+    <c:release date="2022-11-07T16:09:45+00:00" is-open="true" ticket-system="org.nypl.jira" version="1.0.1">
       <c:changes>
         <c:change date="2022-10-20T00:00:00+00:00" summary="Changed target version to Android 12."/>
-        <c:change date="2022-10-27T17:15:02+00:00" summary="Changed target version to Android 13."/>
+        <c:change date="2022-10-27T00:00:00+00:00" summary="Changed target version to Android 13."/>
+        <c:change date="2022-11-07T16:09:45+00:00" summary="Fixed redirecting bearer token bug."/>
       </c:changes>
     </c:release>
   </c:releases>
