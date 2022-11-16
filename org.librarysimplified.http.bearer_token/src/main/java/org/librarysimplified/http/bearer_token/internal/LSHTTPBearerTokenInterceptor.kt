@@ -57,15 +57,24 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
           innerResponse.close()
 
           proceedWithNewRequest(chain, newRequest0, target)
+        } else if (!innerResponse.isSuccessful && wasRedirected) {
 
           /*
-           * Some books may be hosted on a server that handles the authorization header by itself.
-           * In this case, it may return a bad request response (code 400) because it internally
-           * handled the redirection and didn't return a 302 response code. When this happens we
-           * retry a request but without the authorization header if two conditions are met: the
-           * first request was unsuccessful and there's been a redirection.
+           * Some books may be hosted on a server (e.g. AWS) that errors when an authorization header
+           * is sent. In this case, okhttp may return a bad request response (code 400) because it
+           * internally handled a redirection to that server, and attached the authorization intended
+           * for a host earlier in the redirect chain. When this happens we retry a request but without
+           * the authorization header if two conditions are met: the request was unsuccessful and
+           * there's been a redirection.
+           *
+           * TODO: This can be avoided if we prevent authorization headers from being sent through
+           * redirects where the host changes. This currently happens in LSHTTPRedirectRequestInterceptor,
+           * which copies the request properties (including authorization) to the next request. We would
+           * need to associate the authorization in the properties with an intended host, and only send
+           * an authorization header when the authorization's intended host matches the target host of
+           * the request.
            */
-        } else if (!innerResponse.isSuccessful && wasRedirected) {
+
           val target =
             innerResponse.header("Location") ?: innerResponse.request.url.toString()
           this.logger.warn("handling an unsuccessful redirection {}", target)
