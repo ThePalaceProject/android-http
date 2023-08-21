@@ -31,6 +31,10 @@ repositories {
     mavenCentral()
 }
 
+/*
+ * The deployment directory used to publish artifacts to Maven Central.
+ */
+
 val deployDirectory = "$rootDir/build/maven"
 
 fun property(
@@ -54,30 +58,59 @@ fun propertyInt(
  */
 
 fun configurePublishingFor(project: Project) {
+    val mavenCentralUsername =
+        (project.findProperty("mavenCentralUsername") ?: "") as String
+    val mavenCentralPassword =
+        (project.findProperty("mavenCentralPassword") ?: "") as String
+
+    val versionName = property(project, "VERSION_NAME")
+    val packaging = project.extra["POM_PACKAGING"]
+
     project.publishing {
         publications {
             create<MavenPublication>("MavenPublication") {
-                groupId = property(project,"GROUP")
-                artifactId = property(project,"POM_ARTIFACT_ID")
-                version = property(project,"VERSION_NAME")
+                groupId = property(project, "GROUP")
+                artifactId = property(project, "POM_ARTIFACT_ID")
+                version = versionName
 
                 pom {
-                    name.set(property(project,"POM_NAME"))
-                    description.set(property(project,"POM_DESCRIPTION"))
-                    url.set(property(project,"POM_URL"))
+                    name.set(property(project, "POM_NAME"))
+                    description.set(property(project, "POM_DESCRIPTION"))
+                    url.set(property(project, "POM_URL"))
                     scm {
-                        connection.set(property(project,"POM_SCM_CONNECTION"))
-                        developerConnection.set(property(project,"POM_SCM_DEV_CONNECTION"))
-                        url.set(property(project,"POM_SCM_URL"))
+                        connection.set(property(project, "POM_SCM_CONNECTION"))
+                        developerConnection.set(property(project, "POM_SCM_DEV_CONNECTION"))
+                        url.set(property(project, "POM_SCM_URL"))
                     }
                     licenses {
                         license {
-                            name.set(property(project,"POM_LICENCE_NAME"))
-                            url.set(property(project,"POM_LICENCE_URL"))
+                            name.set(property(project, "POM_LICENCE_NAME"))
+                            url.set(property(project, "POM_LICENCE_URL"))
                         }
                     }
                 }
-                from(components["java"])
+
+                from(
+                    when (packaging) {
+                        "jar" -> {
+                            project.components["java"]
+                        }
+
+                        "aar" -> {
+                            project.components["release"]
+                        }
+
+                        "apk" -> {
+                            project.components["release"]
+                        }
+
+                        else -> {
+                            throw java.lang.IllegalArgumentException(
+                                "Cannot set up publishing for packaging type $packaging"
+                            )
+                        }
+                    }
+                )
             }
         }
 
@@ -85,8 +118,27 @@ fun configurePublishingFor(project: Project) {
             maven {
                 url = uri(deployDirectory)
             }
+            maven {
+                name = "SonatypeCentralSnapshots"
+                url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+
+                credentials {
+                    username = mavenCentralUsername
+                    password = mavenCentralPassword
+                }
+            }
         }
     }
+}
+
+/*
+ * A task that cleans up the Maven deployment directory. The "clean" tasks of
+ * each project are configured to depend upon this tasks. This prevents any
+ * deployment of stale artifacts to remote repositories.
+ */
+
+val cleanTask = task("cleanMavenDeployDirectory", Delete::class) {
+    this.delete.add(deployDirectory)
 }
 
 allprojects {
@@ -111,7 +163,7 @@ allprojects {
              * Configure the JVM toolchain version that we want to use for Kotlin.
              */
 
-            val kotlin : KotlinAndroidProjectExtension =
+            val kotlin: KotlinAndroidProjectExtension =
                 this.extensions["kotlin"] as KotlinAndroidProjectExtension
 
             kotlin.jvmToolchain(17)
@@ -120,7 +172,7 @@ allprojects {
              * Configure the various required Android properties.
              */
 
-            val android : LibraryExtension =
+            val android: LibraryExtension =
                 this.extensions["android"] as LibraryExtension
 
             android.namespace =
@@ -184,11 +236,28 @@ allprojects {
     when (extra["POM_PACKAGING"]) {
         "jar" -> {
             apply(plugin = "maven-publish")
+
             configurePublishingFor(this.project)
         }
 
-        "pom", "aar" -> {
+        "aar" -> {
+            apply(plugin = "maven-publish")
+
+            afterEvaluate {
+                configurePublishingFor(this.project)
+            }
+        }
+
+        "pom" -> {
 
         }
     }
+
+    /*
+     * Configure all "clean" tasks to depend upon the global Maven deployment directory cleaning
+     * task.
+     */
+
+    tasks.matching { task -> task.name == "clean" }
+        .forEach { task -> task.dependsOn(cleanTask) }
 }
