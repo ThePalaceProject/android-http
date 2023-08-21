@@ -14,6 +14,16 @@ plugins {
         .version("8.1.0")
         .apply(false)
 
+    /*
+     * Android Junit5 plugin. Required to run JUnit 5 tests on Android projects.
+     *
+     * https://github.com/mannodermaus/android-junit5
+     */
+
+    id("de.mannodermaus.android-junit5")
+        .version("1.9.3.0")
+        .apply(false)
+
     id("maven-publish")
 }
 
@@ -28,6 +38,14 @@ fun property(
     name: String
 ): String {
     return project.extra[name] as String
+}
+
+fun propertyInt(
+    project: Project,
+    name: String
+): Int {
+    val text = property(project, name)
+    return text.toInt()
 }
 
 /*
@@ -87,6 +105,7 @@ allprojects {
 
             apply(plugin = "com.android.library")
             apply(plugin = "org.jetbrains.kotlin.android")
+            apply(plugin = "de.mannodermaus.android-junit5")
 
             /*
              * Configure the JVM toolchain version that we want to use for Kotlin.
@@ -104,8 +123,39 @@ allprojects {
             val android : LibraryExtension =
                 this.extensions["android"] as LibraryExtension
 
-            android.namespace = property(this, "POM_ARTIFACT_ID")
-            android.compileSdk = 33
+            android.namespace =
+                property(this, "POM_ARTIFACT_ID")
+            android.compileSdk =
+                propertyInt(this, "ANDROID_SDK_COMPILE")
+
+            android.defaultConfig {
+                multiDexEnabled = true
+                minSdk = propertyInt(this@allprojects, "ANDROID_SDK_COMPILE")
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            }
+
+            android.compileOptions {
+                encoding = "UTF-8"
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+
+            android.testOptions {
+                execution = "ANDROIDX_TEST_ORCHESTRATOR"
+                animationsDisabled = true
+
+                /*
+                 * Enable the production of reports for all unit tests.
+                 */
+
+                unitTests {
+                    isIncludeAndroidResources = true
+                    all { test ->
+                        test.reports.html.required = true
+                        test.reports.junitXml.required = true
+                    }
+                }
+            }
         }
 
         "jar" -> {
