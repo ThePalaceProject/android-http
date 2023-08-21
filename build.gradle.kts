@@ -180,7 +180,7 @@ fun configurePublishingFor(project: Project) {
 
 /*
  * A task that cleans up the Maven deployment directory. The "clean" tasks of
- * each project are configured to depend upon this tasks. This prevents any
+ * each project are configured to depend upon this task. This prevents any
  * deployment of stale artifacts to remote repositories.
  */
 
