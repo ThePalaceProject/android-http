@@ -52,6 +52,14 @@ fun propertyInt(
     return text.toInt()
 }
 
+fun propertyBoolean(
+    project: Project,
+    name: String
+): Boolean {
+    val text = property(project, name)
+    return text.toBooleanStrict()
+}
+
 /*
  * Configure Maven publishing. Artifacts are published to a local directory
  * so that they can be pushed to Maven Central in one step using brooklime.
@@ -63,8 +71,22 @@ fun configurePublishingFor(project: Project) {
     val mavenCentralPassword =
         (project.findProperty("mavenCentralPassword") ?: "") as String
 
-    val versionName = property(project, "VERSION_NAME")
-    val packaging = project.extra["POM_PACKAGING"]
+    val versionName =
+        property(project, "VERSION_NAME")
+    val packaging =
+        project.extra["POM_PACKAGING"]
+
+    val publishSources =
+        propertyBoolean(project, "org.thepalaceproject.publishSources")
+
+    /*
+     * Create an empty JavaDoc jar. Required for Maven Central deployments.
+     */
+
+    val taskJavadocEmpty =
+        project.task("JavadocEmptyJar", org.gradle.jvm.tasks.Jar::class) {
+            this.archiveClassifier = "javadoc"
+        }
 
     project.publishing {
         publications {
@@ -89,6 +111,8 @@ fun configurePublishingFor(project: Project) {
                         }
                     }
                 }
+
+                artifact(taskJavadocEmpty)
 
                 from(
                     when (packaging) {
@@ -116,6 +140,7 @@ fun configurePublishingFor(project: Project) {
 
         repositories {
             maven {
+                name = "Directory"
                 url = uri(deployDirectory)
             }
             maven {
@@ -128,6 +153,28 @@ fun configurePublishingFor(project: Project) {
                 }
             }
         }
+    }
+
+    /*
+     * If source publications are disabled in the project properties, it seems that the only
+     * way to stop the Android plugins from publishing sources is to manually "disable" the
+     * publication tasks by deleting all of the actions within the tasks, and then specifying
+     * a dependency on our own task that produces an empty jar file.
+     */
+
+    if (!publishSources) {
+        logger.info("org.thepalaceproject.publishSources is false, so source jars are disabled.")
+
+        val taskSourcesEmpty =
+            project.task("SourcesEmptyJar", org.gradle.jvm.tasks.Jar::class) {
+                this.archiveClassifier = "sources"
+            }
+
+        project.tasks.matching { task -> task.name.endsWith("SourcesJar") }
+            .forEach { task ->
+                task.actions.clear()
+                task.dependsOn.add(taskSourcesEmpty)
+            }
     }
 }
 
@@ -178,11 +225,11 @@ allprojects {
             android.namespace =
                 property(this, "POM_ARTIFACT_ID")
             android.compileSdk =
-                propertyInt(this, "ANDROID_SDK_COMPILE")
+                propertyInt(this, "org.thepalaceproject.androidSDKCompile")
 
             android.defaultConfig {
                 multiDexEnabled = true
-                minSdk = propertyInt(this@allprojects, "ANDROID_SDK_COMPILE")
+                minSdk = propertyInt(this@allprojects, "org.thepalaceproject.androidSDKMinimum")
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
 
@@ -225,6 +272,9 @@ allprojects {
                 testLogging {
                     events("passed")
                 }
+
+                this.reports.html.required = true
+                this.reports.junitXml.required = true
             }
         }
     }
@@ -234,13 +284,7 @@ allprojects {
      */
 
     when (extra["POM_PACKAGING"]) {
-        "jar" -> {
-            apply(plugin = "maven-publish")
-
-            configurePublishingFor(this.project)
-        }
-
-        "aar" -> {
+        "jar", "aar" -> {
             apply(plugin = "maven-publish")
 
             afterEvaluate {
