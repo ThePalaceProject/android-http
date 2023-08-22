@@ -164,13 +164,21 @@ fun configurePublishingFor(project: Project) {
                 name = "Directory"
                 url = uri(palaceDeployDirectory)
             }
-            maven {
-                name = "SonatypeCentralSnapshots"
-                url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
 
-                credentials {
-                    username = mavenCentralUsername
-                    password = mavenCentralPassword
+            /*
+             * Only deploy to the Sonatype snapshots repository if the current version is a
+             * snapshot version.
+             */
+
+            if (versionName.endsWith("-SNAPSHOT")) {
+                maven {
+                    name = "SonatypeCentralSnapshots"
+                    url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+
+                    credentials {
+                        username = mavenCentralUsername
+                        password = mavenCentralPassword
+                    }
                 }
             }
         }
@@ -295,7 +303,7 @@ fun createScandoAnalyzeTask(project: Project): Task {
  * Create a task in the root project that downloads Scando.
  */
 
-lateinit var scandoDownloadTask : Task
+lateinit var scandoDownloadTask: Task
 
 rootProject.afterEvaluate {
     apply(plugin = "de.undercouch.download")
