@@ -382,12 +382,20 @@ allprojects {
              */
 
             afterEvaluate {
-                val verifyActual = createScandoAnalyzeTask(this)
-                verifyActual.dependsOn.add(scandoDownloadTask)
-                verifyActual.dependsOn.add("assembleDebug")
+                val enableSemanticVersionChecks =
+                    propertyBoolean(this, "org.thepalaceproject.checkSemanticVersioning")
 
-                val verifyTask = project.task("verifySemanticVersioning")
-                verifyTask.dependsOn.add(verifyActual)
+                if (enableSemanticVersionChecks) {
+                    val verifyActual = createScandoAnalyzeTask(this)
+                    verifyActual.dependsOn.add(scandoDownloadTask)
+                    verifyActual.dependsOn.add("assembleDebug")
+
+                    val verifyTask = project.task("verifySemanticVersioning")
+                    verifyTask.dependsOn.add(verifyActual)
+                } else {
+                    // Create a do-nothing task to keep interface compatibility.
+                    project.task("verifySemanticVersioning")
+                }
             }
         }
 
