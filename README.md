@@ -1,7 +1,7 @@
 Simplified-Android-HTTP
 =======================
 
-[![Build Status](https://img.shields.io/github/workflow/status/NYPL-Simplified/Simplified-Android-HTTP/Android%20CI%20(Authenticated)?style=flat-square)](https://github.com/NYPL-Simplified/Simplified-Android-HTTP/actions?query=workflow%3A%22Android+CI+%28Authenticated%29%22)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/ThePalaceProject/android-http/.github%2Fworkflows%2Fandroid-main.yml?style=flat-square)](https://github.com/NYPL-Simplified/Simplified-Android-HTTP/actions?query=workflow%3A%22Android+CI+%28Authenticated%29%22)
 [![Maven Central](https://img.shields.io/maven-central/v/org.thepalaceproject.http/org.librarysimplified.http.api?style=flat-square)](https://repo2.maven.org/maven2/org/librarysimplified/http)
 [![Maven Central (snapshot)](https://img.shields.io/nexus/s/org.thepalaceproject.http/org.librarysimplified.http.api?server=https%3A%2F%2Foss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/org/librarysimplified/http/)
 
