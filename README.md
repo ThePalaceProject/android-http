@@ -2,8 +2,8 @@ Simplified-Android-HTTP
 =======================
 
 [![Build Status](https://img.shields.io/github/workflow/status/NYPL-Simplified/Simplified-Android-HTTP/Android%20CI%20(Authenticated)?style=flat-square)](https://github.com/NYPL-Simplified/Simplified-Android-HTTP/actions?query=workflow%3A%22Android+CI+%28Authenticated%29%22)
-[![Maven Central](https://img.shields.io/maven-central/v/org.librarysimplified.http/org.librarysimplified.http.api?style=flat-square)](https://repo2.maven.org/maven2/org/librarysimplified/http)
-[![Maven Central (snapshot)](https://img.shields.io/nexus/s/org.librarysimplified.http/org.librarysimplified.http.api?server=https%3A%2F%2Foss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/org/librarysimplified/http/)
+[![Maven Central](https://img.shields.io/maven-central/v/org.thepalaceproject.http/org.librarysimplified.http.api?style=flat-square)](https://repo2.maven.org/maven2/org/librarysimplified/http)
+[![Maven Central (snapshot)](https://img.shields.io/nexus/s/org.thepalaceproject.http/org.librarysimplified.http.api?server=https%3A%2F%2Foss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/org/librarysimplified/http/)
 
 The NYPL's [Library Simplified](http://www.librarysimplified.org/) Android HTTP client.
 
@@ -48,8 +48,6 @@ $ git submodule update --remote --recursive
 The short version: Install an [Android SDK](#android-sdk) and run:
 
 ~~~
-$ echo "systemProp.org.gradle.internal.publish.checksums.insecure=true" >> "$HOME/.gradle/gradle.properties"
-
 $ ./gradlew clean assembleDebug test
 ~~~
 
@@ -62,7 +60,7 @@ support the use of any other IDE at the moment.
 
 #### JDK
 
-Install a reasonably modern JDK: Java 8 is the current recommendation for Android Studio.
+Install a reasonably modern JDK: Java 17 is the current recommendation for Android Studio.
 
 The `JAVA_HOME` environment variable must be set correctly. You can check what it is set to in
 most shells with `echo $JAVA_HOME`. If that command does not show anything, adding the following
@@ -70,8 +68,8 @@ line to `$HOME/.profile` and then executing `source $HOME/.profile` or opening a
 should suffice:
 
 ~~~w
-# Replace NNN with your particular version of 1.8.0.
-export JAVA_HOME=/path/to/jdk1.8.0_NNN
+# Replace NNN with your particular version of 17.
+export JAVA_HOME=/path/to/jdk17_NNN
 ~~~
 
 You can verify that everything is set up correctly by inspecting the results of both
@@ -79,20 +77,10 @@ You can verify that everything is set up correctly by inspecting the results of 
 
 ~~~
 $ java -version
-openjdk version "1.8.0_222"
-OpenJDK Runtime Environment (build 1.8.0_222-b05)
-OpenJDK 64-Bit Server VM (build 25.222-b05, mixed mode)
+openjdk version "17.0.8" 2023-07-18
+OpenJDK Runtime Environment (build 17.0.8+7)
+OpenJDK 64-Bit Server VM (build 17.0.8+7, mixed mode)
 ~~~
-
-#### Insecure checksums?
-
-Astute readers may have noticed the `org.gradle.internal.publish.checksums.insecure` property
-in the initial build instructions. This is necessary because Gradle 6 currently publishes
-checksums that [Maven Central doesn't like](https://github.com/gradle/gradle/issues/11308#issuecomment-554317655).
-Until Maven Central is updated to accept SHA256 and SHA512 checksums, this flag is necessary.
-As all artifacts published to Maven Central are PGP signed, this is not a serious issue; PGP
-signatures combine integrity checking and authentication, so checksum files are essentially
-redundant nowadays.
 
 ### Branching/Merging
 
