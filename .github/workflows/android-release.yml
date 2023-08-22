@@ -12,6 +12,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 17
+          distribution: temurin
       - name: Finish release
         run: .ci/ci-release-finish.sh --tag
       - name: Build
