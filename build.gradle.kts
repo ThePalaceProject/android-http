@@ -1,4 +1,6 @@
 import com.android.build.gradle.LibraryExtension
+import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
+import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Verify
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 plugins {
@@ -24,6 +26,16 @@ plugins {
         .version("1.9.3.0")
         .apply(false)
 
+    /*
+     * Download plugin. Used to fetch artifacts such as Scando during the build.
+     *
+     * https://plugins.gradle.org/plugin/de.undercouch.download
+     */
+
+    id("de.undercouch.download")
+        .version("5.4.0")
+        .apply(false)
+
     id("maven-publish")
 }
 
@@ -32,10 +44,19 @@ repositories {
 }
 
 /*
- * The deployment directory used to publish artifacts to Maven Central.
+ * The various paths used during the build.
  */
 
-val deployDirectory = "$rootDir/build/maven"
+val palaceRootBuildDirectory =
+    "$rootDir/build"
+val palaceDeployDirectory =
+    "$palaceRootBuildDirectory/maven"
+val palaceScandoJarFile =
+    "$palaceRootBuildDirectory/scando.jar"
+
+/**
+ * Convenience functions to read strongly-typed values from property files.
+ */
 
 fun property(
     project: Project,
@@ -60,7 +81,7 @@ fun propertyBoolean(
     return text.toBooleanStrict()
 }
 
-/*
+/**
  * Configure Maven publishing. Artifacts are published to a local directory
  * so that they can be pushed to Maven Central in one step using brooklime.
  */
@@ -74,7 +95,7 @@ fun configurePublishingFor(project: Project) {
     val versionName =
         property(project, "VERSION_NAME")
     val packaging =
-        project.extra["POM_PACKAGING"]
+        property(project, "POM_PACKAGING")
 
     val publishSources =
         propertyBoolean(project, "org.thepalaceproject.publishSources")
@@ -141,7 +162,7 @@ fun configurePublishingFor(project: Project) {
         repositories {
             maven {
                 name = "Directory"
-                url = uri(deployDirectory)
+                url = uri(palaceDeployDirectory)
             }
             maven {
                 name = "SonatypeCentralSnapshots"
@@ -185,10 +206,110 @@ fun configurePublishingFor(project: Project) {
  */
 
 val cleanTask = task("cleanMavenDeployDirectory", Delete::class) {
-    this.delete.add(deployDirectory)
+    this.delete.add(palaceDeployDirectory)
+}
+
+/**
+ * A function to download and verify the Scando jar file.
+ *
+ * @return The verification task
+ */
+
+fun createScandoDownloadTask(project: Project): Task {
+    val scandoVersion =
+        "1.0.0"
+    val scandoSHA256 =
+        "08fba5fc4bc3b5a49d205a4c38356dc8c7e01f4963adb661b67f9d2ed23751ae"
+    val scandoSource =
+        "https://repo1.maven.org/maven2/com/io7m/scando/com.io7m.scando.cmdline/${scandoVersion}/com.io7m.scando.cmdline-${scandoVersion}-main.jar"
+
+    val scandoMakeDirectory =
+        project.task("ScandoMakeDirectory") {
+            mkdir(palaceRootBuildDirectory)
+        }
+
+    val scandoDownload =
+        project.task("ScandoDownload", Download::class) {
+            src(scandoSource)
+            dest(file(palaceScandoJarFile))
+            overwrite(true)
+            this.dependsOn.add(scandoMakeDirectory)
+        }
+
+    return project.task("ScandoDownloadVerify", Verify::class) {
+        src(file(palaceScandoJarFile))
+        checksum(scandoSHA256)
+        algorithm("SHA-256")
+        this.dependsOn(scandoDownload)
+    }
+}
+
+/**
+ * A task to execute Scando to analyze semantic versioning.
+ */
+
+fun createScandoAnalyzeTask(project: Project): Task {
+    val group =
+        property(project, "GROUP")
+    val artifactId =
+        property(project, "POM_ARTIFACT_ID")
+    val versionCurrent =
+        property(project, "VERSION_NAME")
+    val versionPrevious =
+        property(project, "VERSION_PREVIOUS")
+
+    val oldGroup =
+        group.replace('.', '/')
+    val oldPath =
+        "${oldGroup}/${artifactId}/${versionPrevious}/${artifactId}-${versionPrevious}.aar"
+    val oldUrl =
+        "https://repo1.maven.org/maven2/${oldPath}"
+
+    val commandLineArguments: List<String> = arrayListOf(
+        "java",
+        "-jar",
+        palaceScandoJarFile,
+        "--excludeList",
+        "${project.rootDir}/VERSIONING.txt",
+        "--oldJarUri",
+        oldUrl,
+        "--oldJarVersion",
+        versionPrevious,
+        "--ignoreMissingOld",
+        "--newJar",
+        "${project.buildDir}/outputs/aar/${artifactId}-debug.aar",
+        "--newJarVersion",
+        versionCurrent,
+        "--textReport",
+        "${project.buildDir}/scando-report.txt",
+        "--htmlReport",
+        "${project.buildDir}/scando-report.html"
+    )
+
+    return project.task("ScandoAnalyze", Exec::class) {
+        commandLine = commandLineArguments
+    }
+}
+
+/*
+ * Create a task in the root project that downloads Scando.
+ */
+
+lateinit var scandoDownloadTask : Task
+
+rootProject.afterEvaluate {
+    apply(plugin = "de.undercouch.download")
+    scandoDownloadTask = createScandoDownloadTask(this)
 }
 
 allprojects {
+
+    /*
+     * Configure the project metadata.
+     */
+
+    this.group = property(this, "GROUP")
+    this.version = property(this, "VERSION_NAME")
 
     /*
      * Configure builds and tests for various project types.
@@ -254,6 +375,19 @@ allprojects {
                         test.reports.junitXml.required = true
                     }
                 }
+            }
+
+            /*
+             * Configure semantic versioning analysis.
+             */
+
+            afterEvaluate {
+                val verifyActual = createScandoAnalyzeTask(this)
+                verifyActual.dependsOn.add(scandoDownloadTask)
+                verifyActual.dependsOn.add("assembleDebug")
+
+                val verifyTask = project.task("verifySemanticVersioning")
+                verifyTask.dependsOn.add(verifyActual)
             }
         }
 
