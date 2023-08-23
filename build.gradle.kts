@@ -452,7 +452,7 @@ allprojects {
             val kotlin: KotlinAndroidProjectExtension =
                 this.extensions["kotlin"] as KotlinAndroidProjectExtension
 
-            kotlin.jvmToolchain(17)
+            kotlin.jvmToolchain(11)
 
             /*
              * Configure the various required Android properties.
@@ -473,10 +473,14 @@ allprojects {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
 
+            /*
+             * Produce JDK 11 bytecode.
+             */
+
             android.compileOptions {
                 encoding = "UTF-8"
-                sourceCompatibility = JavaVersion.VERSION_17
-                targetCompatibility = JavaVersion.VERSION_17
+                sourceCompatibility = JavaVersion.VERSION_11
+                targetCompatibility = JavaVersion.VERSION_11
             }
 
             android.testOptions {
