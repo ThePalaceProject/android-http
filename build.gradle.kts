@@ -452,7 +452,7 @@ allprojects {
             val kotlin: KotlinAndroidProjectExtension =
                 this.extensions["kotlin"] as KotlinAndroidProjectExtension
 
-            kotlin.jvmToolchain(17)
+            kotlin.jvmToolchain(11)
 
             /*
              * Configure the various required Android properties.
