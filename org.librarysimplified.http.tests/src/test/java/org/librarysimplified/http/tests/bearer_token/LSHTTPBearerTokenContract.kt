@@ -23,6 +23,7 @@ import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
+import org.junit.jupiter.api.Disabled
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -241,6 +242,7 @@ abstract class LSHTTPBearerTokenContract {
    */
 
   @Test
+  @Disabled("The real URI is no longer usable, and no replacement has been found yet.")
   fun testRealRequest() {
     val clients = this.clients()
     val client = clients.create(this.context, this.configuration)
