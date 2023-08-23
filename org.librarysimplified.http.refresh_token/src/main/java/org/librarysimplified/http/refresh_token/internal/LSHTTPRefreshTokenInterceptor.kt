@@ -73,7 +73,7 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
           chain.proceed(originalRequest)
         }
       } else {
-        originalResponse
+        response
       }
     } else {
       originalResponse
