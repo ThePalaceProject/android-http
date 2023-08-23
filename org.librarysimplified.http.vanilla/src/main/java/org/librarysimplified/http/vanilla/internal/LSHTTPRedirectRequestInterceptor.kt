@@ -5,11 +5,11 @@ import okhttp3.Response
 import org.librarysimplified.http.api.LSHTTPRequestProperties
 
 class LSHTTPRedirectRequestInterceptor(
-  private val modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties
+  private val modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties,
 ) : Interceptor {
 
   override fun intercept(
-    chain: Interceptor.Chain
+    chain: Interceptor.Chain,
   ): Response {
     val request =
       chain.request()

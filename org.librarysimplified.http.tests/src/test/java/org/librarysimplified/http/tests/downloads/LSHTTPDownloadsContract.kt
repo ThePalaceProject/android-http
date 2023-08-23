@@ -45,7 +45,7 @@ abstract class LSHTTPDownloadsContract {
   private lateinit var context: Context
 
   abstract fun clients(
-    parsers: LSHTTPProblemReportParserFactoryType = LSHTTPProblemReportParsers()
+    parsers: LSHTTPProblemReportParserFactoryType = LSHTTPProblemReportParsers(),
   ): LSHTTPClientProviderType
 
   @BeforeEach
@@ -59,7 +59,7 @@ abstract class LSHTTPDownloadsContract {
     this.configuration =
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
-        applicationVersion = "1.0.0"
+        applicationVersion = "1.0.0",
       )
   }
 
@@ -96,7 +96,7 @@ abstract class LSHTTPDownloadsContract {
         request = request,
         outputFile = outputFile,
         onEvent = this::logEvent,
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     val result = LSHTTPDownloads.download(downloadRequest) as DownloadFailed
@@ -128,7 +128,7 @@ abstract class LSHTTPDownloadsContract {
         request = request,
         outputFile = outputFile,
         onEvent = this::logEvent,
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     val result = LSHTTPDownloads.download(downloadRequest) as DownloadFailedExceptionally
@@ -150,7 +150,7 @@ abstract class LSHTTPDownloadsContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("Hello!")
+        .setBody("Hello!"),
     )
 
     val clients = this.clients()
@@ -167,7 +167,7 @@ abstract class LSHTTPDownloadsContract {
         request = request,
         outputFile = outputFile,
         onEvent = this::logEvent,
-        isCancelled = { true }
+        isCancelled = { true },
       )
 
     LSHTTPDownloads.download(downloadRequest) as DownloadCancelled
@@ -188,7 +188,7 @@ abstract class LSHTTPDownloadsContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("Hello!")
+        .setBody("Hello!"),
     )
 
     val clients = this.clients()
@@ -205,7 +205,7 @@ abstract class LSHTTPDownloadsContract {
         request = request,
         outputFile = outputFile,
         onEvent = this::logEvent,
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     val result = LSHTTPDownloads.download(downloadRequest) as DownloadCompletedSuccessfully
@@ -230,7 +230,7 @@ abstract class LSHTTPDownloadsContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("Hello!")
+        .setBody("Hello!"),
     )
 
     val clients = this.clients()
@@ -248,7 +248,7 @@ abstract class LSHTTPDownloadsContract {
         outputFile = outputFile,
         onEvent = this::logEvent,
         isMIMETypeAcceptable = { false },
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     LSHTTPDownloads.download(downloadRequest) as DownloadFailedUnacceptableMIME
@@ -274,7 +274,7 @@ abstract class LSHTTPDownloadsContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setChunkedBody(buffer, 8)
+        .setChunkedBody(buffer, 8),
     )
 
     val clients = this.clients()
@@ -291,7 +291,7 @@ abstract class LSHTTPDownloadsContract {
         request = request,
         outputFile = outputFile,
         onEvent = this::logEvent,
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     val result = LSHTTPDownloads.download(downloadRequest) as DownloadCompletedSuccessfully
@@ -310,7 +310,7 @@ abstract class LSHTTPDownloadsContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("Hello!")
+        .setBody("Hello!"),
     )
 
     val clients = this.clients()
@@ -330,7 +330,7 @@ abstract class LSHTTPDownloadsContract {
         isMIMETypeAcceptable = {
           throw IllegalArgumentException()
         },
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     LSHTTPDownloads.download(downloadRequest) as DownloadFailedExceptionally
@@ -351,7 +351,7 @@ abstract class LSHTTPDownloadsContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("Hello!")
+        .setBody("Hello!"),
     )
 
     this.server.enqueue(
@@ -359,7 +359,7 @@ abstract class LSHTTPDownloadsContract {
         .setResponseCode(302)
         .setHeader("Location", this.serverElsewhere.url("/abc"))
         .setHeader("content-type", "text/html")
-        .setBody("Hello!")
+        .setBody("Hello!"),
     )
 
     val clients = this.clients()
@@ -375,11 +375,12 @@ abstract class LSHTTPDownloadsContract {
       LSHTTPDownloadRequest(
         request = request,
         isMIMETypeAcceptable = {
-          type -> type.fullType == "text/plain"
+            type ->
+          type.fullType == "text/plain"
         },
         outputFile = outputFile,
         onEvent = this::logEvent,
-        isCancelled = { false }
+        isCancelled = { false },
       )
 
     val result = LSHTTPDownloads.download(downloadRequest) as DownloadCompletedSuccessfully

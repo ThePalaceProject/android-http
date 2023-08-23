@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
  */
 
 class LSSimplifiedBearerTokenDeserializers private constructor(
-  private val allowedClasses: Set<String>
+  private val allowedClasses: Set<String>,
 ) : SimpleDeserializers() {
 
   private val logger =
@@ -35,7 +35,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
     config: DeserializationConfig,
     beanDesc: BeanDescription,
     elementTypeDeserializer: TypeDeserializer,
-    elementDeserializer: JsonDeserializer<*>?
+    elementDeserializer: JsonDeserializer<*>?,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.toCanonical())
     return super.findArrayDeserializer(
@@ -43,7 +43,8 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
       config,
       beanDesc,
       elementTypeDeserializer,
-      elementDeserializer)
+      elementDeserializer,
+    )
   }
 
   private fun checkAllowedClass(name: String) {
@@ -57,7 +58,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
   override fun findBeanDeserializer(
     type: JavaType,
     config: DeserializationConfig,
-    beanDesc: BeanDescription
+    beanDesc: BeanDescription,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.rawClass.canonicalName)
     return super.findBeanDeserializer(type, config, beanDesc)
@@ -69,7 +70,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
     config: DeserializationConfig,
     beanDesc: BeanDescription,
     elementTypeDeserializer: TypeDeserializer,
-    elementDeserializer: JsonDeserializer<*>?
+    elementDeserializer: JsonDeserializer<*>?,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.toCanonical())
     return super.findCollectionDeserializer(
@@ -77,7 +78,8 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
       config,
       beanDesc,
       elementTypeDeserializer,
-      elementDeserializer)
+      elementDeserializer,
+    )
   }
 
   @Throws(JsonMappingException::class)
@@ -86,7 +88,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
     config: DeserializationConfig,
     beanDesc: BeanDescription,
     elementTypeDeserializer: TypeDeserializer,
-    elementDeserializer: JsonDeserializer<*>?
+    elementDeserializer: JsonDeserializer<*>?,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.toCanonical())
     return super.findCollectionLikeDeserializer(
@@ -94,14 +96,15 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
       config,
       beanDesc,
       elementTypeDeserializer,
-      elementDeserializer)
+      elementDeserializer,
+    )
   }
 
   @Throws(JsonMappingException::class)
   override fun findEnumDeserializer(
     type: Class<*>,
     config: DeserializationConfig,
-    beanDesc: BeanDescription
+    beanDesc: BeanDescription,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.canonicalName)
     return super.findEnumDeserializer(type, config, beanDesc)
@@ -111,7 +114,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
   override fun findTreeNodeDeserializer(
     nodeType: Class<out JsonNode?>,
     config: DeserializationConfig,
-    beanDesc: BeanDescription
+    beanDesc: BeanDescription,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(nodeType.canonicalName)
     return super.findTreeNodeDeserializer(nodeType, config, beanDesc)
@@ -123,7 +126,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
     config: DeserializationConfig,
     beanDesc: BeanDescription,
     contentTypeDeserializer: TypeDeserializer,
-    contentDeserializer: JsonDeserializer<*>?
+    contentDeserializer: JsonDeserializer<*>?,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(refType.toCanonical())
     return super.findReferenceDeserializer(
@@ -131,7 +134,8 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
       config,
       beanDesc,
       contentTypeDeserializer,
-      contentDeserializer)
+      contentDeserializer,
+    )
   }
 
   @Throws(JsonMappingException::class)
@@ -141,7 +145,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
     beanDesc: BeanDescription,
     keyDeserializer: KeyDeserializer,
     elementTypeDeserializer: TypeDeserializer,
-    elementDeserializer: JsonDeserializer<*>?
+    elementDeserializer: JsonDeserializer<*>?,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.toCanonical())
     return super.findMapDeserializer(
@@ -150,7 +154,8 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
       beanDesc,
       keyDeserializer,
       elementTypeDeserializer,
-      elementDeserializer)
+      elementDeserializer,
+    )
   }
 
   @Throws(JsonMappingException::class)
@@ -160,7 +165,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
     beanDesc: BeanDescription,
     keyDeserializer: KeyDeserializer,
     elementTypeDeserializer: TypeDeserializer,
-    elementDeserializer: JsonDeserializer<*>?
+    elementDeserializer: JsonDeserializer<*>?,
   ): JsonDeserializer<*>? {
     this.checkAllowedClass(type.toCanonical())
     return super.findMapLikeDeserializer(
@@ -169,7 +174,8 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
       beanDesc,
       keyDeserializer,
       elementTypeDeserializer,
-      elementDeserializer)
+      elementDeserializer,
+    )
   }
 
   companion object {
@@ -182,7 +188,7 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
         "java.lang.String",
         "java.math.BigInteger",
         "java.net.URI",
-        "org.librarysimplified.http.bearer_token.LSSimplifiedBearerToken"
+        "org.librarysimplified.http.bearer_token.LSSimplifiedBearerToken",
       )
     }
 

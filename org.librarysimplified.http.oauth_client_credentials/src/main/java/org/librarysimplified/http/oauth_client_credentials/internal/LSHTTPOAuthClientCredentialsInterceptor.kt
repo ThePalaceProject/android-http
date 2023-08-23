@@ -23,12 +23,12 @@ import org.slf4j.LoggerFactory
  */
 
 internal class LSHTTPOAuthClientCredentialsInterceptor(
-  private val tokenRepository: LSHTTPOAuthTokenRepository<RepositoryKey, String>
+  private val tokenRepository: LSHTTPOAuthTokenRepository<RepositoryKey, String>,
 ) : Interceptor {
 
   internal data class RepositoryKey(
     val authenticateURI: String,
-    val originalAuthorization: String
+    val originalAuthorization: String,
   )
 
   private val logger =
@@ -48,7 +48,7 @@ internal class LSHTTPOAuthClientCredentialsInterceptor(
         chain,
         originalRequest,
         authenticateURI,
-        originalAuthorization
+        originalAuthorization,
       )
     }
   }
@@ -57,7 +57,7 @@ internal class LSHTTPOAuthClientCredentialsInterceptor(
     chain: Interceptor.Chain,
     originalRequest: Request,
     authenticateURI: String,
-    originalAuthorization: LSHTTPAuthorizationType
+    originalAuthorization: LSHTTPAuthorizationType,
   ): Response {
     logger.debug("Intercepting request to ${originalRequest.url}.")
 
@@ -74,7 +74,7 @@ internal class LSHTTPOAuthClientCredentialsInterceptor(
   private fun getToken(
     chain: Interceptor.Chain,
     authenticateURI: String,
-    originalAuthorization: LSHTTPAuthorizationType
+    originalAuthorization: LSHTTPAuthorizationType,
   ): String {
     val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
     val key = RepositoryKey(authenticateURI, originalAuthorization.toHeaderValue())
@@ -89,7 +89,7 @@ internal class LSHTTPOAuthClientCredentialsInterceptor(
   private fun proceedWithOAuthToken(
     chain: Interceptor.Chain,
     originalRequest: Request,
-    token: String
+    token: String,
   ): Response {
     // Proceed the request with the access token.
     val newAuthorization =
@@ -106,27 +106,27 @@ internal class LSHTTPOAuthClientCredentialsInterceptor(
     return chain.proceed(newRequest)
   }
 
- private fun fetchToken(
+  private fun fetchToken(
     chain: Interceptor.Chain,
     authenticateURI: String,
-    authorization: LSHTTPAuthorizationType?
-): LSHTTPOAuthClientCredentialsToken {
-  logger.debug("Trying to fetch a new token for $authenticateURI")
+    authorization: LSHTTPAuthorizationType?,
+  ): LSHTTPOAuthClientCredentialsToken {
+    logger.debug("Trying to fetch a new token for $authenticateURI")
 
-  val authRequest = Request.Builder()
-    .url(authenticateURI)
-    .get()
-    .apply { authorization?.let {  header("Authorization", it.toHeaderValue()) } }
-    .build()
+    val authRequest = Request.Builder()
+      .url(authenticateURI)
+      .get()
+      .apply { authorization?.let { header("Authorization", it.toHeaderValue()) } }
+      .build()
 
-  val response =
-    chain.proceed(authRequest)
+    val response =
+      chain.proceed(authRequest)
 
-  val body =
-    response.body
-      ?: throw Exception("A token was expected but an empty body was received from the server.")
+    val body =
+      response.body
+        ?: throw Exception("A token was expected but an empty body was received from the server.")
 
-  return body.byteStream()
-    .use(LSHTTPOAuthClientCredentialsTokenJSON::deserializeFromStream)
+    return body.byteStream()
+      .use(LSHTTPOAuthClientCredentialsTokenJSON::deserializeFromStream)
   }
 }

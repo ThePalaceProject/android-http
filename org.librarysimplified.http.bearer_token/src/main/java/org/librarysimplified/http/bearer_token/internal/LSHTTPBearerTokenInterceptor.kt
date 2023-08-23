@@ -15,7 +15,7 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
     LoggerFactory.getLogger(LSHTTPBearerTokenInterceptor::class.java)
 
   override fun intercept(
-    chain: Interceptor.Chain
+    chain: Interceptor.Chain,
   ): Response {
     val originalRequest = chain.request()
     val response = chain.proceed(originalRequest)
@@ -58,7 +58,6 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
 
           proceedWithNewRequest(chain, newRequest0, target)
         } else if (!innerResponse.isSuccessful && wasRedirected) {
-
           /*
            * Some books may be hosted on a server (e.g. AWS) that errors when an authorization header
            * is sent. In this case, okhttp may return a bad request response (code 400) because it
@@ -97,9 +96,8 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
   private fun proceedWithNewRequest(
     chain: Interceptor.Chain,
     oldRequest: Request,
-    target: String
+    target: String,
   ): Response {
-
     val request0Properties = oldRequest.tag(LSHTTPRequestProperties::class.java)!!
     val request1Properties = request0Properties.copy(authorization = null)
 
@@ -115,7 +113,7 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
 
   private fun errorBadBearerToken(
     response: Response,
-    exception: Exception
+    exception: Exception,
   ): Response {
     this.logger.error("could not parse bearer token: ", exception)
     return response.newBuilder()

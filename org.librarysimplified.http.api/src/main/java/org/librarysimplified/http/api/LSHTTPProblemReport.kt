@@ -10,7 +10,7 @@ data class LSHTTPProblemReport(
   val status: Int?,
   val title: String?,
   val detail: String?,
-  val type: String?
+  val type: String?,
 ) {
 
   /**

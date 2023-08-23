@@ -32,7 +32,7 @@ object LSHTTPTestDirectories {
   fun resourceOf(
     clazz: Class<*> = LSHTTPTestDirectories::class.java,
     output: File,
-    name: String
+    name: String,
   ): File {
     val internal = String.format("/org/librarysimplified/http/tests/%s", name)
     val url = clazz.getResource(internal) ?: throw NoSuchFileException(File(internal))
@@ -46,7 +46,7 @@ object LSHTTPTestDirectories {
   fun resourceStreamOf(
     clazz: Class<*> = LSHTTPTestDirectories::class.java,
     output: File,
-    name: String
+    name: String,
   ): InputStream {
     return resourceOf(clazz, output, name).inputStream()
   }
@@ -54,7 +54,7 @@ object LSHTTPTestDirectories {
   fun stringOf(
     clazz: Class<*> = LSHTTPTestDirectories::class.java,
     output: File,
-    name: String
+    name: String,
   ): String {
     return String(resourceOf(clazz, output, name).inputStream().readBytes())
   }

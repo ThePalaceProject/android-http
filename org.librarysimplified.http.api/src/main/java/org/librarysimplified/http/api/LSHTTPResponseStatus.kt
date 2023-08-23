@@ -38,7 +38,7 @@ sealed class LSHTTPResponseStatus {
 
     data class OK(
       override val properties: LSHTTPResponseProperties,
-      override val bodyStream: InputStream?
+      override val bodyStream: InputStream?,
     ) : Responded()
 
     /**
@@ -47,7 +47,7 @@ sealed class LSHTTPResponseStatus {
 
     data class Error(
       override val properties: LSHTTPResponseProperties,
-      override val bodyStream: InputStream?
+      override val bodyStream: InputStream?,
     ) : Responded()
   }
 
@@ -56,7 +56,7 @@ sealed class LSHTTPResponseStatus {
    */
 
   data class Failed(
-    val exception: Exception
+    val exception: Exception,
   ) : LSHTTPResponseStatus() {
     override val properties: LSHTTPResponseProperties? =
       null

@@ -9,7 +9,7 @@ import org.librarysimplified.http.api.LSHTTPRequestProperties
 object LSOKHTTPRequests {
 
   fun createRequest(
-    properties: LSHTTPRequestProperties
+    properties: LSHTTPRequestProperties,
   ): Request {
     val builder = Request.Builder().url(properties.target.toURL())
     return this.createRequestForBuilder(properties, builder)
@@ -17,7 +17,7 @@ object LSOKHTTPRequests {
 
   fun createRequestForBuilder(
     properties: LSHTTPRequestProperties,
-    builder: Request.Builder
+    builder: Request.Builder,
   ): Request {
     val authorization = properties.authorization
     if (authorization != null) {
@@ -30,7 +30,7 @@ object LSOKHTTPRequests {
       val headerText =
         properties.cookies.entries.fold(
           initial = "",
-          operation = { acc, entry -> acc + "${entry.key}=${entry.value};" }
+          operation = { acc, entry -> acc + "${entry.key}=${entry.value};" },
         )
       builder.header("Cookie", headerText)
     }

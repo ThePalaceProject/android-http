@@ -19,7 +19,7 @@ import org.librarysimplified.http.api.LSHTTPResponseType
 
 class LSHTTPResponse(
   override val status: LSHTTPResponseStatus,
-  val response: Response?
+  val response: Response?,
 ) : LSHTTPResponseType {
 
   companion object {
@@ -30,7 +30,7 @@ class LSHTTPResponse(
 
     fun ofOkResponse(
       client: LSHTTPClient,
-      response: Response
+      response: Response,
     ): LSHTTPResponse {
       val request = response.request
       val responseCode = response.code
@@ -47,7 +47,7 @@ class LSHTTPResponse(
           client = client,
           request = request,
           responseContentType = responseContentType,
-          responseBody = responseBody
+          responseBody = responseBody,
         )
 
       val responseStream =
@@ -64,7 +64,7 @@ class LSHTTPResponse(
             "[{}]: problem report changed status {} -> {}",
             request.url,
             responseCode,
-            status
+            status,
           )
           status
         } else {
@@ -86,7 +86,7 @@ class LSHTTPResponse(
           message = responseMessage,
           headers = response.headers.toMultimap(),
           cookies = cookies,
-          authorization = request.tag(LSHTTPRequestProperties::class.java)?.authorization
+          authorization = request.tag(LSHTTPRequestProperties::class.java)?.authorization,
         )
 
       return when {
@@ -94,29 +94,29 @@ class LSHTTPResponse(
           LSHTTPResponse(
             status = LSHTTPResponseStatus.Responded.Error(
               properties = properties,
-              bodyStream = responseStream
+              bodyStream = responseStream,
             ),
-            response = response
+            response = response,
           )
         }
         adjustedStatus >= 300 -> {
           LSHTTPResponse(
             status = LSHTTPResponseStatus.Responded.Error(
               properties = properties.copy(
-                message = refusedRedirectMessage(properties.header("location"))
+                message = refusedRedirectMessage(properties.header("location")),
               ),
-              bodyStream = responseStream
+              bodyStream = responseStream,
             ),
-            response = response
+            response = response,
           )
         }
         else -> {
           LSHTTPResponse(
             status = LSHTTPResponseStatus.Responded.OK(
               properties = properties,
-              bodyStream = responseStream
+              bodyStream = responseStream,
             ),
-            response = response
+            response = response,
           )
         }
       }
@@ -124,16 +124,15 @@ class LSHTTPResponse(
 
     private fun refusedRedirectMessage(location: String?): String {
       return if (location != null) {
-        "Refused to follow a redirect to ${location}."
+        "Refused to follow a redirect to $location."
       } else {
         "Refused to follow a redirect."
       }
     }
 
     private fun lsCookieOf(
-      cookie: Cookie
+      cookie: Cookie,
     ): LSHTTPCookie {
-
       /*
        * Apparently, anything after December 31, 9999 means "does not expire".
        */
@@ -158,8 +157,8 @@ class LSHTTPResponse(
         attributes = mapOf(
           Pair("domain", cookie.domain),
           Pair("hostOnly", cookie.hostOnly.toString()),
-          Pair("persistent", cookie.persistent.toString())
-        )
+          Pair("persistent", cookie.persistent.toString()),
+        ),
       )
     }
 
@@ -167,7 +166,7 @@ class LSHTTPResponse(
       client: LSHTTPClient,
       request: Request,
       responseContentType: MIMEType,
-      responseBody: ResponseBody?
+      responseBody: ResponseBody?,
     ): LSHTTPProblemReport? {
       val responseType = responseContentType.fullType
       val problemType = LSHTTPMimeTypes.problemReport.fullType
@@ -175,7 +174,7 @@ class LSHTTPResponse(
         try {
           client.problemReportParsers.createParser(
             uri = request.url.toString(),
-            stream = responseBody.byteStream()
+            stream = responseBody.byteStream(),
           ).use(LSHTTPProblemReportParserType::execute)
         } catch (e: Exception) {
           null
@@ -187,7 +186,7 @@ class LSHTTPResponse(
 
     private fun parseResponseContentType(
       client: LSHTTPClient,
-      response: Response
+      response: Response,
     ): MIMEType {
       val contentType =
         response.header("content-type") ?: return LSHTTPMimeTypes.octetStream
@@ -196,7 +195,10 @@ class LSHTTPResponse(
         MIMEParser.parseRaisingException(contentType)
       } catch (e: Exception) {
         client.logger.error(
-          "[{}]: could not parse content type: {}: ", response.request.url, contentType, e
+          "[{}]: could not parse content type: {}: ",
+          response.request.url,
+          contentType,
+          e,
         )
         LSHTTPMimeTypes.octetStream
       }

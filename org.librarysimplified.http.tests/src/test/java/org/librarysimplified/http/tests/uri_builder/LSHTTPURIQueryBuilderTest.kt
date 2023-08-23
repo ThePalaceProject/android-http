@@ -12,7 +12,7 @@ class LSHTTPURIQueryBuilderTest {
     val uri =
       LSHTTPURIQueryBuilder.encodeQuery(
         base = URI.create("http://www.example.com"),
-        parameters = sortedMapOf()
+        parameters = sortedMapOf(),
       )
 
     Assertions.assertEquals("http://www.example.com", uri.toString())
@@ -27,7 +27,7 @@ class LSHTTPURIQueryBuilderTest {
           Pair("a", "x"),
           Pair("b", "y"),
           Pair("c", "z"),
-        )
+        ),
       )
 
     Assertions.assertEquals("http://www.example.com?a=x&b=y&c=z", uri.toString())

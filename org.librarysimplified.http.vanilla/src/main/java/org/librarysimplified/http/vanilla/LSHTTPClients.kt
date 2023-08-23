@@ -7,7 +7,6 @@ import org.librarysimplified.http.api.LSHTTPClientType
 import org.librarysimplified.http.api.LSHTTPProblemReportParserFactoryType
 import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryType
 import org.librarysimplified.http.vanilla.internal.LSHTTPClient
-import org.slf4j.LoggerFactory
 import java.util.ServiceLoader
 
 /**
@@ -16,23 +15,23 @@ import java.util.ServiceLoader
 
 class LSHTTPClients(
   private val problemReportParsers: LSHTTPProblemReportParserFactoryType,
-  private val interceptors: List<LSHTTPInterceptorFactoryType>
+  private val interceptors: List<LSHTTPInterceptorFactoryType>,
 ) : LSHTTPClientProviderType {
 
   constructor() : this(
     problemReportParsers = LSHTTPProblemReportParsers(),
-    interceptors = ServiceLoader.load(LSHTTPInterceptorFactoryType::class.java).toList()
+    interceptors = ServiceLoader.load(LSHTTPInterceptorFactoryType::class.java).toList(),
   )
 
   override fun create(
     context: Context,
-    configuration: LSHTTPClientConfiguration
+    configuration: LSHTTPClientConfiguration,
   ): LSHTTPClientType {
     return LSHTTPClient(
       context = context,
       problemReportParsers = problemReportParsers,
       interceptors = interceptors,
-      configuration = configuration
+      configuration = configuration,
     )
   }
 }

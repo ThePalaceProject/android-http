@@ -6,7 +6,7 @@ class LSHTTPOAuthTokenRepository<K, V> {
 
   data class Expirable<V>(
     val item: V,
-    val expiresAt: LocalDateTime
+    val expiresAt: LocalDateTime,
   )
 
   private val locks: MutableMap<K, Any> =
@@ -24,7 +24,7 @@ class LSHTTPOAuthTokenRepository<K, V> {
     // Get or refresh the item while holding the per-key lock.
     return synchronized(lock) {
       val item = items[key]
-        ?.takeUnless { it.expiresAt < LocalDateTime.now()  }
+        ?.takeUnless { it.expiresAt < LocalDateTime.now() }
         ?: refresh(key).also { items[key] = it }
       item.item
     }

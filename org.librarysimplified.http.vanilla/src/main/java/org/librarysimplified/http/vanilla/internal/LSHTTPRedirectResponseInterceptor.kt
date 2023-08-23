@@ -6,11 +6,11 @@ import org.librarysimplified.http.api.LSHTTPResponseType
 
 class LSHTTPRedirectResponseInterceptor(
   private val client: LSHTTPClient,
-  private val observer: (LSHTTPResponseType) -> Unit
+  private val observer: (LSHTTPResponseType) -> Unit,
 ) : Interceptor {
 
   override fun intercept(
-    chain: Interceptor.Chain
+    chain: Interceptor.Chain,
   ): Response {
     val response = chain.proceed(chain.request())
     this.observer.invoke(LSHTTPResponse.ofOkResponse(this.client, response))

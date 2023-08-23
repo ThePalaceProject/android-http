@@ -62,14 +62,14 @@ val palaceKtlintJarFile =
 
 fun property(
     project: Project,
-    name: String
+    name: String,
 ): String {
     return project.extra[name] as String
 }
 
 fun propertyInt(
     project: Project,
-    name: String
+    name: String,
 ): Int {
     val text = property(project, name)
     return text.toInt()
@@ -77,7 +77,7 @@ fun propertyInt(
 
 fun propertyBoolean(
     project: Project,
-    name: String
+    name: String,
 ): Boolean {
     val text = property(project, name)
     return text.toBooleanStrict()
@@ -153,10 +153,10 @@ fun configurePublishingFor(project: Project) {
 
                         else -> {
                             throw java.lang.IllegalArgumentException(
-                                "Cannot set up publishing for packaging type $packaging"
+                                "Cannot set up publishing for packaging type $packaging",
                             )
                         }
-                    }
+                    },
                 )
             }
         }
@@ -293,7 +293,7 @@ fun createScandoAnalyzeTask(project: Project): Task {
         "--textReport",
         "${project.buildDir}/scando-report.txt",
         "--htmlReport",
-        "${project.buildDir}/scando-report.html"
+        "${project.buildDir}/scando-report.html",
     )
 
     return project.task("ScandoAnalyze", Exec::class) {
@@ -349,21 +349,43 @@ fun createKtlintDownloadTask(project: Project): Task {
 }
 
 /**
- * A task to execute ktlint to analyze semantic versioning.
+ * A task to execute ktlint to check sources.
  */
 
+val ktlintPatterns: List<String> = arrayListOf(
+    "*/src/**/*.kt",
+    "*/build.gradle.kts",
+    "build.gradle.kts",
+    "!*/src/test/**",
+)
+
 fun createKtlintCheckTask(project: Project): Task {
-    val commandLineArguments: List<String> = arrayListOf(
+    val commandLineArguments: ArrayList<String> = arrayListOf(
         "java",
         "-jar",
         palaceKtlintJarFile,
-        "*/src/**/*.kt",
-        "*/build.gradle.kts",
-        "build.gradle.kts",
-        "!*/src/test/**"
     )
+    commandLineArguments.addAll(ktlintPatterns)
 
     return project.task("KtlintCheck", Exec::class) {
+        commandLine = commandLineArguments
+    }
+}
+
+/**
+ * A task to execute ktlint to reformat sources.
+ */
+
+fun createKtlintFormatTask(project: Project): Task {
+    val commandLineArguments: ArrayList<String> = arrayListOf(
+        "java",
+        "-jar",
+        palaceKtlintJarFile,
+        "-F",
+    )
+    commandLineArguments.addAll(ktlintPatterns)
+
+    return project.task("KtlintFormat", Exec::class) {
         commandLine = commandLineArguments
     }
 }
@@ -386,6 +408,14 @@ rootProject.afterEvaluate {
         checkActual.dependsOn.add(ktlintDownloadTask)
         cleanTask.dependsOn.add(checkActual)
     }
+
+    /*
+     * Create a task that can be used to reformat sources. This is purely for manual execution
+     * from the command-line, and is not executed otherwise.
+     */
+
+    val formatTask = createKtlintFormatTask(this)
+    formatTask.dependsOn.add(ktlintDownloadTask)
 }
 
 allprojects {

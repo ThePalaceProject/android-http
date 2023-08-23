@@ -15,5 +15,5 @@ data class LSHTTPCookie(
   val attributes: Map<String, String>,
   val secure: Boolean,
   val httpOnly: Boolean,
-  val expiresAt: LocalDateTime?
+  val expiresAt: LocalDateTime?,
 )

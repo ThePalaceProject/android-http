@@ -12,13 +12,12 @@ import org.librarysimplified.http.vanilla.BuildConfig
 import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryType
 import org.slf4j.LoggerFactory
 import java.net.URI
-import java.util.concurrent.TimeUnit
 
 class LSHTTPClient(
   val context: Context,
   val configuration: LSHTTPClientConfiguration,
   val problemReportParsers: LSHTTPProblemReportParserFactoryType,
-  val interceptors: List<LSHTTPInterceptorFactoryType>
+  val interceptors: List<LSHTTPInterceptorFactoryType>,
 ) : LSHTTPClientType {
 
   internal val logger =
@@ -37,9 +36,8 @@ class LSHTTPClient(
   internal fun createOkClient(
     redirects: LSHTTPRequestBuilderType.AllowRedirects,
     modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)?,
-    observer: ((LSHTTPResponseType) -> Unit)?
+    observer: ((LSHTTPResponseType) -> Unit)?,
   ): OkHttpClient {
-
     val builder = OkHttpClient.Builder()
 
     if (modifier != null) {
@@ -84,7 +82,7 @@ class LSHTTPClient(
     if (tlsOverrides != null) {
       builder.sslSocketFactory(
         sslSocketFactory = tlsOverrides.sslSocketFactory,
-        trustManager = tlsOverrides.trustManager
+        trustManager = tlsOverrides.trustManager,
       )
       builder.hostnameVerifier(tlsOverrides.hostnameVerifier)
     }

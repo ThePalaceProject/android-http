@@ -12,7 +12,7 @@ class LSHTTPRequest(
   private val allowRedirects: AllowRedirects,
   override val properties: LSHTTPRequestProperties,
   private val modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)?,
-  private val observer: ((LSHTTPResponseType) -> Unit)?
+  private val observer: ((LSHTTPResponseType) -> Unit)?,
 ) : LSHTTPRequestType {
 
   private lateinit var request: Request
@@ -25,14 +25,14 @@ class LSHTTPRequest(
       this.client.logger.debug(
         "[{}] creating client with {}",
         this.request.url,
-        this.allowRedirects
+        this.allowRedirects,
       )
 
       val okClient =
         this.client.createOkClient(
           redirects = this.allowRedirects,
           modifier = this.modifier,
-          observer = this.observer
+          observer = this.observer,
         )
       val call = okClient.newCall(this.request)
       val response = call.execute()
@@ -41,11 +41,11 @@ class LSHTTPRequest(
       this.client.logger.error(
         "[{}]: request failed: ",
         this.request.url,
-        e
+        e,
       )
       return LSHTTPResponse(
         status = LSHTTPResponseStatus.Failed(e),
-        response = null
+        response = null,
       )
     }
   }

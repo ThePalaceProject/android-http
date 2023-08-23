@@ -30,7 +30,7 @@ interface LSHTTPRequestBuilderType {
      * Redirects between HTTP and HTTPS are allowed. This is unsafe!
      */
 
-    ALLOW_UNSAFE_REDIRECTS
+    ALLOW_UNSAFE_REDIRECTS,
   }
 
   /**
@@ -39,7 +39,7 @@ interface LSHTTPRequestBuilderType {
 
   fun addHeader(
     name: String,
-    value: String
+    value: String,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -47,7 +47,7 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun removeHeader(
-    name: String
+    name: String,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -55,7 +55,7 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun allowRedirects(
-    redirects: AllowRedirects
+    redirects: AllowRedirects,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -69,12 +69,12 @@ interface LSHTTPRequestBuilderType {
 
     data class Post(
       val body: ByteArray,
-      val contentType: MIMEType
+      val contentType: MIMEType,
     ) : Method()
 
     data class Put(
       val body: ByteArray,
-      val contentType: MIMEType
+      val contentType: MIMEType,
     ) : Method()
   }
 
@@ -83,7 +83,7 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun setMethod(
-    method: Method
+    method: Method,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -94,7 +94,7 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun setAuthorization(
-    authorization: LSHTTPAuthorizationType?
+    authorization: LSHTTPAuthorizationType?,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -103,7 +103,7 @@ interface LSHTTPRequestBuilderType {
 
   fun addCookie(
     name: String,
-    value: String
+    value: String,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -111,7 +111,7 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun removeCookie(
-    name: String
+    name: String,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -133,9 +133,8 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun setRequestModifier(
-    modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties
+    modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties,
   ): LSHTTPRequestBuilderType
-
 
   /**
    * Set an extension property of indefinite type.
@@ -143,7 +142,7 @@ interface LSHTTPRequestBuilderType {
 
   fun setExtensionProperty(
     key: String,
-    value: Any
+    value: Any,
   ): LSHTTPRequestBuilderType
 
   /**
@@ -157,7 +156,7 @@ interface LSHTTPRequestBuilderType {
    */
 
   fun setResponseObserver(
-    observer: (LSHTTPResponseType) -> Unit
+    observer: (LSHTTPResponseType) -> Unit,
   ): LSHTTPRequestBuilderType
 
   /**

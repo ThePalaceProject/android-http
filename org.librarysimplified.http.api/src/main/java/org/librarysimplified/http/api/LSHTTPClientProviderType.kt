@@ -14,6 +14,6 @@ interface LSHTTPClientProviderType {
 
   fun create(
     context: Context,
-    configuration: LSHTTPClientConfiguration
+    configuration: LSHTTPClientConfiguration,
   ): LSHTTPClientType
 }
