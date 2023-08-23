@@ -26,3 +26,6 @@ overdrive.json
 # backup files
 *~
 .ci/*.log
+
+scando.jar
+ktlint.jar
