@@ -12,10 +12,10 @@ class LSSimplifiedRefreshToken(
 
   @JsonIgnore
   @JsonProperty("expiresIn")
-  val expiresIn: Int = 0,
+  val expiresIn: Int? = null,
 
   @JsonIgnore
   @JsonProperty("tokenType")
-  val tokenType: String = "",
+  val tokenType: String? = null,
 
 )
