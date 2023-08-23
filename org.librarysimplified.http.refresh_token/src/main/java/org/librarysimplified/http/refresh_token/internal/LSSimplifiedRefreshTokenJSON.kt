@@ -9,10 +9,8 @@ import java.io.InputStream
 
 object LSSimplifiedRefreshTokenJSON {
   fun deserializeFromStream(
-    stream: InputStream?
+    stream: InputStream
   ): LSSimplifiedRefreshToken {
-    stream ?: throw Exception("Invalid input stream")
-
     val objectMapper = ObjectMapper()
     return try {
       objectMapper.readValue(stream, LSSimplifiedRefreshToken::class.java)

@@ -49,8 +49,9 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
       val response = chain.proceed(newRequest)
       if (response.isSuccessful) {
         try {
+          val bodyStream = response.body?.byteStream() ?: return chain.proceed(originalRequest)
           val accessToken =
-            response.body?.byteStream()
+            bodyStream
               .use(LSSimplifiedRefreshTokenJSON::deserializeFromStream)
               .accessToken
 

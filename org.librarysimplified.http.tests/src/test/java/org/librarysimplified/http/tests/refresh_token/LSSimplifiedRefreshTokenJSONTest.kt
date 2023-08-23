@@ -19,15 +19,6 @@ class LSSimplifiedRefreshTokenJSONTest {
   }
 
   @Test
-  fun testNullInputStream() {
-    val ex = Assertions.assertThrows(Exception::class.java) {
-      LSSimplifiedRefreshTokenJSON.deserializeFromStream(null)
-    }
-
-    assertTrue(ex.message!!.contains("Invalid input stream"))
-  }
-
-  @Test
   fun testInvalidInputStream() {
     val ex = Assertions.assertThrows(Exception::class.java) {
       LSSimplifiedRefreshTokenJSON.deserializeFromStream(ByteArrayInputStream("{}".toByteArray()))
