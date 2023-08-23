@@ -1,24 +1,23 @@
-Simplified-Android-HTTP
-=======================
+android-http
+============
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/ThePalaceProject/android-http/.github%2Fworkflows%2Fandroid-main.yml?style=flat-square)](https://github.com/NYPL-Simplified/Simplified-Android-HTTP/actions?query=workflow%3A%22Android+CI+%28Authenticated%29%22)
 [![Maven Central](https://img.shields.io/maven-central/v/org.thepalaceproject.http/org.librarysimplified.http.api?style=flat-square)](https://repo2.maven.org/maven2/org/librarysimplified/http)
 [![Maven Central (Snapshots)](https://img.shields.io/nexus/s/org.thepalaceproject.http/org.librarysimplified.http.api?server=https%3A%2F%2Fs01.oss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/org/librarysimplified/http/)
 
-The NYPL's [Library Simplified](http://www.librarysimplified.org/) Android HTTP client.
+The Palace Project's Android HTTP client.
 
 ![http](./src/site/resources/skyscraper.jpg?raw=true)
 
-_Image by [Free-Photos](https://pixabay.com/photos/skyscraper-architecture-new-york-1209736/) from [Pixabay](https://pixabay.com/users/Free-Photos-242387/)_
+_Image by [Free-Photos](https://pixabay.com/photos/skyscraper-architecture-new-york-1209736/)
+from [Pixabay](https://pixabay.com/users/Free-Photos-242387/)_
 
 ### What Is This?
 
-The contents of this repository define an API specification and an
-implementation of an opinionated HTTP client for the various _Library
-Simplified_ Android projects. It is intended to implement various policy
-decisions (such as problem report parsing, higher timeout values, etc)
-in a centralized location so that these policies can be enacted across
-all codebases without duplicating code.
+The contents of this repository define an API specification and an implementation of an opinionated 
+HTTP client for the various _Palace Project_ Android projects. It is intended to implement various 
+policy decisions (such as problem report parsing, higher timeout values, etc) in a centralized 
+location so that these policies can be enacted across all codebases without duplicating code.
 
 #### Features
 
@@ -26,18 +25,20 @@ all codebases without duplicating code.
 * Automatic [RFC7807](https://tools.ietf.org/html/rfc7807) problem report parsing
 * Control over redirects
 * Optional integration with [Chucker](https://github.com/ChuckerTeam/chucker)
-* Optional transparent handling of [Library Simplified Bearer Tokens](https://github.com/NYPL-Simplified/Simplified/wiki/OPDSForDistributors#how-it-works)
+* Optional transparent handling
+  of [Library Simplified Bearer Tokens](https://github.com/NYPL-Simplified/Simplified/wiki/OPDSForDistributors#how-it-works)
 * Optional synchronous file downloads with MIME type checking
 * High-coverage automated test suite
 * Easily mocked, strongly-typed Kotlin API
-* API [Semantic Versioning](https://semver.org/spec/v2.0.0.html) enforced with [japicmp](https://github.com/siom79/japicmp)
+* API [Semantic Versioning](https://semver.org/spec/v2.0.0.html) enforced
+  with [japicmp](https://github.com/siom79/japicmp)
 * Apache 2.0 license
 
 ### Building
 
 #### Build!
 
-Make sure you clone this repository with `git clone --recursive`. 
+Make sure you clone this repository with `git clone --recursive`.
 If you forgot to use `--recursive`, then execute:
 
 ```
@@ -106,15 +107,15 @@ due to being private implementation packages.
 The project is heavily modularized in order to keep the separate components as loosely
 coupled as possible. New features should typically be implemented as new modules.
 
-|Module|Description|
-|------|-----------|
-|[org.librarysimplified.http.api](org.librarysimplified.http.api)|Library Simplified HTTP client (API)|
-|[org.librarysimplified.http.bearer_token](org.librarysimplified.http.bearer_token)|Library Simplified HTTP client (Bearer token extension)|
-|[org.librarysimplified.http.chucker](org.librarysimplified.http.chucker)|Library Simplified HTTP client (Chucker extension)|
-|[org.librarysimplified.http.downloads](org.librarysimplified.http.downloads)|Library Simplified HTTP client (File downloads)|
-|[org.librarysimplified.http.tests](org.librarysimplified.http.tests)|Library Simplified HTTP client (Test suite)|
-|[org.librarysimplified.http.uri_builder](org.librarysimplified.http.uri_builder)|Library Simplified HTTP client (URI query builder)|
-|[org.librarysimplified.http.vanilla](org.librarysimplified.http.vanilla)|Library Simplified HTTP client (Vanilla implementation)|
+| Module                                                                             | Description                                             |
+|------------------------------------------------------------------------------------|---------------------------------------------------------|
+| [org.librarysimplified.http.api](org.librarysimplified.http.api)                   | Library Simplified HTTP client (API)                    |
+| [org.librarysimplified.http.bearer_token](org.librarysimplified.http.bearer_token) | Library Simplified HTTP client (Bearer token extension) |
+| [org.librarysimplified.http.chucker](org.librarysimplified.http.chucker)           | Library Simplified HTTP client (Chucker extension)      |
+| [org.librarysimplified.http.downloads](org.librarysimplified.http.downloads)       | Library Simplified HTTP client (File downloads)         |
+| [org.librarysimplified.http.tests](org.librarysimplified.http.tests)               | Library Simplified HTTP client (Test suite)             |
+| [org.librarysimplified.http.uri_builder](org.librarysimplified.http.uri_builder)   | Library Simplified HTTP client (URI query builder)      |
+| [org.librarysimplified.http.vanilla](org.librarysimplified.http.vanilla)           | Library Simplified HTTP client (Vanilla implementation) |
 
 ### License
 
