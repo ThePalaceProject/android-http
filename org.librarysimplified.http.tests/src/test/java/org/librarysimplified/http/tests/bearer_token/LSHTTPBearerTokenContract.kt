@@ -1,11 +1,17 @@
 package org.librarysimplified.http.tests.bearer_token
 
 import android.content.Context
+import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.inOrder
+import com.nhaarman.mockitokotlin2.mock
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
@@ -18,12 +24,6 @@ import org.librarysimplified.http.bearer_token.LSHTTPBearerTokenInterceptors
 import org.librarysimplified.http.tests.LSHTTPTestDirectories
 import org.librarysimplified.http.vanilla.LSHTTPProblemReportParsers
 import org.mockito.Mockito
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.inOrder
-import com.nhaarman.mockitokotlin2.mock
-import org.junit.jupiter.api.Disabled
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -36,7 +36,7 @@ abstract class LSHTTPBearerTokenContract {
   private lateinit var context: Context
 
   abstract fun clients(
-    parsers: LSHTTPProblemReportParserFactoryType = LSHTTPProblemReportParsers()
+    parsers: LSHTTPProblemReportParserFactoryType = LSHTTPProblemReportParsers(),
   ): LSHTTPClientProviderType
 
   @BeforeEach
@@ -49,7 +49,7 @@ abstract class LSHTTPBearerTokenContract {
     this.configuration =
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
-        applicationVersion = "1.0.0"
+        applicationVersion = "1.0.0",
       )
   }
 
@@ -95,15 +95,15 @@ abstract class LSHTTPBearerTokenContract {
   "expires_in": 1000,
   "location": "${this.server.url("/abc")}"
 }
-          """.trimIndent()
-        )
+          """.trimIndent(),
+        ),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("OK!")
+        .setBody("OK!"),
     )
 
     val clients = this.clients()
@@ -143,15 +143,15 @@ abstract class LSHTTPBearerTokenContract {
   "expires_in": 1000,
   "location": "${this.server.url("/abc")}"
 }
-          """.trimIndent()
-        )
+          """.trimIndent(),
+        ),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("OK!")
+        .setBody("OK!"),
     )
 
     val clients = this.clients()
@@ -180,13 +180,17 @@ abstract class LSHTTPBearerTokenContract {
     Assertions.assertEquals("Bearer abcd", sent1.getHeader("Authorization"))
 
     inOrder(requestModifier) {
-      verify(requestModifier).invoke(argThat {
-        authorization!!.toHeaderValue() == "Bearer original_token"
-      })
+      verify(requestModifier).invoke(
+        argThat {
+          authorization!!.toHeaderValue() == "Bearer original_token"
+        },
+      )
 
-      verify(requestModifier).invoke(argThat {
-        authorization!!.toHeaderValue() == "Bearer abcd"
-      })
+      verify(requestModifier).invoke(
+        argThat {
+          authorization!!.toHeaderValue() == "Bearer abcd"
+        },
+      )
     }
   }
 
@@ -208,15 +212,15 @@ abstract class LSHTTPBearerTokenContract {
   with only Leela to talk to. I think he still holds the grudge. You don't think I'm sarcastic, 
   do you?
 }
-          """.trimIndent()
-        )
+          """.trimIndent(),
+        ),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "text/plain")
-        .setBody("OK!")
+        .setBody("OK!"),
     )
 
     val clients = this.clients()

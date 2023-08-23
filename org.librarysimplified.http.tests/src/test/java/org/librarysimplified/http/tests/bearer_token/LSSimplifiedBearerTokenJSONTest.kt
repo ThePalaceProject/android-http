@@ -22,9 +22,12 @@ class LSSimplifiedBearerTokenJSONTest {
   @Test
   fun testRequiredField1() {
     val ex = Assertions.assertThrows(Exception::class.java) {
-      LSSimplifiedBearerTokenJSON.deserializeFromText("""{
+      LSSimplifiedBearerTokenJSON.deserializeFromText(
+        """{
         "access_token": "abcd"
-      }""".trimIndent())
+      }
+        """.trimIndent(),
+      )
     }
 
     assertTrue(ex.message!!.contains("expires_in"))
@@ -33,10 +36,13 @@ class LSSimplifiedBearerTokenJSONTest {
   @Test
   fun testRequiredField2() {
     val ex = Assertions.assertThrows(Exception::class.java) {
-      LSSimplifiedBearerTokenJSON.deserializeFromText("""{
+      LSSimplifiedBearerTokenJSON.deserializeFromText(
+        """{
         "access_token": "abcd",
         "expires_in": 1000
-      }""".trimIndent())
+      }
+        """.trimIndent(),
+      )
     }
 
     assertTrue(ex.message!!.contains("location"))
@@ -45,11 +51,14 @@ class LSSimplifiedBearerTokenJSONTest {
   @Test
   fun badURI0() {
     val ex = Assertions.assertThrows(Exception::class.java) {
-      LSSimplifiedBearerTokenJSON.deserializeFromText("""{
+      LSSimplifiedBearerTokenJSON.deserializeFromText(
+        """{
         "access_token": "abcd",
         "expires_in": 1000,
         "location": " not a uri "
-      }""".trimIndent())
+      }
+        """.trimIndent(),
+      )
     }
 
     assertTrue(ex.message!!.contains("location"))
@@ -58,11 +67,14 @@ class LSSimplifiedBearerTokenJSONTest {
   @Test
   fun ok0() {
     val token =
-      LSSimplifiedBearerTokenJSON.deserializeFromText("""{
+      LSSimplifiedBearerTokenJSON.deserializeFromText(
+        """{
         "access_token": "abcd",
         "expires_in": 1000,
         "location": "https://www.example.com"
-      }""".trimIndent())
+      }
+        """.trimIndent(),
+      )
 
     assertEquals("abcd", token.accessToken)
     assertEquals(BigInteger.valueOf(1000L), token.expiresIn)
@@ -72,11 +84,14 @@ class LSSimplifiedBearerTokenJSONTest {
   @Test
   fun roundTrip0() {
     val token0 =
-      LSSimplifiedBearerTokenJSON.deserializeFromText("""{
+      LSSimplifiedBearerTokenJSON.deserializeFromText(
+        """{
         "access_token": "abcd",
         "expires_in": 1000,
         "location": "https://www.example.com"
-      }""".trimIndent())
+      }
+        """.trimIndent(),
+      )
 
     val token1 =
       LSSimplifiedBearerTokenJSON.deserializeFromText(LSSimplifiedBearerTokenJSON.serializeToText(token0))

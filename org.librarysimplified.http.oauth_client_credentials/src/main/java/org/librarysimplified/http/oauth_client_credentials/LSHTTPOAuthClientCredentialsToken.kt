@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import org.joda.time.LocalDateTime
 import java.math.BigInteger
-import java.net.URI
 
 /**
  * The type of bearer tokens.

@@ -12,7 +12,7 @@ import java.io.InputStream
 class LSHTTPProblemReportParsers : LSHTTPProblemReportParserFactoryType {
   override fun createParser(
     uri: String,
-    stream: InputStream
+    stream: InputStream,
   ): LSHTTPProblemReportParserType {
     return LSHTTPProblemReportParser(uri, stream)
   }

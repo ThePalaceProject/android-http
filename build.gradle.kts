@@ -52,7 +52,9 @@ val palaceRootBuildDirectory =
 val palaceDeployDirectory =
     "$palaceRootBuildDirectory/maven"
 val palaceScandoJarFile =
-    "$palaceRootBuildDirectory/scando.jar"
+    "$rootDir/scando.jar"
+val palaceKtlintJarFile =
+    "$rootDir/ktlint.jar"
 
 /**
  * Convenience functions to read strongly-typed values from property files.
@@ -60,14 +62,14 @@ val palaceScandoJarFile =
 
 fun property(
     project: Project,
-    name: String
+    name: String,
 ): String {
     return project.extra[name] as String
 }
 
 fun propertyInt(
     project: Project,
-    name: String
+    name: String,
 ): Int {
     val text = property(project, name)
     return text.toInt()
@@ -75,7 +77,7 @@ fun propertyInt(
 
 fun propertyBoolean(
     project: Project,
-    name: String
+    name: String,
 ): Boolean {
     val text = property(project, name)
     return text.toBooleanStrict()
@@ -98,7 +100,7 @@ fun configurePublishingFor(project: Project) {
         property(project, "POM_PACKAGING")
 
     val publishSources =
-        propertyBoolean(project, "org.thepalaceproject.publishSources")
+        propertyBoolean(project, "org.thepalaceproject.build.publishSources")
 
     /*
      * Create an empty JavaDoc jar. Required for Maven Central deployments.
@@ -151,10 +153,10 @@ fun configurePublishingFor(project: Project) {
 
                         else -> {
                             throw java.lang.IllegalArgumentException(
-                                "Cannot set up publishing for packaging type $packaging"
+                                "Cannot set up publishing for packaging type $packaging",
                             )
                         }
-                    }
+                    },
                 )
             }
         }
@@ -192,7 +194,7 @@ fun configurePublishingFor(project: Project) {
      */
 
     if (!publishSources) {
-        logger.info("org.thepalaceproject.publishSources is false, so source jars are disabled.")
+        logger.info("org.thepalaceproject.build.publishSources is false, so source jars are disabled.")
 
         val taskSourcesEmpty =
             project.task("SourcesEmptyJar", org.gradle.jvm.tasks.Jar::class) {
@@ -229,7 +231,7 @@ fun createScandoDownloadTask(project: Project): Task {
     val scandoSHA256 =
         "08fba5fc4bc3b5a49d205a4c38356dc8c7e01f4963adb661b67f9d2ed23751ae"
     val scandoSource =
-        "https://repo1.maven.org/maven2/com/io7m/scando/com.io7m.scando.cmdline/${scandoVersion}/com.io7m.scando.cmdline-${scandoVersion}-main.jar"
+        "https://repo1.maven.org/maven2/com/io7m/scando/com.io7m.scando.cmdline/$scandoVersion/com.io7m.scando.cmdline-$scandoVersion-main.jar"
 
     val scandoMakeDirectory =
         project.task("ScandoMakeDirectory") {
@@ -269,9 +271,9 @@ fun createScandoAnalyzeTask(project: Project): Task {
     val oldGroup =
         group.replace('.', '/')
     val oldPath =
-        "${oldGroup}/${artifactId}/${versionPrevious}/${artifactId}-${versionPrevious}.aar"
+        "$oldGroup/$artifactId/$versionPrevious/$artifactId-$versionPrevious.aar"
     val oldUrl =
-        "https://repo1.maven.org/maven2/${oldPath}"
+        "https://repo1.maven.org/maven2/$oldPath"
 
     val commandLineArguments: List<String> = arrayListOf(
         "java",
@@ -285,13 +287,13 @@ fun createScandoAnalyzeTask(project: Project): Task {
         versionPrevious,
         "--ignoreMissingOld",
         "--newJar",
-        "${project.buildDir}/outputs/aar/${artifactId}-debug.aar",
+        "${project.buildDir}/outputs/aar/$artifactId-debug.aar",
         "--newJarVersion",
         versionCurrent,
         "--textReport",
         "${project.buildDir}/scando-report.txt",
         "--htmlReport",
-        "${project.buildDir}/scando-report.html"
+        "${project.buildDir}/scando-report.html",
     )
 
     return project.task("ScandoAnalyze", Exec::class) {
@@ -310,14 +312,122 @@ rootProject.afterEvaluate {
     scandoDownloadTask = createScandoDownloadTask(this)
 }
 
+/**
+ * A function to download and verify the ktlint jar file.
+ *
+ * @return The verification task
+ */
+
+fun createKtlintDownloadTask(project: Project): Task {
+    val ktlintVersion =
+        "0.50.0"
+    val ktlintSHA256 =
+        "c704fbc28305bb472511a1e98a7e0b014aa13378a571b716bbcf9d99d59a5092"
+    val ktlintSource =
+        "https://repo1.maven.org/maven2/com/pinterest/ktlint/$ktlintVersion/ktlint-$ktlintVersion-all.jar"
+
+    val ktlintMakeDirectory =
+        project.task("KtlintMakeDirectory") {
+            mkdir(palaceRootBuildDirectory)
+        }
+
+    val ktlintDownload =
+        project.task("KtlintDownload", Download::class) {
+            src(ktlintSource)
+            dest(file(palaceKtlintJarFile))
+            overwrite(true)
+            onlyIfModified(true)
+            this.dependsOn.add(ktlintMakeDirectory)
+        }
+
+    return project.task("KtlintDownloadVerify", Verify::class) {
+        src(file(palaceKtlintJarFile))
+        checksum(ktlintSHA256)
+        algorithm("SHA-256")
+        this.dependsOn(ktlintDownload)
+    }
+}
+
+/**
+ * A task to execute ktlint to check sources.
+ */
+
+val ktlintPatterns: List<String> = arrayListOf(
+    "*/src/**/*.kt",
+    "*/build.gradle.kts",
+    "build.gradle.kts",
+    "!*/src/test/**",
+)
+
+fun createKtlintCheckTask(project: Project): Task {
+    val commandLineArguments: ArrayList<String> = arrayListOf(
+        "java",
+        "-jar",
+        palaceKtlintJarFile,
+    )
+    commandLineArguments.addAll(ktlintPatterns)
+
+    return project.task("KtlintCheck", Exec::class) {
+        commandLine = commandLineArguments
+    }
+}
+
+/**
+ * A task to execute ktlint to reformat sources.
+ */
+
+fun createKtlintFormatTask(project: Project): Task {
+    val commandLineArguments: ArrayList<String> = arrayListOf(
+        "java",
+        "-jar",
+        palaceKtlintJarFile,
+        "-F",
+    )
+    commandLineArguments.addAll(ktlintPatterns)
+
+    return project.task("KtlintFormat", Exec::class) {
+        commandLine = commandLineArguments
+    }
+}
+
+/*
+ * Create a task in the root project that downloads ktlint.
+ */
+
+lateinit var ktlintDownloadTask: Task
+
+rootProject.afterEvaluate {
+    apply(plugin = "de.undercouch.download")
+    ktlintDownloadTask = createKtlintDownloadTask(this)
+
+    val enableKtlintChecks =
+        propertyBoolean(this, "org.thepalaceproject.build.enableKtLint")
+
+    if (enableKtlintChecks) {
+        val checkActual = createKtlintCheckTask(this)
+        checkActual.dependsOn.add(ktlintDownloadTask)
+        cleanTask.dependsOn.add(checkActual)
+    }
+
+    /*
+     * Create a task that can be used to reformat sources. This is purely for manual execution
+     * from the command-line, and is not executed otherwise.
+     */
+
+    val formatTask = createKtlintFormatTask(this)
+    formatTask.dependsOn.add(ktlintDownloadTask)
+}
+
 allprojects {
 
     /*
      * Configure the project metadata.
      */
 
-    this.group = property(this, "GROUP")
-    this.version = property(this, "VERSION_NAME")
+    this.group =
+        property(this, "GROUP")
+    this.version =
+        property(this, "VERSION_NAME")
 
     /*
      * Configure builds and tests for various project types.
@@ -354,11 +464,12 @@ allprojects {
             android.namespace =
                 property(this, "POM_ARTIFACT_ID")
             android.compileSdk =
-                propertyInt(this, "org.thepalaceproject.androidSDKCompile")
+                propertyInt(this, "org.thepalaceproject.build.androidSDKCompile")
 
             android.defaultConfig {
                 multiDexEnabled = true
-                minSdk = propertyInt(this@allprojects, "org.thepalaceproject.androidSDKMinimum")
+                minSdk =
+                    propertyInt(this@allprojects, "org.thepalaceproject.build.androidSDKMinimum")
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
 
@@ -391,7 +502,7 @@ allprojects {
 
             afterEvaluate {
                 val enableSemanticVersionChecks =
-                    propertyBoolean(this, "org.thepalaceproject.checkSemanticVersioning")
+                    propertyBoolean(this, "org.thepalaceproject.build.checkSemanticVersioning")
 
                 if (enableSemanticVersionChecks) {
                     val verifyActual = createScandoAnalyzeTask(this)
@@ -440,10 +551,6 @@ allprojects {
             afterEvaluate {
                 configurePublishingFor(this.project)
             }
-        }
-
-        "pom" -> {
-
         }
     }
 

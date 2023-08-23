@@ -24,7 +24,7 @@ sealed class LSHTTPDownloadState {
   data class DownloadReceiving(
     val expectedSize: Long?,
     val receivedSize: Long,
-    val bytesPerSecond: Long
+    val bytesPerSecond: Long,
   ) : LSHTTPDownloadState()
 
   /**
@@ -61,7 +61,7 @@ sealed class LSHTTPDownloadState {
        */
 
       data class DownloadFailedServer(
-        override val responseStatus: LSHTTPResponseStatus.Responded
+        override val responseStatus: LSHTTPResponseStatus.Responded,
       ) : DownloadFailed()
 
       /**
@@ -73,7 +73,7 @@ sealed class LSHTTPDownloadState {
 
       data class DownloadFailedUnacceptableMIME(
         override val responseStatus: LSHTTPResponseStatus,
-        val exception: Throwable
+        val exception: Throwable,
       ) : DownloadFailed()
 
       /**
@@ -82,7 +82,7 @@ sealed class LSHTTPDownloadState {
 
       data class DownloadFailedExceptionally(
         override val responseStatus: LSHTTPResponseStatus?,
-        val exception: Throwable
+        val exception: Throwable,
       ) : DownloadFailed()
     }
 
@@ -92,7 +92,7 @@ sealed class LSHTTPDownloadState {
 
     data class DownloadCompletedSuccessfully(
       override val responseStatus: LSHTTPResponseStatus,
-      val receivedSize: Long
+      val receivedSize: Long,
     ) : LSHTTPDownloadResult()
   }
 }

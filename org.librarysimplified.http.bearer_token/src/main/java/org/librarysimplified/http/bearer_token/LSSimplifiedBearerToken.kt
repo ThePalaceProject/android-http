@@ -19,7 +19,7 @@ data class LSSimplifiedBearerToken(
   val expiresIn: BigInteger,
 
   @JsonProperty(value = "location", required = true)
-  val location: URI
+  val location: URI,
 ) {
 
   /**

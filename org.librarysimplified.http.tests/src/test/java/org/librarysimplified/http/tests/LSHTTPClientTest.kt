@@ -8,7 +8,7 @@ class LSHTTPClientTest : LSHTTPClientContract() {
   override fun clients(parsers: LSHTTPProblemReportParserFactoryType): LSHTTPClientProviderType {
     return LSHTTPClients(
       parsers,
-      listOf()
+      listOf(),
     )
   }
 }

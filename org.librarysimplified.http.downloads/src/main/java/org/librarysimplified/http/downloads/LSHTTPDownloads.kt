@@ -14,7 +14,7 @@ object LSHTTPDownloads {
    */
 
   fun download(
-    request: LSHTTPDownloadRequest
+    request: LSHTTPDownloadRequest,
   ): LSHTTPDownloadResult {
     return this.create(request).execute()
   }
@@ -25,7 +25,7 @@ object LSHTTPDownloads {
    */
 
   fun create(
-    request: LSHTTPDownloadRequest
+    request: LSHTTPDownloadRequest,
   ): LSHTTPDownloadType {
     return LSHTTPDownload(request)
   }

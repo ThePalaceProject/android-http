@@ -9,7 +9,7 @@ class LSHTTPBearerTokenTest : LSHTTPBearerTokenContract() {
   override fun clients(parsers: LSHTTPProblemReportParserFactoryType): LSHTTPClientProviderType {
     return LSHTTPClients(
       parsers,
-      listOf(LSHTTPBearerTokenInterceptors())
+      listOf(LSHTTPBearerTokenInterceptors()),
     )
   }
 }

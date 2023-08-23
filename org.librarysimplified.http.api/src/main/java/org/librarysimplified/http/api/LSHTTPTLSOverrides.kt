@@ -28,5 +28,5 @@ data class LSHTTPTLSOverrides(
    * The verifier used to check hostnames.
    */
 
-  val hostnameVerifier: HostnameVerifier
+  val hostnameVerifier: HostnameVerifier,
 )

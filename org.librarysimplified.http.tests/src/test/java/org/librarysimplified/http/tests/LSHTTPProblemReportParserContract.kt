@@ -27,7 +27,7 @@ abstract class LSHTTPProblemReportParserContract {
     val status =
       parsers.createParser(
         "urn:test",
-        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "valid0.json")
+        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "valid0.json"),
       ).use(LSHTTPProblemReportParserType::execute)
 
     Assertions.assertEquals("https://example.com/probs/out-of-credit", status.type)
@@ -42,7 +42,7 @@ abstract class LSHTTPProblemReportParserContract {
     val status =
       parsers.createParser(
         "urn:test",
-        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "valid1.json")
+        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "valid1.json"),
       ).use(LSHTTPProblemReportParserType::execute)
 
     Assertions.assertEquals(null, status.type)
@@ -58,7 +58,7 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertThrows(IOException::class.java) {
       parsers.createParser(
         "urn:test",
-        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "invalid0.json")
+        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "invalid0.json"),
       ).use(LSHTTPProblemReportParserType::execute)
     }
   }
@@ -70,7 +70,7 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertThrows(IOException::class.java) {
       parsers.createParser(
         "urn:test",
-        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "invalid1.json")
+        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "invalid1.json"),
       ).use(LSHTTPProblemReportParserType::execute)
     }
   }

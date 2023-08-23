@@ -52,5 +52,5 @@ data class LSHTTPDownloadRequest(
 
   val clock: () -> Instant = {
     Instant.now()
-  }
+  },
 )

@@ -14,7 +14,7 @@ object LSSimplifiedBearerTokenJSON {
 
   fun serializeToJSON(
     objectMapper: ObjectMapper,
-    token: LSSimplifiedBearerToken
+    token: LSSimplifiedBearerToken,
   ): ObjectNode {
     val node = objectMapper.createObjectNode()
     node.put("access_token", token.accessToken)
@@ -25,7 +25,7 @@ object LSSimplifiedBearerTokenJSON {
 
   fun serializeToText(
     objectMapper: ObjectMapper,
-    token: LSSimplifiedBearerToken
+    token: LSSimplifiedBearerToken,
   ): String {
     return ByteArrayOutputStream().use { stream ->
       val writer = objectMapper.writerWithDefaultPrettyPrinter()
@@ -35,17 +35,17 @@ object LSSimplifiedBearerTokenJSON {
   }
 
   fun serializeToText(
-    token: LSSimplifiedBearerToken
+    token: LSSimplifiedBearerToken,
   ): String {
     return serializeToText(
       objectMapper = LSSimplifiedBearerTokenObjectMappers.createObjectMapper(),
-      token = token
+      token = token,
     )
   }
 
   fun deserializeFromStream(
     objectMapper: ObjectMapper,
-    stream: InputStream
+    stream: InputStream,
   ): LSSimplifiedBearerToken {
     val factory = objectMapper.factory
     return factory.createParser(stream).use {
@@ -54,30 +54,30 @@ object LSSimplifiedBearerTokenJSON {
   }
 
   fun deserializeFromStream(
-    stream: InputStream
+    stream: InputStream,
   ): LSSimplifiedBearerToken {
     return deserializeFromStream(
       objectMapper = LSSimplifiedBearerTokenObjectMappers.createObjectMapper(),
-      stream = stream
+      stream = stream,
     )
   }
 
   fun deserializeFromText(
     objectMapper: ObjectMapper,
-    text: String
+    text: String,
   ): LSSimplifiedBearerToken {
     return deserializeFromStream(
       objectMapper = objectMapper,
-      stream = text.byteInputStream()
+      stream = text.byteInputStream(),
     )
   }
 
   fun deserializeFromText(
-    text: String
+    text: String,
   ): LSSimplifiedBearerToken {
     return deserializeFromText(
       objectMapper = LSSimplifiedBearerTokenObjectMappers.createObjectMapper(),
-      text = text
+      text = text,
     )
   }
 }

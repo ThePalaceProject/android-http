@@ -11,7 +11,7 @@ import java.io.InputStream
 
 class LSHTTPProblemReportParser(
   private val uri: String,
-  private val stream: InputStream
+  private val stream: InputStream,
 ) : LSHTTPProblemReportParserType {
 
   private val logger =
@@ -32,11 +32,11 @@ class LSHTTPProblemReportParser(
   }
 
   private class JsonException(
-    message: String
+    message: String,
   ) : JsonProcessingException(message)
 
   private fun fromObjectNode(
-    objectNode: ObjectNode
+    objectNode: ObjectNode,
   ): LSHTTPProblemReport {
     val statusNode = objectNode["status"]
     val typeNode = objectNode["type"]
@@ -75,7 +75,7 @@ class LSHTTPProblemReportParser(
       status = status,
       title = title,
       detail = detail,
-      type = type
+      type = type,
     )
   }
 
