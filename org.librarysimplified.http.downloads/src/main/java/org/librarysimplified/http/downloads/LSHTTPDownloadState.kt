@@ -24,7 +24,8 @@ sealed class LSHTTPDownloadState {
   data class DownloadReceiving(
     val expectedSize: Long?,
     val receivedSize: Long,
-    val bytesPerSecond: Long
+    val bytesPerSecond: Long,
+    val accessToken: String?
   ) : LSHTTPDownloadState()
 
   /**

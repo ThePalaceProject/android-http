@@ -1,0 +1,16 @@
+dependencies {
+  implementation project(":org.librarysimplified.http.api")
+  implementation project(":org.librarysimplified.http.vanilla")
+
+  implementation libs.jackson.databind
+  implementation libs.kotlin.stdlib
+  implementation libs.kotlin.reflect
+  implementation libs.okhttp3
+  implementation libs.slf4j
+}
+
+android {
+  defaultConfig {
+    buildConfigField "String", "REFRESH_TOKEN_VERSION_NAME", "\"${VERSION_NAME}\""
+  }
+}
