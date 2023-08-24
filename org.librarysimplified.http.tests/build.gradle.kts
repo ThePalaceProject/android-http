@@ -2,6 +2,7 @@ dependencies {
     implementation(project(":org.librarysimplified.http.api"))
     implementation(project(":org.librarysimplified.http.bearer_token"))
     implementation(project(":org.librarysimplified.http.downloads"))
+    implementation(project(":org.librarysimplified.http.refresh_token"))
     implementation(project(":org.librarysimplified.http.uri_builder"))
     implementation(project(":org.librarysimplified.http.vanilla"))
 

@@ -1,5 +1,6 @@
 package org.librarysimplified.http.downloads.internal
 
+import org.librarysimplified.http.api.LSHTTPRequestConstants
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.downloads.LSHTTPDownloadRequest
 import org.librarysimplified.http.downloads.LSHTTPDownloadState.DownloadReceiving
@@ -111,6 +112,7 @@ class LSHTTPDownload(
           expectedSize = expectedSize,
           receivedSize = total,
           bytesPerSecond = 0L,
+          accessToken = status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
         ),
       )
 
@@ -129,6 +131,8 @@ class LSHTTPDownload(
               expectedSize = expectedSize,
               receivedSize = total,
               bytesPerSecond = unitsPerSecond.now,
+              accessToken =
+              status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
             ),
           )
         }
