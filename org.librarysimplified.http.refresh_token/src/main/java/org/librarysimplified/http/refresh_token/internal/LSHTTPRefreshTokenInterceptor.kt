@@ -19,7 +19,7 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
     chain: Interceptor.Chain,
     originalResponse: Response,
     originalRequest: Request,
-    properties: LSHTTPRequestProperties?
+    properties: LSHTTPRequestProperties?,
   ): Response {
     properties ?: return originalResponse
 
@@ -33,14 +33,13 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
     return if (
       !userName.isNullOrBlank() && !password.isNullOrBlank() && !authenticationUrl.isNullOrBlank()
     ) {
-
       this.logger.debug("We have a username, a password and an auth url, so let's refresh the token")
 
       val newRequest = originalRequest
         .newBuilder()
-        .header(  
+        .header(
           "Authorization",
-          LSHTTPAuthorizationBasic.ofUsernamePassword(userName, password).toHeaderValue()
+          LSHTTPAuthorizationBasic.ofUsernamePassword(userName, password).toHeaderValue(),
         )
         .url(authenticationUrl)
         .build()
@@ -62,9 +61,9 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
               .newBuilder()
               .header(
                 "Authorization",
-                LSHTTPAuthorizationBearerToken.ofToken(accessToken).toHeaderValue()
+                LSHTTPAuthorizationBearerToken.ofToken(accessToken).toHeaderValue(),
               )
-              .build()
+              .build(),
           )
 
           newResponse.newBuilder()
@@ -82,7 +81,7 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
   }
 
   override fun intercept(
-    chain: Interceptor.Chain
+    chain: Interceptor.Chain,
   ): Response {
     val originalRequest = chain.request()
     val response = chain.proceed(originalRequest)
@@ -93,7 +92,7 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
         chain = chain,
         originalRequest = originalRequest,
         originalResponse = response,
-        properties = properties
+        properties = properties,
       )
     } else {
       response

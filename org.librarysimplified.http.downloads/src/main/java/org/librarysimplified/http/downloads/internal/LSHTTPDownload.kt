@@ -113,7 +113,7 @@ class LSHTTPDownload(
           receivedSize = total,
           bytesPerSecond = 0L,
           accessToken = status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
-        )
+        ),
       )
 
       while (true) {
@@ -132,8 +132,8 @@ class LSHTTPDownload(
               receivedSize = total,
               bytesPerSecond = unitsPerSecond.now,
               accessToken =
-                status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
-            )
+              status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
+            ),
           )
         }
       }

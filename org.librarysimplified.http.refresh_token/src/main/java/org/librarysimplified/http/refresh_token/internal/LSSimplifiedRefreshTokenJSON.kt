@@ -9,7 +9,7 @@ import java.io.InputStream
 
 object LSSimplifiedRefreshTokenJSON {
   fun deserializeFromStream(
-    stream: InputStream
+    stream: InputStream,
   ): LSSimplifiedRefreshToken {
     val objectMapper = ObjectMapper()
     return try {
