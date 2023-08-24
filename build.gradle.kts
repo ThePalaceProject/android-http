@@ -1,7 +1,17 @@
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.LibraryExtension
 import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Verify
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+
+val gradleVersionRequired = "8.2.1"
+val gradleVersionReceived = gradle.gradleVersion
+
+if (gradleVersionRequired != gradleVersionReceived) {
+    throw GradleException(
+        "Gradle version $gradleVersionRequired is required to run this build. You are using Gradle $gradleVersionReceived",
+    )
+}
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
@@ -13,6 +23,10 @@ plugins {
         .apply(false)
 
     id("com.android.library")
+        .version("8.1.0")
+        .apply(false)
+
+    id("com.android.application")
         .version("8.1.0")
         .apply(false)
 
@@ -37,10 +51,6 @@ plugins {
         .apply(false)
 
     id("maven-publish")
-}
-
-repositories {
-    mavenCentral()
 }
 
 /*
@@ -215,7 +225,7 @@ fun configurePublishingFor(project: Project) {
  * deployment of stale artifacts to remote repositories.
  */
 
-val cleanTask = task("cleanMavenDeployDirectory", Delete::class) {
+val cleanTask = task("CleanMavenDeployDirectory", Delete::class) {
     this.delete.add(palaceDeployDirectory)
 }
 
@@ -429,6 +439,9 @@ allprojects {
     this.version =
         property(this, "VERSION_NAME")
 
+    val produceBytecodeForJDK =
+        propertyInt(this, "org.thepalaceproject.build.produceBytecodeForJDK")
+
     /*
      * Configure builds and tests for various project types.
      */
@@ -436,6 +449,51 @@ allprojects {
     when (extra["POM_PACKAGING"]) {
         "pom" -> {
             logger.info("Configuring ${this.project} $version as a pom project")
+        }
+
+        "apk" -> {
+            logger.info("Configuring ${this.project} $version as an apk project")
+
+            apply(plugin = "com.android.application")
+            apply(plugin = "org.jetbrains.kotlin.android")
+
+            /*
+             * Configure the JVM toolchain version that we want to use for Kotlin.
+             */
+
+            val kotlin: KotlinAndroidProjectExtension =
+                this.extensions["kotlin"] as KotlinAndroidProjectExtension
+
+            kotlin.jvmToolchain(produceBytecodeForJDK)
+
+            /*
+             * Configure the various required Android properties.
+             */
+
+            val android: ApplicationExtension =
+                this.extensions["android"] as ApplicationExtension
+
+            android.namespace =
+                property(this, "POM_ARTIFACT_ID")
+            android.compileSdk =
+                propertyInt(this, "org.thepalaceproject.build.androidSDKCompile")
+
+            android.defaultConfig {
+                multiDexEnabled = true
+                minSdk =
+                    propertyInt(this@allprojects, "org.thepalaceproject.build.androidSDKMinimum")
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            }
+
+            /*
+             * Produce JDK bytecode of the correct version.
+             */
+
+            android.compileOptions {
+                encoding = "UTF-8"
+                sourceCompatibility = JavaVersion.toVersion(produceBytecodeForJDK)
+                targetCompatibility = JavaVersion.toVersion(produceBytecodeForJDK)
+            }
         }
 
         "aar" -> {
@@ -452,7 +510,7 @@ allprojects {
             val kotlin: KotlinAndroidProjectExtension =
                 this.extensions["kotlin"] as KotlinAndroidProjectExtension
 
-            kotlin.jvmToolchain(11)
+            kotlin.jvmToolchain(produceBytecodeForJDK)
 
             /*
              * Configure the various required Android properties.
@@ -474,13 +532,13 @@ allprojects {
             }
 
             /*
-             * Produce JDK 11 bytecode.
+             * Produce JDK bytecode of the correct version.
              */
 
             android.compileOptions {
                 encoding = "UTF-8"
-                sourceCompatibility = JavaVersion.VERSION_11
-                targetCompatibility = JavaVersion.VERSION_11
+                sourceCompatibility = JavaVersion.toVersion(produceBytecodeForJDK)
+                targetCompatibility = JavaVersion.toVersion(produceBytecodeForJDK)
             }
 
             android.testOptions {
