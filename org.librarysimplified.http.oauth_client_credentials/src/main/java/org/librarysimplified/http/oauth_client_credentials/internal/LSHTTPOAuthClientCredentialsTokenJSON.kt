@@ -14,7 +14,7 @@ object LSHTTPOAuthClientCredentialsTokenJSON {
 
   fun serializeToJSON(
     objectMapper: ObjectMapper,
-    token: LSHTTPOAuthClientCredentialsToken
+    token: LSHTTPOAuthClientCredentialsToken,
   ): ObjectNode {
     val node = objectMapper.createObjectNode()
     node.put("access_token", token.accessToken)
@@ -24,7 +24,7 @@ object LSHTTPOAuthClientCredentialsTokenJSON {
 
   fun serializeToText(
     objectMapper: ObjectMapper,
-    token: LSHTTPOAuthClientCredentialsToken
+    token: LSHTTPOAuthClientCredentialsToken,
   ): String {
     return ByteArrayOutputStream().use { stream ->
       val writer = objectMapper.writerWithDefaultPrettyPrinter()
@@ -34,17 +34,17 @@ object LSHTTPOAuthClientCredentialsTokenJSON {
   }
 
   fun serializeToText(
-    token: LSHTTPOAuthClientCredentialsToken
+    token: LSHTTPOAuthClientCredentialsToken,
   ): String {
     return serializeToText(
       objectMapper = LSHTTPOAuthClientCredentialsObjectMappers.createObjectMapper(),
-      token = token
+      token = token,
     )
   }
 
   fun deserializeFromStream(
     objectMapper: ObjectMapper,
-    stream: InputStream
+    stream: InputStream,
   ): LSHTTPOAuthClientCredentialsToken {
     val factory = objectMapper.factory
     return factory.createParser(stream).use {
@@ -53,30 +53,30 @@ object LSHTTPOAuthClientCredentialsTokenJSON {
   }
 
   fun deserializeFromStream(
-    stream: InputStream
+    stream: InputStream,
   ): LSHTTPOAuthClientCredentialsToken {
     return deserializeFromStream(
       objectMapper = LSHTTPOAuthClientCredentialsObjectMappers.createObjectMapper(),
-      stream = stream
+      stream = stream,
     )
   }
 
   fun deserializeFromText(
     objectMapper: ObjectMapper,
-    text: String
+    text: String,
   ): LSHTTPOAuthClientCredentialsToken {
     return deserializeFromStream(
       objectMapper = objectMapper,
-      stream = text.byteInputStream()
+      stream = text.byteInputStream(),
     )
   }
 
   fun deserializeFromText(
-    text: String
+    text: String,
   ): LSHTTPOAuthClientCredentialsToken {
     return deserializeFromText(
       objectMapper = LSHTTPOAuthClientCredentialsObjectMappers.createObjectMapper(),
-      text = text
+      text = text,
     )
   }
 }

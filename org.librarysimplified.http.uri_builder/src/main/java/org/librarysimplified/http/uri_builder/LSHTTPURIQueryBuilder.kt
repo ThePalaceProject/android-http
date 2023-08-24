@@ -22,7 +22,7 @@ object LSHTTPURIQueryBuilder {
 
   fun encodeQuery(
     base: URI,
-    parameters: SortedMap<String, String>
+    parameters: SortedMap<String, String>,
   ): URI {
     return try {
       if (parameters.isEmpty()) {

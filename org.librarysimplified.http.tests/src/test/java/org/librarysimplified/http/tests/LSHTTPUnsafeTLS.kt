@@ -14,14 +14,14 @@ object LSHTTPUnsafeTLS {
     return object : X509TrustManager {
       override fun checkClientTrusted(
         chain: Array<X509Certificate?>?,
-        authType: String?
+        authType: String?,
       ) {
         logger.debug("checkClientTrusted")
       }
 
       override fun checkServerTrusted(
         chain: Array<X509Certificate?>?,
-        authType: String?
+        authType: String?,
       ) {
         logger.debug("checkServerTrusted")
       }

@@ -21,14 +21,13 @@ import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 
-
 class LSHTTPTestTLS(
   val clientKeyPair: KeyPair,
   val clientCert: X509Certificate,
   val clientContext: SSLContext,
   val serverKeyPair: KeyPair,
   val serverCert: X509Certificate,
-  val serverContext: SSLContext
+  val serverContext: SSLContext,
 ) {
 
   companion object {
@@ -47,7 +46,7 @@ class LSHTTPTestTLS(
       LoggerFactory.getLogger(LSHTTPTestTLS::class.java)
 
     fun createRSAKeyPair(
-      name: String
+      name: String,
     ): KeyPair {
       this.logger.debug("generating $name keypair")
       val generator = KeyPairGenerator.getInstance("RSA")
@@ -69,14 +68,14 @@ class LSHTTPTestTLS(
           name = "client",
           ownKeyPair = clientKeyPair,
           ownCert = clientCert,
-          peerCert = serverCert
+          peerCert = serverCert,
         )
       val serverContext =
         this.createSSLContext(
           name = "server",
           ownKeyPair = serverKeyPair,
           ownCert = serverCert,
-          peerCert = clientCert
+          peerCert = clientCert,
         )
 
       return LSHTTPTestTLS(
@@ -85,7 +84,7 @@ class LSHTTPTestTLS(
         clientContext,
         serverKeyPair,
         serverCert,
-        serverContext
+        serverContext,
       )
     }
 
@@ -93,7 +92,7 @@ class LSHTTPTestTLS(
       name: String,
       ownKeyPair: KeyPair,
       ownCert: X509Certificate,
-      peerCert: X509Certificate
+      peerCert: X509Certificate,
     ): SSLContext {
       this.logger.debug("creating $name SSL context")
 
@@ -135,7 +134,7 @@ class LSHTTPTestTLS(
     fun createCertificate(
       name: String,
       keyPair: KeyPair,
-      subjectDN: String
+      subjectDN: String,
     ): X509Certificate {
       this.logger.debug("creating $name X509 certificate")
 
@@ -159,7 +158,7 @@ class LSHTTPTestTLS(
           startDate,
           endDate,
           dnName,
-          keyPair.public
+          keyPair.public,
         )
 
       return JcaX509CertificateConverter()

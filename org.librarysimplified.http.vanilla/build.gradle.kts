@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.extraProperties
-
 dependencies {
     api(project(":org.librarysimplified.http.api"))
 

@@ -14,5 +14,5 @@ data class LSHTTPRequestProperties(
   val headers: SortedMap<String, String>,
   val method: Method,
   val authorization: LSHTTPAuthorizationType?,
-  val otherProperties: Map<String, Any>
+  val otherProperties: Map<String, Any>,
 )

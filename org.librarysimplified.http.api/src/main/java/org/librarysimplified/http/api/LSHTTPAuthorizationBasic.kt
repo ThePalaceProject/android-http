@@ -10,7 +10,7 @@ import java.nio.charset.Charset
 object LSHTTPAuthorizationBasic {
 
   private class Basic(
-    private val text: String
+    private val text: String,
   ) : LSHTTPAuthorizationType {
     override fun toHeaderValue(): String = this.text
   }
@@ -18,7 +18,7 @@ object LSHTTPAuthorizationBasic {
   fun ofUsernamePassword(
     userName: String,
     password: String,
-    encoding: Charset = Charsets.UTF_8
+    encoding: Charset = Charsets.UTF_8,
   ): LSHTTPAuthorizationType {
     val encoded =
       Base64Variants.MIME_NO_LINEFEEDS.encode("$userName:$password".toByteArray(encoding))

@@ -15,6 +15,6 @@ interface LSHTTPProblemReportParserFactoryType {
 
   fun createParser(
     uri: String,
-    stream: InputStream
+    stream: InputStream,
   ): LSHTTPProblemReportParserType
 }

@@ -14,7 +14,7 @@ import java.util.TreeMap
 
 class LSHTTPRequestBuilder(
   private val client: LSHTTPClient,
-  private val target: URI
+  private val target: URI,
 ) : LSHTTPRequestBuilderType {
 
   private var observer: ((LSHTTPResponseType) -> Unit)? = null
@@ -28,7 +28,7 @@ class LSHTTPRequestBuilder(
       headers = sortedMapOf(),
       method = Get,
       authorization = null,
-      otherProperties = emptyMap()
+      otherProperties = emptyMap(),
     )
 
   init {
@@ -41,7 +41,7 @@ class LSHTTPRequestBuilder(
 
   override fun addHeader(
     name: String,
-    value: String
+    value: String,
   ): LSHTTPRequestBuilderType {
     val oldHeaders = TreeMap(this.properties.headers)
     oldHeaders[name] = value
@@ -50,7 +50,7 @@ class LSHTTPRequestBuilder(
   }
 
   override fun removeHeader(
-    name: String
+    name: String,
   ): LSHTTPRequestBuilderType {
     val oldHeaders = TreeMap(this.properties.headers)
     oldHeaders.remove(name)
@@ -59,21 +59,21 @@ class LSHTTPRequestBuilder(
   }
 
   override fun allowRedirects(
-    redirects: AllowRedirects
+    redirects: AllowRedirects,
   ): LSHTTPRequestBuilderType {
     this.redirects = redirects
     return this
   }
 
   override fun setMethod(
-    method: Method
+    method: Method,
   ): LSHTTPRequestBuilderType {
     this.properties = this.properties.copy(method = method)
     return this
   }
 
   override fun setAuthorization(
-    authorization: LSHTTPAuthorizationType?
+    authorization: LSHTTPAuthorizationType?,
   ): LSHTTPRequestBuilderType {
     this.properties = this.properties.copy(authorization = authorization)
     return this
@@ -81,7 +81,7 @@ class LSHTTPRequestBuilder(
 
   override fun addCookie(
     name: String,
-    value: String
+    value: String,
   ): LSHTTPRequestBuilderType {
     val oldCookies = TreeMap(this.properties.cookies)
     oldCookies[name] = value
@@ -90,7 +90,7 @@ class LSHTTPRequestBuilder(
   }
 
   override fun removeCookie(
-    name: String
+    name: String,
   ): LSHTTPRequestBuilderType {
     val oldCookies = TreeMap(this.properties.cookies)
     oldCookies.remove(name)
@@ -104,7 +104,7 @@ class LSHTTPRequestBuilder(
   }
 
   override fun setRequestModifier(
-    modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties
+    modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties,
   ): LSHTTPRequestBuilderType {
     this.modifier = modifier
     return this
@@ -112,7 +112,7 @@ class LSHTTPRequestBuilder(
 
   override fun setExtensionProperty(
     key: String,
-    value: Any
+    value: Any,
   ): LSHTTPRequestBuilderType {
     val oldProperties = this.properties.otherProperties
     val newItem = key to value
@@ -121,7 +121,7 @@ class LSHTTPRequestBuilder(
   }
 
   override fun setResponseObserver(
-    observer: (LSHTTPResponseType) -> Unit
+    observer: (LSHTTPResponseType) -> Unit,
   ): LSHTTPRequestBuilderType {
     this.observer = observer
     return this
@@ -133,7 +133,7 @@ class LSHTTPRequestBuilder(
       allowRedirects = this.redirects,
       modifier = this.modifier,
       observer = this.observer,
-      properties = this.properties
+      properties = this.properties,
     )
   }
 }

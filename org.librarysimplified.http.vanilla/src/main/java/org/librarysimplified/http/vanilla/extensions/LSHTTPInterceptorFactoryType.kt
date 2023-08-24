@@ -26,6 +26,6 @@ interface LSHTTPInterceptorFactoryType {
    */
 
   fun createInterceptor(
-    context: Context
+    context: Context,
   ): Interceptor
 }

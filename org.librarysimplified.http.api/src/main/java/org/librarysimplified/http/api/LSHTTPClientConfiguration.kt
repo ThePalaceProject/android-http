@@ -30,5 +30,5 @@ data class LSHTTPClientConfiguration(
    * The timeout used for all I/O operations (connects, reads, writes, etc).
    */
 
-  val timeout: Pair<Long, TimeUnit> = Pair(1L, TimeUnit.MINUTES)
+  val timeout: Pair<Long, TimeUnit> = Pair(1L, TimeUnit.MINUTES),
 )

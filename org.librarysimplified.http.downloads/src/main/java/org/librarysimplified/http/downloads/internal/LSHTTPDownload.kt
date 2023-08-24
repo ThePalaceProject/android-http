@@ -18,14 +18,14 @@ import java.io.InputStream
 import java.util.concurrent.CancellationException
 
 class LSHTTPDownload(
-  private val request: LSHTTPDownloadRequest
+  private val request: LSHTTPDownloadRequest,
 ) : LSHTTPDownloadType {
 
   private val logger =
     LoggerFactory.getLogger(LSHTTPDownload::class.java)
 
   private class UnacceptableMIME(
-    val status: LSHTTPResponseStatus.Responded.OK
+    val status: LSHTTPResponseStatus.Responded.OK,
   ) : Exception()
 
   override fun execute(): LSHTTPDownloadResult {
@@ -57,18 +57,18 @@ class LSHTTPDownload(
   }
 
   private fun handleFailed(
-    status: LSHTTPResponseStatus.Failed
+    status: LSHTTPResponseStatus.Failed,
   ): LSHTTPDownloadResult {
     val result = DownloadFailedExceptionally(
       responseStatus = status,
-      exception = status.exception
+      exception = status.exception,
     )
     this.request.onEvent(result)
     return result
   }
 
   private fun handleRespondedError(
-    status: LSHTTPResponseStatus.Responded.Error
+    status: LSHTTPResponseStatus.Responded.Error,
   ): LSHTTPDownloadResult {
     val result = DownloadFailedServer(status)
     this.request.onEvent(result)
@@ -76,7 +76,7 @@ class LSHTTPDownload(
   }
 
   private fun handleTransfer(
-    status: LSHTTPResponseStatus.Responded.OK
+    status: LSHTTPResponseStatus.Responded.OK,
   ): LSHTTPDownloadResult {
     this.checkMIME(status)
     this.checkCancellation()
@@ -87,7 +87,7 @@ class LSHTTPDownload(
     return this.transfer(
       status = status,
       expectedSize = status.properties.contentLength,
-      inputStream = inputStream
+      inputStream = inputStream,
     )
   }
 
@@ -100,7 +100,7 @@ class LSHTTPDownload(
   private fun transfer(
     status: LSHTTPResponseStatus,
     expectedSize: Long?,
-    inputStream: InputStream
+    inputStream: InputStream,
   ): LSHTTPDownloadResult {
     return this.request.outputFile.outputStream().use { outputStream ->
       val unitsPerSecond = LSHTTPDownloadUnitsPerSecond(this.request.clock)
@@ -112,7 +112,7 @@ class LSHTTPDownload(
           expectedSize = expectedSize,
           receivedSize = total,
           bytesPerSecond = 0L,
-          accessToken = status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN)
+          accessToken = status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
         )
       )
 
@@ -132,7 +132,7 @@ class LSHTTPDownload(
               receivedSize = total,
               bytesPerSecond = unitsPerSecond.now,
               accessToken =
-                status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN)
+                status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
             )
           )
         }
@@ -144,7 +144,7 @@ class LSHTTPDownload(
       val result =
         DownloadCompletedSuccessfully(
           receivedSize = total,
-          responseStatus = status
+          responseStatus = status,
         )
 
       this.request.onEvent(result)
@@ -154,7 +154,7 @@ class LSHTTPDownload(
 
   private fun checkOutputFile(
     expectedSize: Long?,
-    total: Long
+    total: Long,
   ) {
     val fileLength = this.request.outputFile.length()
     if (expectedSize != null && expectedSize >= 0) {

@@ -7,13 +7,13 @@ package org.librarysimplified.http.api
 object LSHTTPAuthorizationBearerToken {
 
   private class Token(
-    private val text: String
+    private val text: String,
   ) : LSHTTPAuthorizationType {
     override fun toHeaderValue(): String = this.text
   }
 
   fun ofToken(
-    token: String
+    token: String,
   ): LSHTTPAuthorizationType {
     return Token("Bearer $token")
   }

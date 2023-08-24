@@ -31,7 +31,6 @@ import org.librarysimplified.http.vanilla.internal.LSHTTPMimeTypes.octetStream
 import org.mockito.Mockito
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.io.IOException
 import java.io.InterruptedIOException
 import java.util.concurrent.TimeUnit
 
@@ -47,7 +46,7 @@ abstract class LSHTTPClientContract {
   private lateinit var context: Context
 
   abstract fun clients(
-    parsers: LSHTTPProblemReportParserFactoryType = LSHTTPProblemReportParsers()
+    parsers: LSHTTPProblemReportParserFactoryType = LSHTTPProblemReportParsers(),
   ): LSHTTPClientProviderType
 
   @BeforeEach
@@ -60,7 +59,7 @@ abstract class LSHTTPClientContract {
     this.configuration =
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
-        applicationVersion = "1.0.0"
+        applicationVersion = "1.0.0",
       )
 
     this.server.start(30000)
@@ -231,7 +230,7 @@ abstract class LSHTTPClientContract {
       MockResponse()
         .setResponseCode(200)
         .setHeader("content-type", "&gibberish ne cede malis")
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()
@@ -262,9 +261,9 @@ abstract class LSHTTPClientContract {
           LSHTTPTestDirectories.stringOf(
             LSHTTPTestDirectories::class.java,
             this.directory,
-            "error.json"
-          )
-        )
+            "error.json",
+          ),
+        ),
     )
 
     val clients = this.clients()
@@ -281,7 +280,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals("You do not have enough credit.", problemReport.title)
       Assertions.assertEquals(
         "Your current balance is 30, but that costs 50.",
-        problemReport.detail
+        problemReport.detail,
       )
     }
   }
@@ -300,9 +299,9 @@ abstract class LSHTTPClientContract {
           LSHTTPTestDirectories.stringOf(
             LSHTTPTestDirectories::class.java,
             this.directory,
-            "invalid0.json"
-          )
-        )
+            "invalid0.json",
+          ),
+        ),
     )
 
     val clients = this.clients()
@@ -358,13 +357,13 @@ abstract class LSHTTPClientContract {
     this.serverElsewhere.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello elsewhere.")
+        .setBody("Hello elsewhere."),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
-        .setHeader("Location", this.serverElsewhere.url("/abc"))
+        .setHeader("Location", this.serverElsewhere.url("/abc")),
     )
 
     val clients = this.clients()
@@ -379,7 +378,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello elsewhere.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -401,13 +400,13 @@ abstract class LSHTTPClientContract {
     this.serverElsewhere.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello elsewhere.")
+        .setBody("Hello elsewhere."),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
-        .setHeader("Location", this.serverElsewhere.url("/abc"))
+        .setHeader("Location", this.serverElsewhere.url("/abc")),
     )
 
     val clients = this.clients()
@@ -423,7 +422,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(301, status.properties.status)
       Assertions.assertEquals(
         this.serverElsewhere.url("/abc").toString(),
-        status.properties.header("Location")
+        status.properties.header("Location"),
       )
     }
 
@@ -441,7 +440,7 @@ abstract class LSHTTPClientContract {
   fun testClientRequestAuthorizationBasic() {
     this.server.enqueue(
       MockResponse()
-        .setResponseCode(200)
+        .setResponseCode(200),
     )
 
     val clients = this.clients()
@@ -469,7 +468,7 @@ abstract class LSHTTPClientContract {
   fun testClientRequestAuthorizationBearer() {
     this.server.enqueue(
       MockResponse()
-        .setResponseCode(200)
+        .setResponseCode(200),
     )
 
     val clients = this.clients()
@@ -498,13 +497,13 @@ abstract class LSHTTPClientContract {
     this.serverElsewhere.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello elsewhere.")
+        .setBody("Hello elsewhere."),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(302)
-        .setHeader("Location", this.serverElsewhere.url("/abc"))
+        .setHeader("Location", this.serverElsewhere.url("/abc")),
     )
 
     val clients = this.clients()
@@ -520,7 +519,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello elsewhere.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -544,7 +543,7 @@ abstract class LSHTTPClientContract {
         .setResponseCode(200)
         .addHeader("Set-Cookie", "x=y; Expires=Mon, 01 Jan 2020 00:00:00 UTC;")
         .addHeader("Set-Cookie", "a=b; Secure")
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()
@@ -558,7 +557,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
 
       Assertions.assertEquals(2, status.properties.cookies.size)
@@ -592,14 +591,14 @@ abstract class LSHTTPClientContract {
         .setResponseCode(200)
         .addHeader("Set-Cookie", "x=y; Expires=Mon, 01 Jan 2020 00:00:00 UTC;")
         .addHeader("Set-Cookie", "a=b; Secure")
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.serverElsewhere.url("/abc"))
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()
@@ -613,7 +612,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
 
       Assertions.assertEquals(2, status.properties.cookies.size)
@@ -645,7 +644,7 @@ abstract class LSHTTPClientContract {
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()
@@ -664,7 +663,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -682,7 +681,7 @@ abstract class LSHTTPClientContract {
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()
@@ -699,7 +698,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -717,14 +716,14 @@ abstract class LSHTTPClientContract {
     this.serverElsewhere.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.serverElsewhere.url("/abc"))
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()
@@ -741,7 +740,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -766,12 +765,12 @@ abstract class LSHTTPClientContract {
     this.serverElsewhere.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     this.server.useHttps(
       sslSocketFactory = tls.serverContext.socketFactory,
-      tunnelProxy = false
+      tunnelProxy = false,
     )
 
     this.configuration =
@@ -779,14 +778,15 @@ abstract class LSHTTPClientContract {
         tlsOverrides = LSHTTPTLSOverrides(
           tls.clientContext.socketFactory,
           LSHTTPUnsafeTLS.unsafeTrustManager(),
-          LSHTTPUnsafeTLS.unsafeHostnameVerifier()
-        ))
+          LSHTTPUnsafeTLS.unsafeHostnameVerifier(),
+        ),
+      )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.serverElsewhere.url("/abc"))
-        .setBody("Redirect!")
+        .setBody("Redirect!"),
     )
 
     val clients = this.clients()
@@ -801,7 +801,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals("Refused to follow a redirect to ${this.serverElsewhere.url("/abc")}.", status.properties.message)
       Assertions.assertEquals(
         "Redirect!",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -823,12 +823,12 @@ abstract class LSHTTPClientContract {
     this.serverElsewhere.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     this.server.useHttps(
       sslSocketFactory = tls.serverContext.socketFactory,
-      tunnelProxy = false
+      tunnelProxy = false,
     )
 
     this.configuration =
@@ -836,14 +836,15 @@ abstract class LSHTTPClientContract {
         tlsOverrides = LSHTTPTLSOverrides(
           tls.clientContext.socketFactory,
           LSHTTPUnsafeTLS.unsafeTrustManager(),
-          LSHTTPUnsafeTLS.unsafeHostnameVerifier()
-        ))
+          LSHTTPUnsafeTLS.unsafeHostnameVerifier(),
+        ),
+      )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.serverElsewhere.url("/abc"))
-        .setBody("Redirect!")
+        .setBody("Redirect!"),
     )
 
     val clients = this.clients()
@@ -858,7 +859,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "Hello.",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -879,20 +880,20 @@ abstract class LSHTTPClientContract {
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.server.url("/a"))
-        .setBody("Redirect to /a")
+        .setBody("Redirect to /a"),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.server.url("/b"))
-        .setBody("Redirect to /b")
+        .setBody("Redirect to /b"),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("End!")
+        .setBody("End!"),
     )
 
     val clients = this.clients()
@@ -918,7 +919,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "End!",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -947,20 +948,20 @@ abstract class LSHTTPClientContract {
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.server.url("/a"))
-        .setBody("Redirect to /a")
+        .setBody("Redirect to /a"),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(301)
         .setHeader("Location", this.server.url("/b"))
-        .setBody("Redirect to /b")
+        .setBody("Redirect to /b"),
     )
 
     this.server.enqueue(
       MockResponse()
         .setResponseCode(200)
-        .setBody("End!")
+        .setBody("End!"),
     )
 
     val responses = mutableListOf<LSHTTPResponseType>()
@@ -976,7 +977,7 @@ abstract class LSHTTPClientContract {
       Assertions.assertEquals(200, status.properties.status)
       Assertions.assertEquals(
         "End!",
-        String(status.bodyStream?.readBytes() ?: ByteArray(0))
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
       )
     }
 
@@ -1056,7 +1057,7 @@ abstract class LSHTTPClientContract {
     this.server.enqueue(
       MockResponse()
         .setBodyDelay(10L, TimeUnit.SECONDS)
-        .setBody("Hello.")
+        .setBody("Hello."),
     )
 
     val clients = this.clients()

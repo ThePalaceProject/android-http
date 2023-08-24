@@ -9,7 +9,7 @@ import org.slf4j.Logger
  */
 
 class LSHTTPLoggingInterceptor(
-  private val logger: Logger
+  private val logger: Logger,
 ) : Interceptor {
 
   override fun intercept(chain: Interceptor.Chain): Response {
@@ -30,7 +30,7 @@ class LSHTTPLoggingInterceptor(
       response.code,
       response.message,
       response.body?.contentLength() ?: -1,
-      response.body?.contentType() ?: "?"
+      response.body?.contentType() ?: "?",
     )
     return response
   }

@@ -61,7 +61,7 @@ data class LSHTTPResponseProperties(
    * that was transparently negotiated by the client.
    */
 
-  val authorization: LSHTTPAuthorizationType? = null
+  val authorization: LSHTTPAuthorizationType? = null,
 ) {
 
   /**
@@ -77,5 +77,4 @@ data class LSHTTPResponseProperties(
 
   fun header(name: String): String? =
     this.headerValues(name).firstOrNull()
-
 }
