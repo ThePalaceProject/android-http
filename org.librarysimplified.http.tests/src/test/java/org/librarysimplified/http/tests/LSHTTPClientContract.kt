@@ -135,7 +135,7 @@ abstract class LSHTTPClientContract {
     val client = clients.create(this.context, this.configuration)
     val request =
       client.newRequest(this.server.url("/xyz").toString())
-        .setMethod(Delete)
+        .setMethod(Delete(ByteArray(0), octetStream))
         .build()
 
     request.execute().use { response ->

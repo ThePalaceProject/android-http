@@ -56,8 +56,10 @@ object LSOKHTTPRequests {
         val type = method.contentType.fullType
         builder.put(bytes.toRequestBody(type.toMediaType()))
       }
-      LSHTTPRequestBuilderType.Method.Delete -> {
-        builder.delete()
+      is LSHTTPRequestBuilderType.Method.Delete -> {
+        val bytes = method.body
+        val type = method.contentType.fullType
+        builder.delete(bytes.toRequestBody(type.toMediaType()))
       }
     }
 
