@@ -1,11 +1,6 @@
 package org.librarysimplified.http.tests.bearer_token
 
 import android.content.Context
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.inOrder
-import com.nhaarman.mockitokotlin2.mock
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
@@ -23,7 +18,10 @@ import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.bearer_token.LSHTTPBearerTokenInterceptors
 import org.librarysimplified.http.tests.LSHTTPTestDirectories
 import org.librarysimplified.http.vanilla.LSHTTPProblemReportParsers
+import org.mockito.InOrder
 import org.mockito.Mockito
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.stubbing.OngoingStubbing
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -130,6 +128,23 @@ abstract class LSHTTPBearerTokenContract {
    * updated to reflect it.
    */
 
+  inline fun <reified T : Any> mock2(): T {
+    return Mockito.mock(
+      T::class.java
+    )
+  }
+
+  infix fun <T> OngoingStubbing<T>.doAnswer1(answer: (InvocationOnMock) -> T?): OngoingStubbing<T> {
+    return thenAnswer(answer)
+  }
+
+  inline fun inOrder1(
+    vararg mocks: Any,
+    evaluation: InOrder.() -> Unit
+  ) {
+    Mockito.inOrder(*mocks).evaluation()
+  }
+
   @Test
   fun testPropertiesUpdated() {
     this.server.enqueue(
@@ -157,9 +172,20 @@ abstract class LSHTTPBearerTokenContract {
     val clients = this.clients()
     val client = clients.create(this.context, this.configuration)
 
-    val requestModifier = mock<(LSHTTPRequestProperties) -> LSHTTPRequestProperties>() {
-      on { invoke(anyOrNull()) } doAnswer { it.getArgument(0) }
-    }
+    val requestModifier = mock2<(LSHTTPRequestProperties) -> LSHTTPRequestProperties>()
+    Mockito.`when`(requestModifier.invoke(Mockito.any())).doAnswer1 { it.getArgument(0) }
+//    val properties = Mockito.mock(LSHTTPRequestProperties::class.java)
+//    stubbing.thenReturn(stubbing.getArgument(0))
+//    Mockito.`when`(stubbing).thenReturn(stubbing)
+
+//    ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)
+//
+//    var mocks: (LSHTTPRequestProperties) -> LSHTTPRequestProperties =
+//      Mockito.mock<(LSHTTPRequestProperties) -> LSHTTPRequestProperties>()
+//
+//    val requestModifier = mock<(LSHTTPRequestProperties) -> LSHTTPRequestProperties>() {
+//      on { invoke(anyOrNull()) } doAnswer { it.getArgument(0) }
+//    }
 
     val request =
       client.newRequest(this.server.url("/xyz").toString())
@@ -179,16 +205,30 @@ abstract class LSHTTPBearerTokenContract {
     val sent1 = this.server.takeRequest()
     Assertions.assertEquals("Bearer abcd", sent1.getHeader("Authorization"))
 
-    inOrder(requestModifier) {
-      verify(requestModifier).invoke(
-        argThat {
-          authorization!!.toHeaderValue() == "Bearer original_token"
+//    inOrder(requestModifier) {
+//      verify(requestModifier).invoke(
+//        argThat {
+//          authorization!!.toHeaderValue() == "Bearer original_token"
+//        },
+//      )
+//
+//      verify(requestModifier).invoke(
+//        argThat {
+//          authorization!!.toHeaderValue() == "Bearer abcd"
+//        },
+//      )
+//    }
+
+    inOrder1(requestModifier) {
+      Mockito.verify(requestModifier).invoke(
+        Mockito.argThat {
+          it.authorization!!.toHeaderValue() == "Bearer original_token"
         },
       )
 
-      verify(requestModifier).invoke(
-        argThat {
-          authorization!!.toHeaderValue() == "Bearer abcd"
+      Mockito.verify(requestModifier).invoke(
+        Mockito.argThat {
+          it.authorization!!.toHeaderValue() == "Bearer abcd"
         },
       )
     }
