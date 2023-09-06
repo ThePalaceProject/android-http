@@ -135,7 +135,7 @@ abstract class LSHTTPClientContract {
     val client = clients.create(this.context, this.configuration)
     val request =
       client.newRequest(this.server.url("/xyz").toString())
-        .setMethod(Delete(ByteArray(0), octetStream))
+        .setMethod(Delete("Goodbye!".toByteArray(), LSHTTPMimeTypes.textPlain))
         .build()
 
     request.execute().use { response ->
@@ -145,7 +145,8 @@ abstract class LSHTTPClientContract {
 
     val received = this.server.takeRequest()
     Assertions.assertEquals("DELETE", received.method)
-    Assertions.assertEquals(0, received.bodySize)
+    Assertions.assertEquals(8, received.bodySize)
+    Assertions.assertEquals(LSHTTPMimeTypes.textPlain.fullType, received.getHeader("content-type"))
   }
 
   /**
