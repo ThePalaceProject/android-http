@@ -65,7 +65,11 @@ interface LSHTTPRequestBuilderType {
   sealed class Method {
     object Get : Method()
     object Head : Method()
-    object Delete : Method()
+
+    data class Delete(
+      val body: ByteArray,
+      val contentType: MIMEType,
+    ) : Method()
 
     data class Post(
       val body: ByteArray,
