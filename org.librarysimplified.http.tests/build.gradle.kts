@@ -3,6 +3,7 @@ dependencies {
         project(":org.librarysimplified.http.api"),
         project(":org.librarysimplified.http.bearer_token"),
         project(":org.librarysimplified.http.downloads"),
+        project(":org.librarysimplified.http.refresh_token"),
         project(":org.librarysimplified.http.uri_builder"),
         project(":org.librarysimplified.http.vanilla"),
 
