@@ -1,7 +1,6 @@
 dependencies {
-    api(libs.irradia.mime.api)
-    api(libs.jackson.core)
-
-    implementation(libs.kotlin.stdlib)
+    implementation(libs.irradia.mime.api)
+    implementation(libs.jackson.core)
     implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib)
 }

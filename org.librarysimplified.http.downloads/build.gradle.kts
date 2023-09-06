@@ -1,9 +1,13 @@
 dependencies {
     implementation(project(":org.librarysimplified.http.api"))
 
+    implementation(libs.irradia.mime.api)
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
     implementation(libs.joda.time)
-    implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib)
     implementation(libs.slf4j)
 }
 
