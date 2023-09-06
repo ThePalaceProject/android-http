@@ -1,7 +1,9 @@
 dependencies {
-    api(project(":org.librarysimplified.http.api"))
-    api(project(":org.librarysimplified.http.vanilla"))
+    implementation(project(":org.librarysimplified.http.api"))
+    implementation(project(":org.librarysimplified.http.vanilla"))
 
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
