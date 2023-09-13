@@ -14,21 +14,21 @@ class LSHTTPRedirectRequestInterceptor(
     val request =
       chain.request()
 
-    val properties =
-      request.tag(LSHTTPRequestProperties::class.java)!!
-    val adjProperties =
-      properties.copy(target = request.url.toUri())
-    val newProperties = if (this.modifier != null) {
-      this.modifier.invoke(adjProperties)
+    return if (this.modifier != null) {
+      val properties =
+        request.tag(LSHTTPRequestProperties::class.java)!!
+      val adjProperties =
+        properties.copy(target = request.url.toUri())
+      val newProperties = this.modifier.invoke(adjProperties)
+
+      val requestBuilder =
+        request.newBuilder()
+      val newRequest =
+        LSOKHTTPRequests.createRequestForBuilder(newProperties, requestBuilder)
+
+      chain.proceed(newRequest)
     } else {
-      adjProperties
+      chain.proceed(request)
     }
-
-    val requestBuilder =
-      request.newBuilder()
-    val newRequest =
-      LSOKHTTPRequests.createRequestForBuilder(newProperties, requestBuilder)
-
-    return chain.proceed(newRequest)
   }
 }
