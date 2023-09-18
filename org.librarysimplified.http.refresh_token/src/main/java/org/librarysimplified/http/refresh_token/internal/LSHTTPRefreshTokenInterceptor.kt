@@ -37,6 +37,7 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
 
       val newRequest = originalRequest
         .newBuilder()
+        .method("POST", null)
         .header(
           "Authorization",
           LSHTTPAuthorizationBasic.ofUsernamePassword(userName, password).toHeaderValue(),
