@@ -103,7 +103,6 @@ class LSHTTPBearerTokenInterceptor : Interceptor {
 
     val newRequest1 =
       oldRequest.newBuilder()
-        .removeHeader("Authorization")
         .tag(LSHTTPRequestProperties::class.java, request1Properties)
         .url(target)
         .build()

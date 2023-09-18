@@ -2,6 +2,7 @@ package org.librarysimplified.http.refresh_token.internal
 
 import okhttp3.Interceptor
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.librarysimplified.http.api.LSHTTPAuthorizationBasic
 import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
@@ -37,6 +38,7 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
 
       val newRequest = originalRequest
         .newBuilder()
+        .method("POST", "".toRequestBody())
         .header(
           "Authorization",
           LSHTTPAuthorizationBasic.ofUsernamePassword(userName, password).toHeaderValue(),
