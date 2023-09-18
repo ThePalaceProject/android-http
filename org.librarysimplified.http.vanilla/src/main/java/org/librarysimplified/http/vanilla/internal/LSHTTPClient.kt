@@ -40,13 +40,11 @@ class LSHTTPClient(
   ): OkHttpClient {
     val builder = OkHttpClient.Builder()
 
-    if (modifier != null) {
-      builder.addNetworkInterceptor(LSHTTPRedirectRequestInterceptor(modifier))
-    }
     if (observer != null) {
       builder.addNetworkInterceptor(LSHTTPRedirectResponseInterceptor(this, observer))
     }
 
+    builder.addNetworkInterceptor(LSHTTPRedirectRequestInterceptor(modifier))
     builder.addNetworkInterceptor(LSHTTPLoggingInterceptor(this.logger))
 
     val timeout = this.configuration.timeout

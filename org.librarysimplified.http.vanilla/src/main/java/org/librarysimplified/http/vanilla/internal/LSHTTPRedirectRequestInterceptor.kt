@@ -5,7 +5,7 @@ import okhttp3.Response
 import org.librarysimplified.http.api.LSHTTPRequestProperties
 
 class LSHTTPRedirectRequestInterceptor(
-  private val modifier: (LSHTTPRequestProperties) -> LSHTTPRequestProperties,
+  private val modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)?,
 ) : Interceptor {
 
   override fun intercept(
@@ -14,18 +14,21 @@ class LSHTTPRedirectRequestInterceptor(
     val request =
       chain.request()
 
-    val properties =
-      request.tag(LSHTTPRequestProperties::class.java)!!
-    val adjProperties =
-      properties.copy(target = request.url.toUri())
-    val newProperties =
-      this.modifier.invoke(adjProperties)
+    return if (this.modifier != null) {
+      val properties =
+        request.tag(LSHTTPRequestProperties::class.java)!!
+      val adjProperties =
+        properties.copy(target = request.url.toUri())
+      val newProperties = this.modifier.invoke(adjProperties)
 
-    val requestBuilder =
-      request.newBuilder()
-    val newRequest =
-      LSOKHTTPRequests.createRequestForBuilder(newProperties, requestBuilder)
+      val requestBuilder =
+        request.newBuilder()
+      val newRequest =
+        LSOKHTTPRequests.createRequestForBuilder(newProperties, requestBuilder)
 
-    return chain.proceed(newRequest)
+      chain.proceed(newRequest)
+    } else {
+      chain.proceed(request)
+    }
   }
 }
