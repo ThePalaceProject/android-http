@@ -183,19 +183,34 @@ fun configurePublishingFor(project: Project) {
                 artifactId = property(project, "POM_ARTIFACT_ID")
                 version = versionName
 
+                /*
+                 * https://central.sonatype.org/publish/requirements/#sufficient-metadata
+                 */
+
                 pom {
                     name.set(property(project, "POM_NAME"))
                     description.set(property(project, "POM_DESCRIPTION"))
                     url.set(property(project, "POM_URL"))
+
                     scm {
                         connection.set(property(project, "POM_SCM_CONNECTION"))
                         developerConnection.set(property(project, "POM_SCM_DEV_CONNECTION"))
                         url.set(property(project, "POM_SCM_URL"))
                     }
+
                     licenses {
                         license {
                             name.set(property(project, "POM_LICENCE_NAME"))
                             url.set(property(project, "POM_LICENCE_URL"))
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name.set("The Palace Project")
+                            email.set("info@thepalaceproject.org")
+                            organization.set("The Palace Project")
+                            organizationUrl.set("https://thepalaceproject.org/")
                         }
                     }
                 }
