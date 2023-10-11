@@ -13,13 +13,16 @@
         <c:change date="2022-11-07T00:00:00+00:00" summary="Fixed redirecting bearer token bug."/>
       </c:changes>
     </c:release>
-    <c:release date="2023-10-11T13:16:44+00:00" is-open="false" ticket-system="org.nypl.jira" version="1.2.1">
+    <c:release date="2023-10-11T00:00:00+00:00" is-open="false" ticket-system="org.nypl.jira" version="1.2.1">
       <c:changes>
         <c:change date="2023-08-22T00:00:00+00:00" summary="Added refresh token interceptor."/>
         <c:change date="2023-09-05T00:00:00+00:00" summary="Added request body to 'Delete' method."/>
         <c:change date="2023-09-13T00:00:00+00:00" summary="Fixed redirect request interceptor not being added when there was no properties modifier."/>
         <c:change date="2023-09-18T00:00:00+00:00" summary="Fixed refresh token request method."/>
       </c:changes>
+    </c:release>
+    <c:release date="2023-10-11T15:39:45+00:00" is-open="true" ticket-system="org.nypl.jira" version="1.2.2">
+      <c:changes/>
     </c:release>
   </c:releases>
   <c:ticket-systems>
