@@ -21,8 +21,10 @@
         <c:change date="2023-09-18T00:00:00+00:00" summary="Fixed refresh token request method."/>
       </c:changes>
     </c:release>
-    <c:release date="2023-10-11T15:39:45+00:00" is-open="true" ticket-system="org.nypl.jira" version="1.2.2">
-      <c:changes/>
+    <c:release date="2023-10-24T08:30:37+00:00" is-open="true" ticket-system="org.nypl.jira" version="1.2.2">
+      <c:changes>
+        <c:change date="2023-10-24T08:30:37+00:00" summary="Fixed wrong downloading percentage values in some books."/>
+      </c:changes>
     </c:release>
   </c:releases>
   <c:ticket-systems>
