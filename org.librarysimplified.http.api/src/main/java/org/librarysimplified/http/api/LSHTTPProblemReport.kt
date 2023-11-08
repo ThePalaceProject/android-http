@@ -1,5 +1,7 @@
 package org.librarysimplified.http.api
 
+import java.io.Serializable
+
 /**
  * An RFC 7807 problem report.
  *
@@ -11,7 +13,7 @@ data class LSHTTPProblemReport(
   val title: String?,
   val detail: String?,
   val type: String?,
-) {
+): Serializable {
 
   /**
    * @return The current report as a set of named attributes
