@@ -1,5 +1,6 @@
 package org.librarysimplified.http.downloads.internal
 
+import org.apache.commons.compress.utils.IOUtils
 import org.librarysimplified.http.api.LSHTTPRequestConstants
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.downloads.LSHTTPDownloadRequest
@@ -81,13 +82,27 @@ class LSHTTPDownload(
     this.checkMIME(status)
     this.checkCancellation()
 
-    val inputStream =
+    val stream =
       status.bodyStream ?: ByteArrayInputStream(ByteArray(0))
+
+    val propertiesContentLength =
+      status.properties.contentLength ?: -1L
+
+    val invalidOriginalLength =
+      propertiesContentLength == -1L
+
+    val (expectedSize, inputStream) = if (invalidOriginalLength) {
+      val byteArray = IOUtils.toByteArray(stream)
+      byteArray.size.toLong() to ByteArrayInputStream(byteArray)
+    } else {
+      propertiesContentLength to stream
+    }
 
     return this.transfer(
       status = status,
-      expectedSize = status.properties.contentLength,
+      expectedSize = expectedSize,
       inputStream = inputStream,
+      invalidOriginalLength = invalidOriginalLength,
     )
   }
 
@@ -101,6 +116,7 @@ class LSHTTPDownload(
     status: LSHTTPResponseStatus,
     expectedSize: Long?,
     inputStream: InputStream,
+    invalidOriginalLength: Boolean,
   ): LSHTTPDownloadResult {
     return this.request.outputFile.outputStream().use { outputStream ->
       val unitsPerSecond = LSHTTPDownloadUnitsPerSecond(this.request.clock)
@@ -135,6 +151,14 @@ class LSHTTPDownload(
               status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
             ),
           )
+        }
+
+        if (invalidOriginalLength) {
+          // this almost insignificant sleeping time is set when the inputstream's size has been
+          // previously calculated and its role is to force the UI to update the downloading
+          // percentage values, otherwise it would be stuck in 0% and then be completed after some
+          // time.
+          Thread.sleep(1L)
         }
       }
 

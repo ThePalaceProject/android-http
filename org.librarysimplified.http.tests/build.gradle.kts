@@ -13,6 +13,7 @@ dependencies {
         libs.bouncycastle.tls,
         libs.bytebuddy,
         libs.bytebuddy.agent,
+        libs.commons.compress,
         libs.irradia.mime.api,
         libs.irradia.mime.vanilla,
         libs.jackson.annotations,
