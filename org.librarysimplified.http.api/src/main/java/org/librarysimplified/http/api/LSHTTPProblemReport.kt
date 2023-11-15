@@ -13,7 +13,7 @@ data class LSHTTPProblemReport(
   val title: String?,
   val detail: String?,
   val type: String?,
-): Serializable {
+) : Serializable {
 
   /**
    * @return The current report as a set of named attributes
