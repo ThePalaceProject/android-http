@@ -27,12 +27,12 @@
         <c:change date="2023-11-08T00:00:00+00:00" summary="Set LSHTTPProblemReport as serializable."/>
       </c:changes>
     </c:release>
-    <c:release date="2024-02-23T11:13:33+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.4.0">
+    <c:release date="2024-02-23T11:59:25+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.4.0">
       <c:changes/>
     </c:release>
   </c:releases>
   <c:ticket-systems>
     <c:ticket-system default="true" id="org.lyrasis.jira" url="https://ebce-lyrasis.atlassian.net/browse/"/>
-    <c:ticket-system id="org.nypl.jira" url="https://jira.nypl.org/browse/"/>
+    <c:ticket-system default="false" id="org.nypl.jira" url="https://jira.nypl.org/browse/"/>
   </c:ticket-systems>
 </c:changelog>
