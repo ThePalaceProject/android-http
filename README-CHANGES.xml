@@ -30,7 +30,7 @@
     <c:release date="2024-02-23T00:00:00+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.4.0">
       <c:changes/>
     </c:release>
-    <c:release date="2024-02-23T12:07:04+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.4.1">
+    <c:release date="2024-02-23T12:07:04+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.5.0">
       <c:changes/>
     </c:release>
   </c:releases>
