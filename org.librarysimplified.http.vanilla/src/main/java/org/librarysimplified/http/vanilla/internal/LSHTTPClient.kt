@@ -46,6 +46,7 @@ class LSHTTPClient(
 
     builder.addNetworkInterceptor(LSHTTPRedirectRequestInterceptor(modifier))
     builder.addNetworkInterceptor(LSHTTPLoggingInterceptor(this.logger))
+    builder.eventListenerFactory(LSHTTPTimingEventListenerFactory)
 
     val timeout = this.configuration.timeout
     builder.callTimeout(timeout.first, timeout.second)
