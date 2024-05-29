@@ -30,9 +30,9 @@
     <c:release date="2024-02-23T00:00:00+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.4.0">
       <c:changes/>
     </c:release>
-    <c:release date="2024-05-29T16:01:53+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.5.0">
+    <c:release date="2024-05-29T16:07:00+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.5.0">
       <c:changes>
-        <c:change date="2024-05-29T16:01:53+00:00" summary="Add a timing listener for debugging slow HTTP requests."/>
+        <c:change date="2024-05-29T00:00:00+00:00" summary="Add a timing listener for debugging slow HTTP requests."/>
       </c:changes>
     </c:release>
   </c:releases>
