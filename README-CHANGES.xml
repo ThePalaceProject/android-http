@@ -35,9 +35,9 @@
         <c:change date="2024-05-29T00:00:00+00:00" summary="Add a timing listener for debugging slow HTTP requests."/>
       </c:changes>
     </c:release>
-    <c:release date="2024-08-16T11:24:32+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.6.0">
+    <c:release date="2024-08-16T11:26:12+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.6.0">
       <c:changes>
-        <c:change date="2024-08-16T11:24:32+00:00" summary="Do not require both a username and password for token refreshing.">
+        <c:change date="2024-08-16T00:00:00+00:00" summary="Do not require both a username and password for token refreshing.">
           <c:tickets>
             <c:ticket id="PP-1516"/>
           </c:tickets>
