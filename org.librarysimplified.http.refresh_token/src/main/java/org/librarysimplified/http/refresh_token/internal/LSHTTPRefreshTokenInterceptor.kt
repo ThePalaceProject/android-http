@@ -27,14 +27,15 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
     val userName =
       properties.otherProperties[LSHTTPRequestConstants.PROPERTY_KEY_USERNAME] as? String
     val password =
-      properties.otherProperties[LSHTTPRequestConstants.PROPERTY_KEY_PASSWORD] as? String
+      properties.otherProperties[LSHTTPRequestConstants.PROPERTY_KEY_PASSWORD] as? String ?: ""
     val authenticationUrl =
       properties.otherProperties[LSHTTPRequestConstants.PROPERTY_KEY_AUTHENTICATION_URL] as? String
 
     return if (
-      !userName.isNullOrBlank() && !password.isNullOrBlank() && !authenticationUrl.isNullOrBlank()
+      !userName.isNullOrBlank() && !authenticationUrl.isNullOrBlank()
     ) {
-      this.logger.debug("We have a username, a password and an auth url, so let's refresh the token")
+      this.logger.debug("We have a username and an authentication URL.")
+      this.logger.debug("Refreshing token...")
 
       val newRequest = originalRequest
         .newBuilder()
