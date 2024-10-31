@@ -1,4 +1,6 @@
 dependencies {
+    coreLibraryDesugaring(libs.android.desugaring)
+
     val dependencyObjects = setOf(
         project(":org.librarysimplified.http.api"),
         project(":org.librarysimplified.http.bearer_token"),

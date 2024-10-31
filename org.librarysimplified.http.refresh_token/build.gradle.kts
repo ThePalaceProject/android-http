@@ -1,4 +1,6 @@
 dependencies {
+    coreLibraryDesugaring(libs.android.desugaring)
+
     implementation(project(":org.librarysimplified.http.api"))
     implementation(project(":org.librarysimplified.http.vanilla"))
 
