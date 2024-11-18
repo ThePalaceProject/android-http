@@ -44,9 +44,9 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2024-11-18T12:46:40+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.7.0">
+    <c:release date="2024-11-18T12:58:48+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.7.0">
       <c:changes>
-        <c:change date="2024-11-18T12:46:40+00:00" summary="Enable core library desugaring."/>
+        <c:change date="2024-11-18T00:00:00+00:00" summary="Enable core library desugaring."/>
       </c:changes>
     </c:release>
   </c:releases>
