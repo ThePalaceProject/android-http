@@ -1,5 +1,6 @@
 package org.librarysimplified.http.api
 
+import java.net.Proxy
 import java.util.concurrent.TimeUnit
 
 /**
@@ -31,4 +32,10 @@ data class LSHTTPClientConfiguration(
    */
 
   val timeout: Pair<Long, TimeUnit> = Pair(1L, TimeUnit.MINUTES),
+
+  /**
+   * An optional proxy.
+   */
+
+  val proxy: Proxy = Proxy.NO_PROXY,
 )
