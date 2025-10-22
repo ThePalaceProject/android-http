@@ -3,10 +3,15 @@ package org.librarysimplified.http.vanilla.internal
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.librarysimplified.http.api.LSHTTPRequestProperties
+import org.slf4j.LoggerFactory
+import java.util.SortedMap
 
 class LSHTTPRedirectRequestInterceptor(
   private val modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)?,
 ) : Interceptor {
+
+  private val logger =
+    LoggerFactory.getLogger(LSHTTPRedirectRequestInterceptor::class.java)
 
   override fun intercept(
     chain: Interceptor.Chain,
@@ -19,7 +24,11 @@ class LSHTTPRedirectRequestInterceptor(
         request.tag(LSHTTPRequestProperties::class.java)!!
       val adjProperties =
         properties.copy(target = request.url.toUri())
-      val newProperties = this.modifier.invoke(adjProperties)
+      var newProperties = this.modifier.invoke(adjProperties)
+
+      if (properties.target.host != newProperties.target.host) {
+        newProperties = this.dropDangerousRedirectHeaders(newProperties)
+      }
 
       val requestBuilder =
         request.newBuilder()
@@ -30,5 +39,25 @@ class LSHTTPRedirectRequestInterceptor(
     } else {
       chain.proceed(request)
     }
+  }
+
+  private fun dropDangerousRedirectHeaders(
+    properties: LSHTTPRequestProperties,
+  ): LSHTTPRequestProperties {
+    var result = properties
+    if (result.cookies.isNotEmpty()) {
+      this.logger.warn("Dropping {} cookies when redirecting.", result.cookies.size)
+      result = result.copy(cookies = sortedMapOf())
+    }
+    var headers = this.toLowercase(result.headers)
+    if (headers.containsKey("authorization")) {
+      this.logger.warn("Dropping Authorization header when redirecting.")
+      headers = headers.minus("authorization")
+    }
+    return result.copy(headers = headers.toSortedMap())
+  }
+
+  private fun toLowercase(headers: SortedMap<String, String>): Map<String, String> {
+    return headers.mapKeys { e -> e.key.lowercase() }
   }
 }

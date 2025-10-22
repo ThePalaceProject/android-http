@@ -54,9 +54,18 @@
         <c:change date="2025-06-09T00:00:00+00:00" summary="Allow passing in a Proxy instance."/>
       </c:changes>
     </c:release>
-    <c:release date="2025-09-05T11:36:28+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.9.0">
+    <c:release date="2025-09-05T00:00:00+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="1.9.0">
       <c:changes>
         <c:change date="2025-09-05T00:00:00+00:00" summary="Update Kotlin."/>
+      </c:changes>
+    </c:release>
+    <c:release date="2025-10-22T15:08:48+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="1.10.0">
+      <c:changes>
+        <c:change date="2025-10-22T15:08:48+00:00" summary="Strip dangerous headers across redirects.">
+          <c:tickets>
+            <c:ticket id="PP-3135"/>
+          </c:tickets>
+        </c:change>
       </c:changes>
     </c:release>
   </c:releases>
