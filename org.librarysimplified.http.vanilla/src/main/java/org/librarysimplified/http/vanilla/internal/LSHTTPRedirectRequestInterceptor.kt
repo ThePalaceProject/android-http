@@ -49,6 +49,10 @@ class LSHTTPRedirectRequestInterceptor(
       this.logger.warn("Dropping {} cookies when redirecting.", result.cookies.size)
       result = result.copy(cookies = sortedMapOf())
     }
+    if (result.authorization != null) {
+      this.logger.warn("Dropping Authorization properties when redirecting.")
+      result = result.copy(authorization = null)
+    }
     var headers = this.toLowercase(result.headers)
     if (headers.containsKey("authorization")) {
       this.logger.warn("Dropping Authorization header when redirecting.")
