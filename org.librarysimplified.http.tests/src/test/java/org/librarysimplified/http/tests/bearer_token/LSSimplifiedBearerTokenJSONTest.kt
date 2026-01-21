@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.librarysimplified.http.bearer_token.internal.LSSimplifiedBearerTokenJSON
+import org.librarysimplified.http.bearer_token.LSSimplifiedBearerTokenJSON
 import java.math.BigInteger
 import java.net.URI
 

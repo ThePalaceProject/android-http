@@ -1,8 +1,7 @@
-package org.librarysimplified.http.bearer_token.internal
+package org.librarysimplified.http.bearer_token
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.librarysimplified.http.bearer_token.LSSimplifiedBearerToken
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 

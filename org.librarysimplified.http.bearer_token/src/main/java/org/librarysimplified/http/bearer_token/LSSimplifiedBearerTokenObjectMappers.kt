@@ -1,4 +1,4 @@
-package org.librarysimplified.http.bearer_token.internal
+package org.librarysimplified.http.bearer_token
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
