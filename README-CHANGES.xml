@@ -82,8 +82,14 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2026-01-30T14:26:05+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.1.0">
-      <c:changes/>
+    <c:release date="2026-02-09T13:36:32+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.1.0">
+      <c:changes>
+        <c:change date="2026-02-09T13:36:32+00:00" summary="Add LS bearer token negotiation.">
+          <c:tickets>
+            <c:ticket id="PP-3676"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
     </c:release>
   </c:releases>
   <c:ticket-systems>

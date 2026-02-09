@@ -2,6 +2,7 @@ dependencies {
     coreLibraryDesugaring(libs.android.desugaring)
 
     implementation(project(":org.librarysimplified.http.api"))
+    implementation(project(":org.librarysimplified.http.refresh_token"))
     implementation(project(":org.librarysimplified.http.vanilla"))
 
     implementation(libs.jackson.annotations)
