@@ -19,10 +19,10 @@ object LSHTTPNetworkAccess : LSHTTPNetworkAccessType {
     }
 
   private val wifiAvailableProp =
-    this.attributes.withValue(false)
+    this.attributes.withValue(true)
 
   private val cellularAvailableProp =
-    this.attributes.withValue(false)
+    this.attributes.withValue(true)
 
   private val wifiPermittedProp =
     this.attributes.withValue(true)
