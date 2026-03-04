@@ -29,4 +29,10 @@ interface LSHTTPClientType {
    */
 
   fun userAgent(): String
+
+  /**
+   * A view of the current network access.
+   */
+
+  val networkAccess: LSHTTPNetworkAccessType
 }

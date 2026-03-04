@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPAuthorizationBasic
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientProviderType
+import org.librarysimplified.http.api.LSHTTPNetworkAccess
 import org.librarysimplified.http.api.LSHTTPProblemReportParserFactoryType
 import org.librarysimplified.http.api.LSHTTPRequestConstants
 import org.librarysimplified.http.api.LSHTTPResponseStatus
@@ -40,7 +41,8 @@ abstract class LSHTTPRefreshTokenContract {
     this.configuration =
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
-        applicationVersion = "1.0.0"
+        applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
   }
 

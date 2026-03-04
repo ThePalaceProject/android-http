@@ -15,6 +15,7 @@ import org.librarysimplified.http.api.LSHTTPAuthorizationBasic
 import org.librarysimplified.http.api.LSHTTPAuthorizationBearerToken
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientProviderType
+import org.librarysimplified.http.api.LSHTTPNetworkAccess
 import org.librarysimplified.http.api.LSHTTPProblemReportParserFactoryType
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.AllowRedirects.ALLOW_UNSAFE_REDIRECTS
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType.AllowRedirects.DISALLOW_REDIRECTS
@@ -60,6 +61,7 @@ abstract class LSHTTPClientContract {
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
         applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
 
     this.server.start(30000)

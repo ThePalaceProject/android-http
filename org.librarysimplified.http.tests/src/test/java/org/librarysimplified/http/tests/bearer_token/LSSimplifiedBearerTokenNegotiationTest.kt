@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
+import org.librarysimplified.http.api.LSHTTPNetworkAccess
 import org.librarysimplified.http.bearer_token.LSSimplifiedBearerTokenNegotiation
 import org.librarysimplified.http.refresh_token.LSHTTPRefreshTokenProperties
 import org.librarysimplified.http.vanilla.LSHTTPClients
@@ -57,6 +58,7 @@ class LSSimplifiedBearerTokenNegotiationTest {
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
         applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
 
     val client =
@@ -98,6 +100,7 @@ class LSSimplifiedBearerTokenNegotiationTest {
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
         applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
 
     val client =
@@ -147,6 +150,7 @@ class LSSimplifiedBearerTokenNegotiationTest {
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
         applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
 
     val client =
@@ -192,6 +196,7 @@ class LSSimplifiedBearerTokenNegotiationTest {
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
         applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
 
     val client =

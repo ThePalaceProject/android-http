@@ -4,6 +4,7 @@ import android.content.Context
 import okhttp3.OkHttpClient
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientType
+import org.librarysimplified.http.api.LSHTTPNetworkAccessType
 import org.librarysimplified.http.api.LSHTTPProblemReportParserFactoryType
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType
 import org.librarysimplified.http.api.LSHTTPRequestProperties
@@ -18,6 +19,7 @@ class LSHTTPClient(
   val configuration: LSHTTPClientConfiguration,
   val problemReportParsers: LSHTTPProblemReportParserFactoryType,
   val interceptors: List<LSHTTPInterceptorFactoryType>,
+  override val networkAccess: LSHTTPNetworkAccessType = configuration.networkAccess,
 ) : LSHTTPClientType {
 
   internal val logger =

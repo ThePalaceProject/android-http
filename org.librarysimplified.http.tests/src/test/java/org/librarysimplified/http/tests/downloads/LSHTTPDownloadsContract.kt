@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPClientConfiguration
 import org.librarysimplified.http.api.LSHTTPClientProviderType
+import org.librarysimplified.http.api.LSHTTPNetworkAccess
 import org.librarysimplified.http.api.LSHTTPProblemReportParserFactoryType
 import org.librarysimplified.http.api.LSHTTPResponseStatus
 import org.librarysimplified.http.downloads.LSHTTPDownloadRequest
@@ -60,6 +61,7 @@ abstract class LSHTTPDownloadsContract {
       LSHTTPClientConfiguration(
         applicationName = "HttpTests",
         applicationVersion = "1.0.0",
+        networkAccess = LSHTTPNetworkAccess
       )
   }
 

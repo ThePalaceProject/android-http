@@ -38,4 +38,10 @@ data class LSHTTPClientConfiguration(
    */
 
   val proxy: Proxy = Proxy.NO_PROXY,
+
+  /**
+   * The network access interface.
+   */
+
+  val networkAccess: LSHTTPNetworkAccessType,
 )
