@@ -16,7 +16,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(true)
     LSHTTPNetworkAccess.setWIFIPermitted(true)
 
-    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canUseNetwork())
   }
 
   @Test
@@ -26,7 +26,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(true)
     LSHTTPNetworkAccess.setWIFIPermitted(true)
 
-    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canUseNetwork())
   }
 
   @Test
@@ -36,7 +36,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(false)
     LSHTTPNetworkAccess.setWIFIPermitted(false)
 
-    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canUseNetwork())
   }
 
   @Test
@@ -46,7 +46,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(true)
     LSHTTPNetworkAccess.setWIFIPermitted(false)
 
-    Assertions.assertEquals(NETWORK_NOT_PERMITTED, LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_NOT_PERMITTED, LSHTTPNetworkAccess.canUseNetwork())
   }
 
   @Test
@@ -56,6 +56,6 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(false)
     LSHTTPNetworkAccess.setWIFIPermitted(true)
 
-    Assertions.assertEquals(NETWORK_UNAVAILABLE, LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_UNAVAILABLE, LSHTTPNetworkAccess.canUseNetwork())
   }
 }

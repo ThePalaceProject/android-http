@@ -23,11 +23,11 @@ interface LSHTTPNetworkAccessReadableType :
   }
 
   /**
-   * Determine if performing a download should be allowed given the current network availability
-   * and permissions.
+   * Determine if performing network operations should be allowed given the current network
+   * availability and permissions.
    */
 
-  fun canDownload(): LSHTTPNetworkAvailability {
+  fun canUseNetwork(): LSHTTPNetworkAvailability {
     val wifiAvailable = this.wifiAvailable.get()
     val cellAvailable = this.cellularAvailable.get()
     val wifiPermitted = this.wifiPermitted.get()
