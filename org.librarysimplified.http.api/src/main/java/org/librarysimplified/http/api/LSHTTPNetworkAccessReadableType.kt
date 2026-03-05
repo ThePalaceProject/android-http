@@ -1,5 +1,9 @@
 package org.librarysimplified.http.api
 
+import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetworkAvailability.NETWORK_AVAILABLE
+import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetworkAvailability.NETWORK_NOT_PERMITTED
+import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetworkAvailability.NETWORK_UNAVAILABLE
+
 /**
  * An observable interface that indicates the availability of different network types.
  */
@@ -7,18 +11,40 @@ package org.librarysimplified.http.api
 interface LSHTTPNetworkAccessReadableType :
   LSHTTPNetworkAvailabilityReadableType,
   LSHTTPNetworkPolicyReadableType {
+
+  /**
+   * The reason that downloads may or may not be available.
+   */
+
+  enum class LSHTTPNetworkAvailability {
+    NETWORK_UNAVAILABLE,
+    NETWORK_AVAILABLE,
+    NETWORK_NOT_PERMITTED,
+  }
+
   /**
    * Determine if performing a download should be allowed given the current network availability
    * and permissions.
    */
 
-  fun canDownload(): Boolean {
-    if (this.wifiAvailable.get() && this.wifiPermitted.get()) {
-      return true
+  fun canDownload(): LSHTTPNetworkAvailability {
+    val wifiAvailable = this.wifiAvailable.get()
+    val cellAvailable = this.cellularAvailable.get()
+    val wifiPermitted = this.wifiPermitted.get()
+    val cellPermitted = this.cellularPermitted.get()
+
+    if (!wifiAvailable && !cellAvailable) {
+      return NETWORK_UNAVAILABLE
     }
-    if (this.cellularAvailable.get() && this.cellularPermitted.get()) {
-      return true
+
+    if (wifiAvailable && wifiPermitted) {
+      return NETWORK_AVAILABLE
     }
-    return false
+
+    if (cellAvailable && cellPermitted) {
+      return NETWORK_AVAILABLE
+    }
+
+    return NETWORK_NOT_PERMITTED
   }
 }

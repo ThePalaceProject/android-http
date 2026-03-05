@@ -3,6 +3,9 @@ package org.librarysimplified.http.tests
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.librarysimplified.http.api.LSHTTPNetworkAccess
+import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetworkAvailability.NETWORK_AVAILABLE
+import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetworkAvailability.NETWORK_NOT_PERMITTED
+import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetworkAvailability.NETWORK_UNAVAILABLE
 
 class LSHTTPNetworkAccessTest {
 
@@ -13,7 +16,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(true)
     LSHTTPNetworkAccess.setWIFIPermitted(true)
 
-    Assertions.assertTrue(LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canDownload())
   }
 
   @Test
@@ -23,7 +26,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(true)
     LSHTTPNetworkAccess.setWIFIPermitted(true)
 
-    Assertions.assertTrue(LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canDownload())
   }
 
   @Test
@@ -33,7 +36,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(false)
     LSHTTPNetworkAccess.setWIFIPermitted(false)
 
-    Assertions.assertTrue(LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_AVAILABLE, LSHTTPNetworkAccess.canDownload())
   }
 
   @Test
@@ -43,7 +46,7 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(true)
     LSHTTPNetworkAccess.setWIFIPermitted(false)
 
-    Assertions.assertFalse(LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_NOT_PERMITTED, LSHTTPNetworkAccess.canDownload())
   }
 
   @Test
@@ -53,6 +56,6 @@ class LSHTTPNetworkAccessTest {
     LSHTTPNetworkAccess.setWIFIAvailable(false)
     LSHTTPNetworkAccess.setWIFIPermitted(true)
 
-    Assertions.assertFalse(LSHTTPNetworkAccess.canDownload())
+    Assertions.assertEquals(NETWORK_UNAVAILABLE, LSHTTPNetworkAccess.canDownload())
   }
 }
