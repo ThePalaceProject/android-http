@@ -3,7 +3,6 @@ android-http
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/ThePalaceProject/android-http/.github%2Fworkflows%2Fandroid-main.yml?style=flat-square)](https://github.com/NYPL-Simplified/Simplified-Android-HTTP/actions?query=workflow%3A%22Android+CI+%28Authenticated%29%22)
 [![Maven Central](https://img.shields.io/maven-central/v/org.thepalaceproject.http/org.librarysimplified.http.api?style=flat-square)](https://repo2.maven.org/maven2/org/librarysimplified/http)
-[![Maven Central (Snapshots)](https://img.shields.io/nexus/s/org.thepalaceproject.http/org.librarysimplified.http.api?server=https%3A%2F%2Fs01.oss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/org/librarysimplified/http/)
 
 The Palace Project's Android HTTP client.
 
@@ -113,9 +112,11 @@ coupled as possible. New features should typically be implemented as new modules
 | [org.librarysimplified.http.bearer_token](org.librarysimplified.http.bearer_token) | Library Simplified HTTP client (Bearer token extension) |
 | [org.librarysimplified.http.chucker](org.librarysimplified.http.chucker)           | Library Simplified HTTP client (Chucker extension)      |
 | [org.librarysimplified.http.downloads](org.librarysimplified.http.downloads)       | Library Simplified HTTP client (File downloads)         |
+| [org.librarysimplified.http.network_access](org.librarysimplified.http.vanilla)    | Library Simplified HTTP client (Network access service) |
 | [org.librarysimplified.http.tests](org.librarysimplified.http.tests)               | Library Simplified HTTP client (Test suite)             |
 | [org.librarysimplified.http.uri_builder](org.librarysimplified.http.uri_builder)   | Library Simplified HTTP client (URI query builder)      |
 | [org.librarysimplified.http.vanilla](org.librarysimplified.http.vanilla)           | Library Simplified HTTP client (Vanilla implementation) |
+
 
 ### License
 
