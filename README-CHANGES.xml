@@ -91,9 +91,9 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2026-03-04T14:21:23+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.2.0">
+    <c:release date="2026-03-06T14:44:25+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="2.2.0">
       <c:changes>
-        <c:change date="2026-03-04T14:21:23+00:00" summary="Add a network access module.">
+        <c:change date="2026-03-04T00:00:00+00:00" summary="Add a network access module.">
           <c:tickets>
             <c:ticket id="PP-3688"/>
           </c:tickets>
