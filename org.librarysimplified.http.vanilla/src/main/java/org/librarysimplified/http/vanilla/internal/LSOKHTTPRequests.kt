@@ -5,6 +5,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.librarysimplified.http.api.LSHTTPRequestBuilderType
 import org.librarysimplified.http.api.LSHTTPRequestProperties
+import java.util.Locale
 
 object LSOKHTTPRequests {
 
@@ -25,6 +26,8 @@ object LSOKHTTPRequests {
     } else {
       builder.removeHeader("Authorization")
     }
+
+    builder.header("Accept-Language", Locale.getDefault().toLanguageTag())
 
     if (properties.cookies.isNotEmpty()) {
       val headerText =

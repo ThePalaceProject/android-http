@@ -33,6 +33,7 @@ import org.mockito.Mockito
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InterruptedIOException
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 abstract class LSHTTPClientContract {
@@ -1094,5 +1095,37 @@ abstract class LSHTTPClientContract {
     this.logger.debug("expected exception: ", ex)
     val timeNow = Instant.now()
     Assertions.assertTrue(timeNow.isAfter(timeExpected))
+  }
+
+  /**
+   * Language headers are sent.
+   */
+
+  @Test
+  fun testLanguageSent() {
+    this.server.enqueue(
+      MockResponse()
+        .setResponseCode(200)
+        .setBody("Hello."),
+    )
+
+    val clients = this.clients()
+    val client = clients.create(this.context, this.configuration)
+    val request =
+      client.newRequest(this.server.url("/xyz").toString())
+        .build()
+
+    request.execute().use { response ->
+      val status = response.status as LSHTTPResponseStatus.Responded.OK
+      Assertions.assertEquals(200, status.properties.status)
+      Assertions.assertEquals(
+        "Hello.",
+        String(status.bodyStream?.readBytes() ?: ByteArray(0)),
+      )
+    }
+
+    val request1 = this.server.takeRequest()
+    Assertions.assertEquals("GET", request1.method)
+    Assertions.assertEquals(Locale.getDefault().toLanguageTag(), request1.getHeader("Accept-Language"))
   }
 }
