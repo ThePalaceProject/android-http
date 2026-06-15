@@ -19,5 +19,7 @@ class PalaceAAR : Plugin<Project> {
     project.extensions.configure(LibraryExtension::class.java) {
       PalaceCompilerConfiguration.configureAndroidLibrary(this, properties)
     }
+    PalaceCompilerConfiguration.configureDisableTransitiveDependencies(project)
+    PalaceCompilerConfiguration.configureDisableTests(project)
   }
 }

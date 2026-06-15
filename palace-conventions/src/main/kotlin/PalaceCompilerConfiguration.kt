@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
+import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
@@ -63,6 +64,90 @@ object PalaceCompilerConfiguration {
           test.reports.junitXml.required.set(true)
         }
       }
+    }
+  }
+
+  fun configureDisableTransitiveDependencies(
+    project: Project
+  ) {
+    /*
+     * The dependency configurations that are allowed to be transitive. Most of these are present
+     * just because the various Android build system garbage will break catastrophically if
+     * transitive dependencies aren't allowed.
+     */
+
+    val transitiveConfigurations = setOf(
+      "androidTestDebugImplementation",
+      "androidTestDebugImplementationDependenciesMetadata",
+      "androidTestImplementation",
+      "androidTestImplementationDependenciesMetadata",
+      "androidTestReleaseImplementation",
+      "androidTestReleaseImplementationDependenciesMetadata",
+      "annotationProcessor",
+      "coreLibraryDesugaring",
+      "debugAndroidTestCompilationImplementation",
+      "debugAndroidTestImplementation",
+      "debugAndroidTestImplementationDependenciesMetadata",
+      "debugAnnotationProcessor",
+      "debugAnnotationProcessorClasspath",
+      "debugUnitTestCompilationImplementation",
+      "debugUnitTestImplementation",
+      "debugUnitTestImplementationDependenciesMetadata",
+      "kotlinBuildToolsApiClasspath",
+      "kotlinCompilerClasspath",
+      "kotlinCompilerPluginClasspath",
+      "kotlinCompilerPluginClasspathDebug",
+      "kotlinCompilerPluginClasspathDebugAndroidTest",
+      "kotlinCompilerPluginClasspathDebugUnitTest",
+      "kotlinCompilerPluginClasspathMain",
+      "kotlinCompilerPluginClasspathRelease",
+      "kotlinCompilerPluginClasspathReleaseUnitTest",
+      "kotlinCompilerPluginClasspathTest",
+      "kotlinKlibCommonizerClasspath",
+      "kotlinNativeCompilerPluginClasspath",
+      "kotlinScriptDef",
+      "kotlinScriptDefExtensions",
+      "mainSourceElements",
+      "releaseAnnotationProcessor",
+      "releaseAnnotationProcessorClasspath",
+      "releaseUnitTestCompilationImplementation",
+      "releaseUnitTestImplementation",
+      "releaseUnitTestImplementationDependenciesMetadata",
+      "testDebugImplementation",
+      "testDebugImplementationDependenciesMetadata",
+      "testFixturesDebugImplementation",
+      "testFixturesDebugImplementationDependenciesMetadata",
+      "testFixturesImplementation",
+      "testFixturesImplementationDependenciesMetadata",
+      "testFixturesReleaseImplementation",
+      "testFixturesReleaseImplementationDependenciesMetadata",
+      "testImplementation",
+      "testImplementationDependenciesMetadata",
+      "testReleaseImplementation",
+      "testReleaseImplementationDependenciesMetadata",
+    )
+
+    val configurationsActual = mutableSetOf<String>()
+    project.afterEvaluate {
+      configurations.forEach { cfg ->
+        configurationsActual.add(cfg.name)
+        cfg.isTransitive = transitiveConfigurations.contains(cfg.name)
+      }
+    }
+  }
+
+  fun configureDisableTests(
+    project: Project
+  ) {
+    /*
+     * Configure all "test" tasks to be disabled. The tests are enabled only in those modules
+     * that specifically ask for them. Why do this? Because the Android plugins do lots of
+     * expensive per-module configuration for tests that don't exist.
+     */
+
+    project.afterEvaluate {
+      tasks.matching { task -> task.name.contains("Test") }
+        .forEach { task -> task.enabled = false }
     }
   }
 }
