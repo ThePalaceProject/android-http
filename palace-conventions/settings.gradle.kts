@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        google()
+    }
+
+    plugins {
+        id("com.android.library")
+            .version("9.1.0")
+            .apply(false)
+
+        id("com.android.application")
+            .version("9.1.0")
+            .apply(false)
+    }
+}

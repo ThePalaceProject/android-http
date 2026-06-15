@@ -21,6 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "org.librarysimplified.http"
 
+includeBuild("palace-conventions")
+
 include("org.librarysimplified.http.api")
 include("org.librarysimplified.http.bearer_token")
 include("org.librarysimplified.http.chucker")
