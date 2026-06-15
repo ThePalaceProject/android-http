@@ -127,10 +127,8 @@ object PalaceCompilerConfiguration {
       "testReleaseImplementationDependenciesMetadata",
     )
 
-    val configurationsActual = mutableSetOf<String>()
     project.afterEvaluate {
       configurations.forEach { cfg ->
-        configurationsActual.add(cfg.name)
         cfg.isTransitive = transitiveConfigurations.contains(cfg.name)
       }
     }
