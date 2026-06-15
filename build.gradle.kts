@@ -17,11 +17,11 @@ plugins {
     signing
 
     id("org.jetbrains.kotlin.jvm")
-        .version("2.2.10")
+        .version("2.4.0")
         .apply(false)
 
     id("org.jetbrains.kotlin.android")
-        .version("2.2.10")
+        .version("2.4.0")
         .apply(false)
 
     id("com.github.ben-manes.versions")
