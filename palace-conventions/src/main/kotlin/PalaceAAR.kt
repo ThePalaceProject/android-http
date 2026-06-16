@@ -1,3 +1,4 @@
+import PalaceConfiguration.PackagingType.AAR
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,15 +12,16 @@ class PalaceAAR : Plugin<Project> {
 
     project.pluginManager.apply("com.android.library")
     project.extensions.configure(KotlinAndroidExtension::class.java) {
-      PalaceCompilerConfiguration.configureKotlin(this, properties)
+      PalaceConfiguration.configureKotlin(this, properties)
     }
     project.extensions.configure(JavaPluginExtension::class.java) {
-      PalaceCompilerConfiguration.configureJava(this, properties)
+      PalaceConfiguration.configureJava(this, properties)
     }
     project.extensions.configure(LibraryExtension::class.java) {
-      PalaceCompilerConfiguration.configureAndroidLibrary(this, properties)
+      PalaceConfiguration.configureAndroidLibrary(this, properties)
     }
-    PalaceCompilerConfiguration.configureDisableTransitiveDependencies(project)
-    PalaceCompilerConfiguration.configureDisableTests(project)
+    PalaceConfiguration.configureDisableTransitiveDependencies(project)
+    PalaceConfiguration.configureDisableTests(project)
+    PalaceConfiguration.configurePublishing(properties, project, AAR)
   }
 }
