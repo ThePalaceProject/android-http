@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory
 class LSSimplifiedBearerTokenDeserializers private constructor(
   private val allowedClasses: Set<String>,
 ) : SimpleDeserializers() {
-
   private val logger =
     LoggerFactory.getLogger(LSSimplifiedBearerTokenDeserializers::class.java)
 
@@ -179,7 +178,6 @@ class LSSimplifiedBearerTokenDeserializers private constructor(
   }
 
   companion object {
-
     private val logger =
       LoggerFactory.getLogger(LSSimplifiedBearerTokenDeserializers::class.java)
 

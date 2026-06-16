@@ -5,7 +5,6 @@ import okhttp3.EventListener
 import java.util.concurrent.atomic.AtomicLong
 
 object LSHTTPTimingEventListenerFactory : EventListener.Factory {
-
   private val callId = AtomicLong()
 
   override fun create(

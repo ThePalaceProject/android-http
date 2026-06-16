@@ -7,7 +7,6 @@ import android.content.Context
  */
 
 interface LSHTTPClientProviderType {
-
   /**
    * Create a new client using the given application context and configuration.
    */

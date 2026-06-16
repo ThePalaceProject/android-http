@@ -10,7 +10,6 @@ import java.net.URI
  */
 
 interface LSHTTPClientType {
-
   /**
    * Create a new request builder for the given URI.
    */

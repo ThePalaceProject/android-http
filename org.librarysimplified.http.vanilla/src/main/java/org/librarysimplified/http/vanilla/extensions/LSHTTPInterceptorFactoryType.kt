@@ -8,7 +8,6 @@ import okhttp3.Interceptor
  */
 
 interface LSHTTPInterceptorFactoryType {
-
   /**
    * The name of the interceptor.
    */

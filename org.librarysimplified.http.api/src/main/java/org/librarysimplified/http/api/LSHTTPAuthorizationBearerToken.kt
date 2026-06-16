@@ -5,7 +5,6 @@ package org.librarysimplified.http.api
  */
 
 object LSHTTPAuthorizationBearerToken {
-
   private class Token(
     private val text: String,
   ) : LSHTTPAuthorizationType {

@@ -11,7 +11,6 @@ import org.slf4j.Logger
 class LSHTTPLoggingInterceptor(
   private val logger: Logger,
 ) : Interceptor {
-
   override fun intercept(chain: Interceptor.Chain): Response {
     val request = chain.request()
     this.logger.debug("[{}] -> {}", request.url, request.method)

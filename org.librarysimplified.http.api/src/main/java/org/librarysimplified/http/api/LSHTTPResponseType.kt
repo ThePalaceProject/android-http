@@ -8,7 +8,6 @@ import java.io.Closeable
  */
 
 interface LSHTTPResponseType : Closeable {
-
   /**
    * The properties of the response.
    */

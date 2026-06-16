@@ -5,7 +5,6 @@ package org.librarysimplified.http.api
  */
 
 interface LSHTTPNetworkAvailabilityType : LSHTTPNetworkAvailabilityReadableType {
-
   fun setWIFIAvailable(
     available: Boolean,
   )

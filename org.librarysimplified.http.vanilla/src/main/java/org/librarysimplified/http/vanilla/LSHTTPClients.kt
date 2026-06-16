@@ -17,7 +17,6 @@ class LSHTTPClients(
   private val problemReportParsers: LSHTTPProblemReportParserFactoryType,
   private val interceptors: List<LSHTTPInterceptorFactoryType>,
 ) : LSHTTPClientProviderType {
-
   constructor() : this(
     problemReportParsers = LSHTTPProblemReportParsers(),
     interceptors = ServiceLoader.load(LSHTTPInterceptorFactoryType::class.java).toList(),

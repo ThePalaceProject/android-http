@@ -8,7 +8,6 @@ import java.nio.charset.Charset
  */
 
 object LSHTTPAuthorizationBasic {
-
   private class Basic(
     private val text: String,
   ) : LSHTTPAuthorizationType {

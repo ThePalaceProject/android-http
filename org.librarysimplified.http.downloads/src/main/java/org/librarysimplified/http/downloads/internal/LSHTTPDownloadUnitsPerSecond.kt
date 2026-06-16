@@ -7,8 +7,9 @@ import org.joda.time.Seconds
  * A units per second counter.
  */
 
-class LSHTTPDownloadUnitsPerSecond(clock: () -> Instant) {
-
+class LSHTTPDownloadUnitsPerSecond(
+  clock: () -> Instant,
+) {
   @Volatile
   private var first = true
 

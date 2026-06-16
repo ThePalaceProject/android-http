@@ -14,7 +14,6 @@ class LSHTTPRequest(
   private val modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)?,
   private val observer: ((LSHTTPResponseType) -> Unit)?,
 ) : LSHTTPRequestType {
-
   private lateinit var request: Request
 
   override fun execute(): LSHTTPResponse {

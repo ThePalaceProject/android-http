@@ -7,7 +7,6 @@ import org.librarysimplified.http.api.LSHTTPResponseStatus
  */
 
 sealed class LSHTTPDownloadState {
-
   /**
    * The download has started. Implementations must guarantee to publish this state exactly
    * once at the start of a download.
@@ -33,7 +32,6 @@ sealed class LSHTTPDownloadState {
    */
 
   sealed class LSHTTPDownloadResult : LSHTTPDownloadState() {
-
     /**
      * The response the server sent, if any.
      */
@@ -56,7 +54,6 @@ sealed class LSHTTPDownloadState {
      */
 
     sealed class DownloadFailed : LSHTTPDownloadResult() {
-
       /**
        * The download failed because the server sent a failure response.
        */

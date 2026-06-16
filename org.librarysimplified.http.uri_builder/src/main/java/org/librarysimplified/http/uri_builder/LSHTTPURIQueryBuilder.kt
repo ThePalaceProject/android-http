@@ -10,7 +10,6 @@ import java.util.SortedMap
  */
 
 object LSHTTPURIQueryBuilder {
-
   /**
    * Encode a query using the given base URI and set of parameters.
    *

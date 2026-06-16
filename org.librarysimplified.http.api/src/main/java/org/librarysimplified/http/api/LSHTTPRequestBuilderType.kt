@@ -7,13 +7,11 @@ import one.irradia.mime.api.MIMEType
  */
 
 interface LSHTTPRequestBuilderType {
-
   /**
    * A specification of whether or not redirects should be allowed.
    */
 
   enum class AllowRedirects {
-
     /**
      * Redirects should be followed automatically.
      */
@@ -64,6 +62,7 @@ interface LSHTTPRequestBuilderType {
 
   sealed class Method {
     object Get : Method()
+
     object Head : Method()
 
     data class Delete(

@@ -5,7 +5,6 @@ package org.librarysimplified.http.api
  */
 
 interface LSHTTPRequestType {
-
   /**
    * The properties of the request
    */

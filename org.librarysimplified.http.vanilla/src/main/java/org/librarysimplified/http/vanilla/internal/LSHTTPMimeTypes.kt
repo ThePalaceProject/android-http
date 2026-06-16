@@ -7,7 +7,6 @@ import one.irradia.mime.api.MIMEType
  */
 
 object LSHTTPMimeTypes {
-
   val octetStream =
     MIMEType("application", "octet-stream", mapOf())
 

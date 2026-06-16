@@ -7,7 +7,6 @@ import org.librarysimplified.http.downloads.LSHTTPDownloadState.LSHTTPDownloadRe
  */
 
 interface LSHTTPDownloadType {
-
   /**
    * Execute the download request.
    */
