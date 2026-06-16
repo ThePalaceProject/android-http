@@ -11,16 +11,6 @@ plugins {
     signing
 
     /*
-     * Android Junit5 plugin. Required to run JUnit 5 tests on Android projects.
-     *
-     * https://github.com/mannodermaus/android-junit5
-     */
-
-    id("de.mannodermaus.android-junit")
-        .version("2.0.1")
-        .apply(false)
-
-    /*
      * https://developers.google.com/android/guides/google-services-plugin
      */
 

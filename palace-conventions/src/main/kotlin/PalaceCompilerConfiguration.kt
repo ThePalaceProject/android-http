@@ -62,6 +62,7 @@ object PalaceCompilerConfiguration {
           test.systemProperty("jdk.attach.allowAttachSelf", "true")
           test.reports.html.required.set(true)
           test.reports.junitXml.required.set(true)
+          test.useJUnitPlatform()
         }
       }
     }

@@ -33,6 +33,7 @@ dependencies {
         libs.junit.jupiter.vintage,
         libs.junit.platform.commons,
         libs.junit.platform.engine,
+        libs.junit.platform.launcher,
         libs.kotlin.reflect,
         libs.kotlin.stdlib,
         libs.logback.classic,
@@ -58,6 +59,6 @@ dependencies {
 }
 
 afterEvaluate {
-    tasks.matching { task -> task.name.contains("UnitTest") }
+    tasks.matching { task -> task.name.contains("Test") }
         .forEach { task -> task.enabled = true }
 }
