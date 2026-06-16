@@ -27,4 +27,5 @@ plugins {
         .apply(false)
 
     id("maven-publish")
+    id("org.thepalaceproject.ktlint")
 }

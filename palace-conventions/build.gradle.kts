@@ -17,5 +17,9 @@ gradlePlugin {
             id = "org.thepalaceproject.build.aar"
             implementationClass = "PalaceAAR"
         }
+        register("PalaceKtLint") {
+            id = "org.thepalaceproject.ktlint"
+            implementationClass = "PalaceKtLint"
+        }
     }
 }

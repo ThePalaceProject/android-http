@@ -17,20 +17,20 @@ object PalaceCompilerConfiguration {
       JavaVersion.toVersion(properties.jdkBytecodeTarget)
 
     ex.toolchain.languageVersion.set(
-      JavaLanguageVersion.of(properties.jdkBuild)
+      JavaLanguageVersion.of(properties.jdkBuild),
     )
   }
 
   fun configureKotlin(
     ex: KotlinAndroidExtension,
-    properties: PalaceProjectProperties
+    properties: PalaceProjectProperties,
   ) {
     ex.jvmToolchain(properties.jdkBuild)
   }
 
   fun configureAndroidLibrary(
     ex: LibraryExtension,
-    properties: PalaceProjectProperties
+    properties: PalaceProjectProperties,
   ) {
     ex.namespace =
       properties.pomArtifactId
@@ -69,7 +69,7 @@ object PalaceCompilerConfiguration {
   }
 
   fun configureDisableTransitiveDependencies(
-    project: Project
+    project: Project,
   ) {
     /*
      * The dependency configurations that are allowed to be transitive. Most of these are present
@@ -136,7 +136,7 @@ object PalaceCompilerConfiguration {
   }
 
   fun configureDisableTests(
-    project: Project
+    project: Project,
   ) {
     /*
      * Configure all "test" tasks to be disabled. The tests are enabled only in those modules
