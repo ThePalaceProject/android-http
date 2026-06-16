@@ -8,7 +8,6 @@ import java.io.IOException
  */
 
 interface LSHTTPProblemReportParserType : Closeable {
-
   /**
    * Execute the parser, raising an exception in the case of parse errors.
    */

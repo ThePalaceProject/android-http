@@ -11,7 +11,6 @@ import org.librarysimplified.http.api.LSHTTPNetworkAccessReadableType.LSHTTPNetw
 interface LSHTTPNetworkAccessReadableType :
   LSHTTPNetworkAvailabilityReadableType,
   LSHTTPNetworkPolicyReadableType {
-
   /**
    * The reason that downloads may or may not be available.
    */

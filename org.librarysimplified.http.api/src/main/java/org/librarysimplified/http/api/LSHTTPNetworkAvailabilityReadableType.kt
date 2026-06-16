@@ -7,7 +7,6 @@ import com.io7m.jattribute.core.AttributeReadableType
  */
 
 interface LSHTTPNetworkAvailabilityReadableType {
-
   val wifiAvailable: AttributeReadableType<Boolean>
 
   val cellularAvailable: AttributeReadableType<Boolean>

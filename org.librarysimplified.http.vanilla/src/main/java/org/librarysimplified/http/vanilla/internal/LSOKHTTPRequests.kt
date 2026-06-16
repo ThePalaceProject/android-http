@@ -8,7 +8,6 @@ import org.librarysimplified.http.api.LSHTTPRequestProperties
 import java.util.Locale
 
 object LSOKHTTPRequests {
-
   fun createRequest(
     properties: LSHTTPRequestProperties,
   ): Request {
@@ -46,19 +45,23 @@ object LSOKHTTPRequests {
       LSHTTPRequestBuilderType.Method.Get -> {
         builder.get()
       }
+
       LSHTTPRequestBuilderType.Method.Head -> {
         builder.head()
       }
+
       is LSHTTPRequestBuilderType.Method.Post -> {
         val bytes = method.body
         val type = method.contentType.fullType
         builder.post(bytes.toRequestBody(type.toMediaType()))
       }
+
       is LSHTTPRequestBuilderType.Method.Put -> {
         val bytes = method.body
         val type = method.contentType.fullType
         builder.put(bytes.toRequestBody(type.toMediaType()))
       }
+
       is LSHTTPRequestBuilderType.Method.Delete -> {
         val bytes = method.body
         val type = method.contentType.fullType

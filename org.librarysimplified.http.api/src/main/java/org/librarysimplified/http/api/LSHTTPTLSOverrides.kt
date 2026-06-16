@@ -11,19 +11,16 @@ import javax.net.ssl.X509TrustManager
  */
 
 data class LSHTTPTLSOverrides(
-
   /**
    * The factory used to produce SSL sockets.
    */
 
   val sslSocketFactory: SSLSocketFactory,
-
   /**
    * The trust manager used to verify client/server certs.
    */
 
   val trustManager: X509TrustManager,
-
   /**
    * The verifier used to check hostnames.
    */

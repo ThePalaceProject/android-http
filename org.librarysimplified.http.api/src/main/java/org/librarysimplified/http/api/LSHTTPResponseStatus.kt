@@ -11,7 +11,6 @@ import java.io.InputStream
  */
 
 sealed class LSHTTPResponseStatus {
-
   /**
    * The properties of the response.
    */
@@ -23,7 +22,6 @@ sealed class LSHTTPResponseStatus {
    */
 
   sealed class Responded : LSHTTPResponseStatus() {
-
     abstract override val properties: LSHTTPResponseProperties
 
     /**

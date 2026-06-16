@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 
 class LSHTTPNetworkAvailabilityService : Service() {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPNetworkAvailabilityService::class.java)
 
@@ -39,13 +38,15 @@ class LSHTTPNetworkAvailabilityService : Service() {
 
       try {
         val cellularRequest =
-          NetworkRequest.Builder()
+          NetworkRequest
+            .Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build()
 
         val wifiRequest =
-          NetworkRequest.Builder()
+          NetworkRequest
+            .Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .build()

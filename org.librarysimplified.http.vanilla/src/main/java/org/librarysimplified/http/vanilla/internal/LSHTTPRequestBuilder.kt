@@ -16,7 +16,6 @@ class LSHTTPRequestBuilder(
   private val client: LSHTTPClient,
   private val target: URI,
 ) : LSHTTPRequestBuilderType {
-
   private var observer: ((LSHTTPResponseType) -> Unit)? = null
   private var modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)? = null
   private var redirects: AllowRedirects = AllowRedirects.ALLOW_REDIRECTS

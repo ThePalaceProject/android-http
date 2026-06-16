@@ -8,7 +8,6 @@ import org.librarysimplified.http.downloads.internal.LSHTTPDownload
  */
 
 object LSHTTPDownloads {
-
   /**
    * Create and execute a download for the given request.
    */

@@ -12,7 +12,6 @@ import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryTyp
  */
 
 class LSHTTPChuckerInterceptors : LSHTTPInterceptorFactoryType {
-
   override val name: String =
     "org.librarysimplified.http.chucker"
   override val version: String =

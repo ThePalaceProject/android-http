@@ -8,7 +8,6 @@ class LSHTTPRedirectResponseInterceptor(
   private val client: LSHTTPClient,
   private val observer: (LSHTTPResponseType) -> Unit,
 ) : Interceptor {
-
   override fun intercept(
     chain: Interceptor.Chain,
   ): Response {

@@ -21,7 +21,6 @@ class LSHTTPClient(
   val interceptors: List<LSHTTPInterceptorFactoryType>,
   override val networkAccess: LSHTTPNetworkAccessType = configuration.networkAccess,
 ) : LSHTTPClientType {
-
   internal val logger =
     LoggerFactory.getLogger(LSHTTPClient::class.java)
 
@@ -32,7 +31,10 @@ class LSHTTPClient(
   }
 
   override fun userAgent(): String {
-    return "${this.configuration.applicationName}/${this.configuration.applicationVersion} (Simplified-Android-HTTP ${BuildConfig.HTTP_VERSION_NAME})"
+    val app = this.configuration.applicationName
+    val ver = this.configuration.applicationVersion
+
+    return "$app/$ver (Simplified-Android-HTTP ${BuildConfig.HTTP_VERSION_NAME})"
   }
 
   internal fun createOkClient(
@@ -62,10 +64,12 @@ class LSHTTPClient(
         builder.followRedirects(true)
         builder.followSslRedirects(false)
       }
+
       LSHTTPRequestBuilderType.AllowRedirects.DISALLOW_REDIRECTS -> {
         builder.followRedirects(false)
         builder.followSslRedirects(false)
       }
+
       LSHTTPRequestBuilderType.AllowRedirects.ALLOW_UNSAFE_REDIRECTS -> {
         builder.followRedirects(true)
         builder.followSslRedirects(true)

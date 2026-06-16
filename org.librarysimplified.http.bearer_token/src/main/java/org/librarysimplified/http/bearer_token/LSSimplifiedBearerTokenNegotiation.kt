@@ -16,7 +16,6 @@ import java.net.URI
  */
 
 object LSSimplifiedBearerTokenNegotiation {
-
   private val logger =
     LoggerFactory.getLogger(LSSimplifiedBearerTokenNegotiation::class.java)
 
@@ -59,7 +58,8 @@ object LSSimplifiedBearerTokenNegotiation {
     this.logger.debug("Negotiating a bearer token at {}", target)
 
     val requestBuilder =
-      client.newRequest(target)
+      client
+        .newRequest(target)
         .setMethod(LSHTTPRequestBuilderType.Method.Get)
         .setAuthorization(authorization)
 

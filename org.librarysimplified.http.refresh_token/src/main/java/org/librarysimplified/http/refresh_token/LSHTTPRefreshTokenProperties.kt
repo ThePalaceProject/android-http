@@ -15,7 +15,6 @@ data class LSHTTPRefreshTokenProperties(
   val refreshURI: URI,
 ) {
   companion object {
-
     /**
      * Add the necessary extension properties to the given request builder in order to support
      * the transparent negotiation of tokens.

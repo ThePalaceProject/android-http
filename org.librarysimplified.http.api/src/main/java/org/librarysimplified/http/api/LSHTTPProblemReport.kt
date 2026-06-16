@@ -14,7 +14,6 @@ data class LSHTTPProblemReport(
   val detail: String?,
   val type: String?,
 ) : Serializable {
-
   /**
    * @return The current report as a set of named attributes
    */

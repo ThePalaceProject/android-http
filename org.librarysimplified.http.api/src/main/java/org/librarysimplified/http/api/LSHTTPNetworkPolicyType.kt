@@ -5,7 +5,6 @@ package org.librarysimplified.http.api
  */
 
 interface LSHTTPNetworkPolicyType : LSHTTPNetworkPolicyReadableType {
-
   fun setWIFIPermitted(
     permitted: Boolean,
   )

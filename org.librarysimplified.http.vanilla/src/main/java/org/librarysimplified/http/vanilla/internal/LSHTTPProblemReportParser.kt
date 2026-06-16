@@ -13,7 +13,6 @@ class LSHTTPProblemReportParser(
   private val uri: String,
   private val stream: InputStream,
 ) : LSHTTPProblemReportParserType {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPProblemReportParser::class.java)
 

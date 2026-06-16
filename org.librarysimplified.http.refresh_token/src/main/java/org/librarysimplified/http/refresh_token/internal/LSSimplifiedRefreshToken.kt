@@ -9,13 +9,10 @@ class LSSimplifiedRefreshToken(
   @JvmField
   @JsonProperty("accessToken")
   val accessToken: String,
-
   @JsonIgnore
   @JsonProperty("expiresIn")
   val expiresIn: Int? = null,
-
   @JsonIgnore
   @JsonProperty("tokenType")
   val tokenType: String? = null,
-
 )

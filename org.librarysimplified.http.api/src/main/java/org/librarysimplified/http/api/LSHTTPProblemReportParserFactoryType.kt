@@ -7,7 +7,6 @@ import java.io.InputStream
  */
 
 interface LSHTTPProblemReportParserFactoryType {
-
   /**
    * Create a new parser for the given input stream. The provided URI is used for
    * diagnostic messages.

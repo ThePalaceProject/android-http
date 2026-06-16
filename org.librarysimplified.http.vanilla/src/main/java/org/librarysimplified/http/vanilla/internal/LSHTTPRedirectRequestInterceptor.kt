@@ -9,7 +9,6 @@ import java.util.SortedMap
 class LSHTTPRedirectRequestInterceptor(
   private val modifier: ((LSHTTPRequestProperties) -> LSHTTPRequestProperties)?,
 ) : Interceptor {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPRedirectRequestInterceptor::class.java)
 

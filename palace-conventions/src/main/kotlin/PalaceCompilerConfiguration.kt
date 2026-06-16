@@ -6,7 +6,6 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 object PalaceCompilerConfiguration {
-
   fun configureJava(
     ex: JavaPluginExtension,
     properties: PalaceProjectProperties,
@@ -60,73 +59,74 @@ object PalaceCompilerConfiguration {
         all { test ->
           // Required for the Mockito ByteBuddy agent on modern VMs.
           test.systemProperty("jdk.attach.allowAttachSelf", "true")
-          test.reports.html.required.set(true)
-          test.reports.junitXml.required.set(true)
+          test.reports.html.required
+            .set(true)
+          test.reports.junitXml.required
+            .set(true)
           test.useJUnitPlatform()
         }
       }
     }
   }
 
-  fun configureDisableTransitiveDependencies(
-    project: Project,
-  ) {
+  fun configureDisableTransitiveDependencies(project: Project) {
     /*
      * The dependency configurations that are allowed to be transitive. Most of these are present
      * just because the various Android build system garbage will break catastrophically if
      * transitive dependencies aren't allowed.
      */
 
-    val transitiveConfigurations = setOf(
-      "androidTestDebugImplementation",
-      "androidTestDebugImplementationDependenciesMetadata",
-      "androidTestImplementation",
-      "androidTestImplementationDependenciesMetadata",
-      "androidTestReleaseImplementation",
-      "androidTestReleaseImplementationDependenciesMetadata",
-      "annotationProcessor",
-      "coreLibraryDesugaring",
-      "debugAndroidTestCompilationImplementation",
-      "debugAndroidTestImplementation",
-      "debugAndroidTestImplementationDependenciesMetadata",
-      "debugAnnotationProcessor",
-      "debugAnnotationProcessorClasspath",
-      "debugUnitTestCompilationImplementation",
-      "debugUnitTestImplementation",
-      "debugUnitTestImplementationDependenciesMetadata",
-      "kotlinBuildToolsApiClasspath",
-      "kotlinCompilerClasspath",
-      "kotlinCompilerPluginClasspath",
-      "kotlinCompilerPluginClasspathDebug",
-      "kotlinCompilerPluginClasspathDebugAndroidTest",
-      "kotlinCompilerPluginClasspathDebugUnitTest",
-      "kotlinCompilerPluginClasspathMain",
-      "kotlinCompilerPluginClasspathRelease",
-      "kotlinCompilerPluginClasspathReleaseUnitTest",
-      "kotlinCompilerPluginClasspathTest",
-      "kotlinKlibCommonizerClasspath",
-      "kotlinNativeCompilerPluginClasspath",
-      "kotlinScriptDef",
-      "kotlinScriptDefExtensions",
-      "mainSourceElements",
-      "releaseAnnotationProcessor",
-      "releaseAnnotationProcessorClasspath",
-      "releaseUnitTestCompilationImplementation",
-      "releaseUnitTestImplementation",
-      "releaseUnitTestImplementationDependenciesMetadata",
-      "testDebugImplementation",
-      "testDebugImplementationDependenciesMetadata",
-      "testFixturesDebugImplementation",
-      "testFixturesDebugImplementationDependenciesMetadata",
-      "testFixturesImplementation",
-      "testFixturesImplementationDependenciesMetadata",
-      "testFixturesReleaseImplementation",
-      "testFixturesReleaseImplementationDependenciesMetadata",
-      "testImplementation",
-      "testImplementationDependenciesMetadata",
-      "testReleaseImplementation",
-      "testReleaseImplementationDependenciesMetadata",
-    )
+    val transitiveConfigurations =
+      setOf(
+        "androidTestDebugImplementation",
+        "androidTestDebugImplementationDependenciesMetadata",
+        "androidTestImplementation",
+        "androidTestImplementationDependenciesMetadata",
+        "androidTestReleaseImplementation",
+        "androidTestReleaseImplementationDependenciesMetadata",
+        "annotationProcessor",
+        "coreLibraryDesugaring",
+        "debugAndroidTestCompilationImplementation",
+        "debugAndroidTestImplementation",
+        "debugAndroidTestImplementationDependenciesMetadata",
+        "debugAnnotationProcessor",
+        "debugAnnotationProcessorClasspath",
+        "debugUnitTestCompilationImplementation",
+        "debugUnitTestImplementation",
+        "debugUnitTestImplementationDependenciesMetadata",
+        "kotlinBuildToolsApiClasspath",
+        "kotlinCompilerClasspath",
+        "kotlinCompilerPluginClasspath",
+        "kotlinCompilerPluginClasspathDebug",
+        "kotlinCompilerPluginClasspathDebugAndroidTest",
+        "kotlinCompilerPluginClasspathDebugUnitTest",
+        "kotlinCompilerPluginClasspathMain",
+        "kotlinCompilerPluginClasspathRelease",
+        "kotlinCompilerPluginClasspathReleaseUnitTest",
+        "kotlinCompilerPluginClasspathTest",
+        "kotlinKlibCommonizerClasspath",
+        "kotlinNativeCompilerPluginClasspath",
+        "kotlinScriptDef",
+        "kotlinScriptDefExtensions",
+        "mainSourceElements",
+        "releaseAnnotationProcessor",
+        "releaseAnnotationProcessorClasspath",
+        "releaseUnitTestCompilationImplementation",
+        "releaseUnitTestImplementation",
+        "releaseUnitTestImplementationDependenciesMetadata",
+        "testDebugImplementation",
+        "testDebugImplementationDependenciesMetadata",
+        "testFixturesDebugImplementation",
+        "testFixturesDebugImplementationDependenciesMetadata",
+        "testFixturesImplementation",
+        "testFixturesImplementationDependenciesMetadata",
+        "testFixturesReleaseImplementation",
+        "testFixturesReleaseImplementationDependenciesMetadata",
+        "testImplementation",
+        "testImplementationDependenciesMetadata",
+        "testReleaseImplementation",
+        "testReleaseImplementationDependenciesMetadata",
+      )
 
     project.afterEvaluate {
       configurations.forEach { cfg ->
@@ -135,9 +135,7 @@ object PalaceCompilerConfiguration {
     }
   }
 
-  fun configureDisableTests(
-    project: Project,
-  ) {
+  fun configureDisableTests(project: Project) {
     /*
      * Configure all "test" tasks to be disabled. The tests are enabled only in those modules
      * that specifically ask for them. Why do this? Because the Android plugins do lots of
@@ -145,7 +143,8 @@ object PalaceCompilerConfiguration {
      */
 
     project.afterEvaluate {
-      tasks.matching { task -> task.name.contains("Test") }
+      tasks
+        .matching { task -> task.name.contains("Test") }
         .forEach { task -> task.enabled = false }
     }
   }

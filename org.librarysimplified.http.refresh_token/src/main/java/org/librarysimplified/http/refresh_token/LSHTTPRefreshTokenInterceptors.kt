@@ -10,7 +10,6 @@ import org.librarysimplified.http.vanilla.extensions.LSHTTPInterceptorFactoryTyp
  **/
 
 class LSHTTPRefreshTokenInterceptors : LSHTTPInterceptorFactoryType {
-
   override val name: String =
     "org.librarysimplified.http.refresh_token"
 

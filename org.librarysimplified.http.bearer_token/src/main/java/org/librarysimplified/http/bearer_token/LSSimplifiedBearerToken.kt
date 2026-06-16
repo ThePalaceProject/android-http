@@ -14,14 +14,11 @@ import java.net.URI
 data class LSSimplifiedBearerToken(
   @JsonProperty(value = "access_token", required = true)
   val accessToken: String,
-
   @JsonProperty(value = "expires_in", required = true)
   val expiresIn: BigInteger,
-
   @JsonProperty(value = "location", required = true)
   val location: URI,
 ) {
-
   /**
    * @return The time at which this bearer token expires
    */

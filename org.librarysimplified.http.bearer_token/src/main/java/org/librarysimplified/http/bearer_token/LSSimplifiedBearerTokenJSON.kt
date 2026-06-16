@@ -10,7 +10,6 @@ import java.io.InputStream
  */
 
 object LSSimplifiedBearerTokenJSON {
-
   fun serializeToJSON(
     objectMapper: ObjectMapper,
     token: LSSimplifiedBearerToken,

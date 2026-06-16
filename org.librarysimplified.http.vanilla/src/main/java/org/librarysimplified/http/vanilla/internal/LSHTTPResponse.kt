@@ -21,9 +21,7 @@ class LSHTTPResponse(
   override val status: LSHTTPResponseStatus,
   val response: Response?,
 ) : LSHTTPResponseType {
-
   companion object {
-
     /**
      * Translate an okHTTP response to an LS response.
      */
@@ -92,30 +90,36 @@ class LSHTTPResponse(
       return when {
         adjustedStatus >= 400 -> {
           LSHTTPResponse(
-            status = LSHTTPResponseStatus.Responded.Error(
-              properties = properties,
-              bodyStream = responseStream,
-            ),
+            status =
+              LSHTTPResponseStatus.Responded.Error(
+                properties = properties,
+                bodyStream = responseStream,
+              ),
             response = response,
           )
         }
+
         adjustedStatus >= 300 -> {
           LSHTTPResponse(
-            status = LSHTTPResponseStatus.Responded.Error(
-              properties = properties.copy(
-                message = refusedRedirectMessage(properties.header("location")),
+            status =
+              LSHTTPResponseStatus.Responded.Error(
+                properties =
+                  properties.copy(
+                    message = refusedRedirectMessage(properties.header("location")),
+                  ),
+                bodyStream = responseStream,
               ),
-              bodyStream = responseStream,
-            ),
             response = response,
           )
         }
+
         else -> {
           LSHTTPResponse(
-            status = LSHTTPResponseStatus.Responded.OK(
-              properties = properties,
-              bodyStream = responseStream,
-            ),
+            status =
+              LSHTTPResponseStatus.Responded.OK(
+                properties = properties,
+                bodyStream = responseStream,
+              ),
             response = response,
           )
         }
@@ -154,11 +158,12 @@ class LSHTTPResponse(
         secure = cookie.secure,
         httpOnly = cookie.httpOnly,
         expiresAt = expires,
-        attributes = mapOf(
-          Pair("domain", cookie.domain),
-          Pair("hostOnly", cookie.hostOnly.toString()),
-          Pair("persistent", cookie.persistent.toString()),
-        ),
+        attributes =
+          mapOf(
+            Pair("domain", cookie.domain),
+            Pair("hostOnly", cookie.hostOnly.toString()),
+            Pair("persistent", cookie.persistent.toString()),
+          ),
       )
     }
 
@@ -172,10 +177,11 @@ class LSHTTPResponse(
       val problemType = LSHTTPMimeTypes.problemReport.fullType
       return if (responseType == problemType && responseBody != null) {
         try {
-          client.problemReportParsers.createParser(
-            uri = request.url.toString(),
-            stream = responseBody.byteStream(),
-          ).use(LSHTTPProblemReportParserType::execute)
+          client.problemReportParsers
+            .createParser(
+              uri = request.url.toString(),
+              stream = responseBody.byteStream(),
+            ).use(LSHTTPProblemReportParserType::execute)
         } catch (e: Exception) {
           null
         }

@@ -5,7 +5,6 @@ package org.librarysimplified.http.api
  */
 
 interface LSHTTPAuthorizationType {
-
   /**
    * @return The value as it will appear directly in an HTTP Authorization header
    */

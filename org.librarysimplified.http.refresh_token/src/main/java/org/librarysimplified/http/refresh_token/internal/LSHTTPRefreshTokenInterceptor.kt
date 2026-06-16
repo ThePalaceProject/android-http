@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import java.net.HttpURLConnection
 
 class LSHTTPRefreshTokenInterceptor : Interceptor {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPRefreshTokenInterceptor::class.java)
 
@@ -37,15 +36,15 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
       this.logger.debug("We have a username and an authentication URL.")
       this.logger.debug("Refreshing token...")
 
-      val newRequest = originalRequest
-        .newBuilder()
-        .method("POST", "".toRequestBody())
-        .header(
-          "Authorization",
-          LSHTTPAuthorizationBasic.ofUsernamePassword(userName, password).toHeaderValue(),
-        )
-        .url(authenticationUrl)
-        .build()
+      val newRequest =
+        originalRequest
+          .newBuilder()
+          .method("POST", "".toRequestBody())
+          .header(
+            "Authorization",
+            LSHTTPAuthorizationBasic.ofUsernamePassword(userName, password).toHeaderValue(),
+          ).url(authenticationUrl)
+          .build()
 
       originalResponse.close()
       val response = chain.proceed(newRequest)
@@ -59,17 +58,18 @@ class LSHTTPRefreshTokenInterceptor : Interceptor {
 
           response.close()
 
-          val newResponse = chain.proceed(
-            originalRequest
-              .newBuilder()
-              .header(
-                "Authorization",
-                LSHTTPAuthorizationBearerToken.ofToken(accessToken).toHeaderValue(),
-              )
-              .build(),
-          )
+          val newResponse =
+            chain.proceed(
+              originalRequest
+                .newBuilder()
+                .header(
+                  "Authorization",
+                  LSHTTPAuthorizationBearerToken.ofToken(accessToken).toHeaderValue(),
+                ).build(),
+            )
 
-          newResponse.newBuilder()
+          newResponse
+            .newBuilder()
             .addHeader(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN, accessToken)
             .build()
         } catch (e: Exception) {

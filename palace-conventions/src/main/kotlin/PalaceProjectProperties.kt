@@ -31,11 +31,9 @@ data class PalaceProjectProperties(
         map[key]?.toString()
           ?: error("Missing required property: $key")
 
-      fun int(key: String): Int =
-        string(key).toInt()
+      fun int(key: String): Int = string(key).toInt()
 
-      fun bool(key: String): Boolean =
-        string(key).toBooleanStrict()
+      fun bool(key: String): Boolean = string(key).toBooleanStrict()
 
       return PalaceProjectProperties(
         adobeDrmEnabled = bool("org.thepalaceproject.adobeDRM.enabled"),

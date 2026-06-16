@@ -17,7 +17,6 @@ import java.net.Proxy
 class LSHTTPTimingEventListener(
   private val id: Long,
 ) : EventListener() {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPTimingEventListener::class.java)
 

@@ -21,7 +21,6 @@ import java.util.concurrent.CancellationException
 class LSHTTPDownload(
   private val request: LSHTTPDownloadRequest,
 ) : LSHTTPDownloadType {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPDownload::class.java)
 
@@ -34,12 +33,17 @@ class LSHTTPDownload(
       this.request.onEvent(DownloadStarted)
       this.request.request.execute().use { response ->
         when (val status = response.status) {
-          is LSHTTPResponseStatus.Responded.OK ->
+          is LSHTTPResponseStatus.Responded.OK -> {
             this.handleTransfer(status)
-          is LSHTTPResponseStatus.Responded.Error ->
+          }
+
+          is LSHTTPResponseStatus.Responded.Error -> {
             this.handleRespondedError(status)
-          is LSHTTPResponseStatus.Failed ->
+          }
+
+          is LSHTTPResponseStatus.Failed -> {
             this.handleFailed(status)
+          }
         }
       }
     } catch (e: UnacceptableMIME) {
@@ -60,10 +64,11 @@ class LSHTTPDownload(
   private fun handleFailed(
     status: LSHTTPResponseStatus.Failed,
   ): LSHTTPDownloadResult {
-    val result = DownloadFailedExceptionally(
-      responseStatus = status,
-      exception = status.exception,
-    )
+    val result =
+      DownloadFailedExceptionally(
+        responseStatus = status,
+        exception = status.exception,
+      )
     this.request.onEvent(result)
     return result
   }
@@ -91,12 +96,13 @@ class LSHTTPDownload(
     val invalidOriginalLength =
       propertiesContentLength == -1L
 
-    val (expectedSize, inputStream) = if (invalidOriginalLength) {
-      val byteArray = IOUtils.toByteArray(stream)
-      byteArray.size.toLong() to ByteArrayInputStream(byteArray)
-    } else {
-      propertiesContentLength to stream
-    }
+    val (expectedSize, inputStream) =
+      if (invalidOriginalLength) {
+        val byteArray = IOUtils.toByteArray(stream)
+        byteArray.size.toLong() to ByteArrayInputStream(byteArray)
+      } else {
+        propertiesContentLength to stream
+      }
 
     return this.transfer(
       status = status,
@@ -148,7 +154,7 @@ class LSHTTPDownload(
               receivedSize = total,
               bytesPerSecond = unitsPerSecond.now,
               accessToken =
-              status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
+                status.properties?.header(LSHTTPRequestConstants.PROPERTY_KEY_ACCESS_TOKEN),
             ),
           )
         }

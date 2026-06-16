@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory
  */
 
 object LSHTTPNetworkAccess : LSHTTPNetworkAccessType {
-
   private val logger =
     LoggerFactory.getLogger(LSHTTPNetworkAccess::class.java)
 
