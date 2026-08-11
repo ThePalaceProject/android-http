@@ -2,6 +2,7 @@ package org.librarysimplified.http.uri_builder
 
 import java.io.UnsupportedEncodingException
 import java.net.URI
+import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.SortedMap
 
@@ -47,5 +48,41 @@ object LSHTTPURIQueryBuilder {
     } catch (e: UnsupportedEncodingException) {
       throw IllegalStateException(e)
     }
+  }
+
+  /**
+   * Parse the query parameters from a URI and return them as a list of
+   * name/value pairs.
+   *
+   * If the URI has no query component, an empty list is returned.
+   *
+   * @param uri The URI whose query string to parse
+   *
+   * @return A list of decoded name/value pairs
+   */
+
+  fun decodeQuery(uri: URI): List<Pair<String, String>> {
+    val query = uri.query
+    if (query == null || query.isEmpty()) {
+      return emptyList()
+    }
+
+    val pairs = mutableListOf<Pair<String, String>>()
+    val segments = query.split("&")
+    for (segment in segments) {
+      if (segment.isEmpty()) {
+        continue
+      }
+      val eqIndex = segment.indexOf('=')
+      if (eqIndex >= 0) {
+        val name = URLDecoder.decode(segment.substring(0, eqIndex), "UTF-8")
+        val value = URLDecoder.decode(segment.substring(eqIndex + 1), "UTF-8")
+        pairs.add(Pair(name, value))
+      } else {
+        val name = URLDecoder.decode(segment, "UTF-8")
+        pairs.add(Pair(name, ""))
+      }
+    }
+    return pairs
   }
 }
