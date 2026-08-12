@@ -110,9 +110,9 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2026-08-12T14:22:50+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.4.0">
+    <c:release date="2026-08-12T14:37:34+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="2.4.0">
       <c:changes>
-        <c:change date="2026-08-12T14:22:50+00:00" summary="Add URL decoding."/>
+        <c:change date="2026-08-12T00:00:00+00:00" summary="Add URL decoding."/>
       </c:changes>
     </c:release>
   </c:releases>
