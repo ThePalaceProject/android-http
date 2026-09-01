@@ -10,4 +10,6 @@ interface LSHTTPNetworkAvailabilityReadableType {
   val wifiAvailable: AttributeReadableType<Boolean>
 
   val cellularAvailable: AttributeReadableType<Boolean>
+
+  val anyAvailable: AttributeReadableType<Boolean>
 }

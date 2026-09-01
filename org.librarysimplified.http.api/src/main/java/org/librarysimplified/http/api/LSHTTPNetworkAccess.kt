@@ -1,6 +1,7 @@
 package org.librarysimplified.http.api
 
 import com.io7m.jattribute.core.AttributeReadableType
+import com.io7m.jattribute.core.AttributeSubscriptionType
 import com.io7m.jattribute.core.Attributes
 import org.slf4j.LoggerFactory
 
@@ -29,6 +30,22 @@ object LSHTTPNetworkAccess : LSHTTPNetworkAccessType {
   private val cellularPermittedProp =
     this.attributes.withValue(true)
 
+  private val anyAvailableProp =
+    this.attributes.withValue(true)
+
+  private val sub1: AttributeSubscriptionType =
+    this.cellularAvailableProp.subscribe { _, _ ->
+      this.anyAvailableProp.set(
+        this.wifiAvailableProp.get() || this.cellularAvailableProp.get(),
+      )
+    }
+  private val sub0: AttributeSubscriptionType =
+    this.wifiAvailableProp.subscribe { _, _ ->
+      this.anyAvailableProp.set(
+        this.wifiAvailableProp.get() || this.cellularAvailableProp.get(),
+      )
+    }
+
   override val wifiAvailable: AttributeReadableType<Boolean>
     get() = this.wifiAvailableProp
 
@@ -40,6 +57,9 @@ object LSHTTPNetworkAccess : LSHTTPNetworkAccessType {
 
   override val cellularPermitted: AttributeReadableType<Boolean>
     get() = this.cellularPermittedProp
+
+  override val anyAvailable: AttributeReadableType<Boolean>
+    get() = this.anyAvailableProp
 
   override fun setWIFIPermitted(
     permitted: Boolean,

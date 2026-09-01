@@ -58,4 +58,20 @@ class LSHTTPNetworkAccessTest {
 
     Assertions.assertEquals(NETWORK_UNAVAILABLE, LSHTTPNetworkAccess.canUseNetwork())
   }
+
+  @Test
+  fun testAvailable0() {
+    LSHTTPNetworkAccess.setCellularAvailable(true)
+    LSHTTPNetworkAccess.setWIFIAvailable(true)
+    Assertions.assertTrue(LSHTTPNetworkAccess.anyAvailable.get())
+
+    LSHTTPNetworkAccess.setCellularAvailable(false)
+    Assertions.assertTrue(LSHTTPNetworkAccess.anyAvailable.get())
+
+    LSHTTPNetworkAccess.setWIFIAvailable(false)
+    Assertions.assertFalse(LSHTTPNetworkAccess.anyAvailable.get())
+
+    LSHTTPNetworkAccess.setCellularAvailable(true)
+    Assertions.assertTrue(LSHTTPNetworkAccess.anyAvailable.get())
+  }
 }
