@@ -41,6 +41,7 @@ class LSHTTPProblemReportParser(
     val typeNode = objectNode["type"]
     val titleNode = objectNode["title"]
     val detailNode = objectNode["detail"]
+    val showTitleNode = objectNode["show_title"]
 
     val status =
       if (statusNode != null && statusNode.canConvertToInt()) {
@@ -70,11 +71,28 @@ class LSHTTPProblemReportParser(
         null
       }
 
+    /*
+     * A Palace extension. Anything that is not an actual JSON boolean degrades to null,
+     * which `shouldShowTitle` treats as "show the title": the behaviour from before the
+     * extension existed. The flag is deliberately not allowed to fail the whole document:
+     * callers that lose a problem report lose the server's `detail` along with it, and on
+     * the sign-in path that means a patron blocked by library policy would be told their
+     * credentials were invalid instead of being shown their library's message.
+     */
+
+    val showTitle =
+      if (showTitleNode != null && showTitleNode.isBoolean) {
+        showTitleNode.booleanValue()
+      } else {
+        null
+      }
+
     return LSHTTPProblemReport(
       status = status,
       title = title,
       detail = detail,
       type = type,
+      showTitle = showTitle,
     )
   }
 
