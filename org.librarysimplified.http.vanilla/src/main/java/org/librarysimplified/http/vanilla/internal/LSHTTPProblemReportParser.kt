@@ -84,6 +84,13 @@ class LSHTTPProblemReportParser(
       if (showTitleNode != null && showTitleNode.isBoolean) {
         showTitleNode.booleanValue()
       } else {
+        if (showTitleNode != null && !showTitleNode.isNull) {
+          this.logger.warn(
+            "[{}]: ignoring non-boolean show_title of type {}",
+            this.uri,
+            showTitleNode.nodeType,
+          )
+        }
         null
       }
 

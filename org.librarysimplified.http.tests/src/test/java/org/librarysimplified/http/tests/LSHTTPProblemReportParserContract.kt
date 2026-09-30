@@ -142,34 +142,59 @@ abstract class LSHTTPProblemReportParserContract {
   }
 
   /**
-   * The `show_title` attribute appears in `toMap()` only when the server actually sent the
-   * member, so reports without the extension keep the exact attribute set that every
-   * existing consumer sees today.
+   * An explicit JSON `null` for `show_title` is treated as an absent member: the server has
+   * not asked for anything, so the pre-extension default stands.
    */
 
   @Test
-  fun testToMapShowTitle() {
+  fun testShowTitleNull() {
     val parsers = this.parsers()
-
-    val withoutFlag =
-      parsers.createParser(
-        "urn:test",
-        resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, "valid0.json"),
-      ).use(LSHTTPProblemReportParserType::execute)
-
-    Assertions.assertFalse(withoutFlag.toMap().containsKey("HTTP problem show title"))
-
-    val withFlag =
+    val status =
       parsers.createParser(
         "urn:test",
         resourceStreamOf(
           LSHTTPTestDirectories::class.java,
           this.testDirectory,
-          "showTitleFalse.json",
+          "showTitleNull.json",
         ),
       ).use(LSHTTPProblemReportParserType::execute)
 
-    Assertions.assertEquals("false", withFlag.toMap()["HTTP problem show title"])
+    Assertions.assertEquals(null, status.showTitle)
+    Assertions.assertTrue(status.shouldShowTitle)
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+  }
+
+  /**
+   * `show_title` never reaches `toMap()`. Those attributes are diagnostic, and are rendered
+   * verbatim onto the error page that patrons can open; a document asking for its title to be
+   * hidden must not be answered by putting the request itself on screen. Every document
+   * therefore yields the same attribute set, with or without the extension.
+   */
+
+  @Test
+  fun testToMapOmitsShowTitle() {
+    val parsers = this.parsers()
+
+    for (file in listOf("valid0.json", "showTitleFalse.json", "showTitleTrue.json")) {
+      val status =
+        parsers.createParser(
+          "urn:test",
+          resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, file),
+        ).use(LSHTTPProblemReportParserType::execute)
+
+      Assertions.assertEquals(
+        setOf(
+          "HTTP problem detail",
+          "HTTP problem status",
+          "HTTP problem title",
+          "HTTP problem type",
+        ),
+        status.toMap().keys,
+        file,
+      )
+    }
   }
 
   @Test

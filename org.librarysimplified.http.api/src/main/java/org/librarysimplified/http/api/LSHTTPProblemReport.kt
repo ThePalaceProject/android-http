@@ -27,6 +27,10 @@ data class LSHTTPProblemReport(
    * `true` when the server sent no `show_title` member, so documents that predate the
    * extension keep displaying a title exactly as they always have.
    *
+   * This says only what the server asked for, and is independent of whether [title] is
+   * actually present: a report with no title at all still reports `true` here. Callers
+   * must check [title] for null regardless of this value.
+   *
    * @see showTitle
    */
 
@@ -45,14 +49,26 @@ data class LSHTTPProblemReport(
     attributes["HTTP problem type"] = this.type.toString()
 
     /*
-     * Only present when the server actually sent the member, so reports without the
-     * extension keep the exact attribute set that every existing consumer sees today.
+     * Note that [showTitle] is deliberately _not_ included here. These attributes are
+     * diagnostic: they end up on the task recorder, and from there are rendered verbatim
+     * onto the error page that patrons can open. `show_title` is a rendering directive
+     * rather than a statement about what went wrong, and the documents that carry it are
+     * exactly the ones where a library has asked for less framing around its message, so
+     * surfacing it to the patron would work against the reason it exists.
      */
 
-    val showTitleNow = this.showTitle
-    if (showTitleNow != null) {
-      attributes["HTTP problem show title"] = showTitleNow.toString()
-    }
     return attributes.toMap()
+  }
+
+  companion object {
+
+    /*
+     * Pinned as of the addition of [showTitle]. Without an explicit value the JVM derives
+     * one from the class structure, so every future field addition would silently break
+     * deserialization of anything already written. Nothing persists these reports across
+     * versions today; this keeps it that way by choice rather than by luck.
+     */
+
+    private const val serialVersionUID: Long = 1L
   }
 }
