@@ -125,6 +125,15 @@
         <c:change date="2026-09-08T00:00:00+00:00" summary="Update build system and dependency catalog."/>
       </c:changes>
     </c:release>
+    <c:release date="2026-09-28T00:00:00+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.7.0">
+      <c:changes>
+        <c:change date="2026-09-28T00:00:00+00:00" summary="Parse the show_title problem report extension.">
+          <c:tickets>
+            <c:ticket id="PP-5235"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
+    </c:release>
   </c:releases>
   <c:ticket-systems>
     <c:ticket-system default="true" id="org.lyrasis.jira" url="https://ebce-lyrasis.atlassian.net/browse/"/>
