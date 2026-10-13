@@ -34,6 +34,14 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertEquals("You do not have enough credit.", status.title)
     Assertions.assertEquals("Your current balance is 30, but that costs 50.", status.detail)
     Assertions.assertEquals(200, status.status)
+
+    /*
+     * A document without the Palace `show_title` extension displays its title, exactly as
+     * it did before the extension existed.
+     */
+
+    Assertions.assertEquals(null, status.showTitle)
+    Assertions.assertTrue(status.shouldShowTitle)
   }
 
   @Test
@@ -49,6 +57,144 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertEquals(null, status.title)
     Assertions.assertEquals(null, status.detail)
     Assertions.assertEquals(null, status.status)
+    Assertions.assertEquals(null, status.showTitle)
+    Assertions.assertTrue(status.shouldShowTitle)
+  }
+
+  /**
+   * `show_title: false` is parsed, and asks callers to render `detail` on its own.
+   */
+
+  @Test
+  fun testShowTitleFalse() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleFalse.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertEquals(false, status.showTitle)
+    Assertions.assertFalse(status.shouldShowTitle)
+
+    /*
+     * The title is still parsed and still available; only its display is suppressed.
+     */
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+  }
+
+  /**
+   * `show_title: true` is parsed, and is equivalent to omitting the member.
+   */
+
+  @Test
+  fun testShowTitleTrue() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleTrue.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertEquals(true, status.showTitle)
+    Assertions.assertTrue(status.shouldShowTitle)
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+  }
+
+  /**
+   * A `show_title` that is not a boolean does not cost us the rest of the document. The
+   * flag degrades to "absent", and everything else parses as usual.
+   *
+   * This is the case that matters most on the sign-in path: a caller that loses the whole
+   * problem report also loses the server's `detail`, and a patron blocked by library policy
+   * would be told their credentials were invalid instead of seeing their library's message.
+   */
+
+  @Test
+  fun testShowTitleNotABoolean() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleInvalid.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertEquals(null, status.showTitle)
+    Assertions.assertTrue(status.shouldShowTitle)
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+    Assertions.assertEquals(403, status.status)
+  }
+
+  /**
+   * An explicit JSON `null` for `show_title` is treated as an absent member: the server has
+   * not asked for anything, so the pre-extension default stands.
+   */
+
+  @Test
+  fun testShowTitleNull() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleNull.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertEquals(null, status.showTitle)
+    Assertions.assertTrue(status.shouldShowTitle)
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+  }
+
+  /**
+   * `show_title` never reaches `toMap()`. Those attributes are diagnostic, and are rendered
+   * verbatim onto the error page that patrons can open; a document asking for its title to be
+   * hidden must not be answered by putting the request itself on screen. Every document
+   * therefore yields the same attribute set, with or without the extension.
+   */
+
+  @Test
+  fun testToMapOmitsShowTitle() {
+    val parsers = this.parsers()
+
+    for (file in listOf("valid0.json", "showTitleFalse.json", "showTitleTrue.json")) {
+      val status =
+        parsers.createParser(
+          "urn:test",
+          resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, file),
+        ).use(LSHTTPProblemReportParserType::execute)
+
+      Assertions.assertEquals(
+        setOf(
+          "HTTP problem detail",
+          "HTTP problem status",
+          "HTTP problem title",
+          "HTTP problem type",
+        ),
+        status.toMap().keys,
+        file,
+      )
+    }
   }
 
   @Test
