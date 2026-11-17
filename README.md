@@ -60,7 +60,7 @@ support the use of any other IDE at the moment.
 
 #### JDK
 
-Install a reasonably modern JDK: Java 17 is the current recommendation for Android Studio.
+The build requires JDK 25; the code is compiled to Java 11 bytecode.
 
 The `JAVA_HOME` environment variable must be set correctly. You can check what it is set to in
 most shells with `echo $JAVA_HOME`. If that command does not show anything, adding the following
@@ -68,8 +68,8 @@ line to `$HOME/.profile` and then executing `source $HOME/.profile` or opening a
 should suffice:
 
 ~~~w
-# Replace NNN with your particular version of 17.
-export JAVA_HOME=/path/to/jdk17_NNN
+# Replace NNN with your particular version of 25.
+export JAVA_HOME=/path/to/jdk25_NNN
 ~~~
 
 You can verify that everything is set up correctly by inspecting the results of both
@@ -77,9 +77,9 @@ You can verify that everything is set up correctly by inspecting the results of 
 
 ~~~
 $ java -version
-openjdk version "17.0.8" 2023-07-18
-OpenJDK Runtime Environment (build 17.0.8+7)
-OpenJDK 64-Bit Server VM (build 17.0.8+7, mixed mode)
+openjdk version "25.0.4.1" 2026-08-18 LTS
+OpenJDK Runtime Environment (Red_Hat-25.0.4.1.1-1) (build 25.0.4.1+1-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-25.0.4.1.1-1) (build 25.0.4.1+1-LTS, mixed mode, sharing)
 ~~~
 
 ### Branching/Merging

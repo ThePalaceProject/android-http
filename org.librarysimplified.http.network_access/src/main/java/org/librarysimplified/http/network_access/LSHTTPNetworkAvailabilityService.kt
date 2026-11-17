@@ -19,6 +19,10 @@ class LSHTTPNetworkAvailabilityService : Service() {
   private val logger =
     LoggerFactory.getLogger(LSHTTPNetworkAvailabilityService::class.java)
 
+  private var connectivityManager: ConnectivityManager? = null
+  private var cellularCallback: ConnectivityManager.NetworkCallback? = null
+  private var wifiCallback: ConnectivityManager.NetworkCallback? = null
+
   companion object {
     private val isRunning =
       AtomicBoolean(false)
@@ -120,12 +124,17 @@ class LSHTTPNetworkAvailabilityService : Service() {
         val connectivityManager =
           this.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
 
+        this.connectivityManager = connectivityManager
+        this.cellularCallback = cellularCallback
+        this.wifiCallback = wifiCallback
+
         connectivityManager.requestNetwork(wifiRequest, wifiCallback)
         connectivityManager.requestNetwork(cellularRequest, cellularCallback)
 
         this.determineInitialNetworkState(connectivityManager)
       } catch (e: Throwable) {
         this.logger.debug("Failed to start network service: ", e)
+        this.unregisterNetworkCallbacks()
         isRunning.set(false)
       }
     } else {
@@ -175,6 +184,36 @@ class LSHTTPNetworkAvailabilityService : Service() {
 
     LSHTTPNetworkAccess.setWIFIAvailable(wifiAvailable)
     LSHTTPNetworkAccess.setCellularAvailable(cellularAvailable)
+  }
+
+  /**
+   * Unregisters any registered network callbacks and clears the fields that hold
+   * them. Safe to call when nothing is registered (unregistering an unknown
+   * callback is a no-op).
+   */
+  private fun unregisterNetworkCallbacks() {
+    val cm = this.connectivityManager
+    if (cm != null) {
+      try {
+        this.cellularCallback?.let { cm.unregisterNetworkCallback(it) }
+        this.wifiCallback?.let { cm.unregisterNetworkCallback(it) }
+      } catch (e: Throwable) {
+        this.logger.debug("Failed to unregister network callbacks: ", e)
+      }
+    }
+    this.connectivityManager = null
+    this.cellularCallback = null
+    this.wifiCallback = null
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    this.logger.debug("Destroying network access service…")
+    this.unregisterNetworkCallbacks()
+    // Reset the running flag so that a subsequent (re)start — for example when the
+    // app returns to the foreground after the system has stopped this background
+    // service — will re-register the network callbacks instead of being ignored.
+    isRunning.set(false)
   }
 
   override fun onBind(intent: Intent?): IBinder? {
