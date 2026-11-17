@@ -72,12 +72,9 @@ class LSHTTPProblemReportParser(
       }
 
     /*
-     * A Palace extension. Anything that is not an actual JSON boolean degrades to null,
-     * which `shouldShowTitle` treats as "show the title": the behaviour from before the
-     * extension existed. The flag is deliberately not allowed to fail the whole document:
-     * callers that lose a problem report lose the server's `detail` along with it, and on
-     * the sign-in path that means a patron blocked by library policy would be told their
-     * credentials were invalid instead of being shown their library's message.
+     * A Palace extension. Anything that is not an actual JSON boolean is treated as if the
+     * member were absent: the flag must not be allowed to fail the whole document, because
+     * callers that lose a problem report lose the server's `detail` along with it.
      */
 
     val showTitle =
@@ -91,7 +88,7 @@ class LSHTTPProblemReportParser(
             showTitleNode.nodeType,
           )
         }
-        null
+        true
       }
 
     return LSHTTPProblemReport(
