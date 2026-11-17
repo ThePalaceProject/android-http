@@ -71,12 +71,6 @@ class LSHTTPProblemReportParser(
         null
       }
 
-    /*
-     * A Palace extension. Anything that is not an actual JSON boolean is treated as if the
-     * member were absent: the flag must not be allowed to fail the whole document, because
-     * callers that lose a problem report lose the server's `detail` along with it.
-     */
-
     val showTitle =
       if (showTitleNode != null && showTitleNode.isBoolean) {
         showTitleNode.booleanValue()

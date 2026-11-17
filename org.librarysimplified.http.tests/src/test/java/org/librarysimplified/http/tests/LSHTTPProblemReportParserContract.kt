@@ -54,10 +54,6 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertTrue(status.showTitle)
   }
 
-  /**
-   * `show_title: false` is parsed, and asks callers to render `detail` on its own.
-   */
-
   @Test
   fun testShowTitleFalse() {
     val parsers = this.parsers()
@@ -73,17 +69,9 @@ abstract class LSHTTPProblemReportParserContract {
 
     Assertions.assertFalse(status.showTitle)
 
-    /*
-     * The title is still parsed and still available; only its display is suppressed.
-     */
-
     Assertions.assertEquals("Blocked by library policy.", status.title)
     Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
   }
-
-  /**
-   * `show_title: true` is parsed, and is equivalent to omitting the member.
-   */
 
   @Test
   fun testShowTitleTrue() {
@@ -101,11 +89,6 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertTrue(status.showTitle)
     Assertions.assertEquals("Blocked by library policy.", status.title)
   }
-
-  /**
-   * A `show_title` that is not a boolean does not cost us the rest of the document: the flag
-   * takes its default, and everything else parses as usual.
-   */
 
   @Test
   fun testShowTitleNotABoolean() {
@@ -127,10 +110,6 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertEquals(403, status.status)
   }
 
-  /**
-   * An explicit JSON `null` for `show_title` is treated as an absent member.
-   */
-
   @Test
   fun testShowTitleNull() {
     val parsers = this.parsers()
@@ -149,10 +128,6 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertEquals("Blocked by library policy.", status.title)
     Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
   }
-
-  /**
-   * `show_title` does not appear in `toMap()`; every document yields the same attributes.
-   */
 
   @Test
   fun testToMapOmitsShowTitle() {
