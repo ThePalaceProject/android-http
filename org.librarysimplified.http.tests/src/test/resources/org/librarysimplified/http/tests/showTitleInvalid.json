@@ -1,0 +1,7 @@
+{
+  "type": "http://librarysimplified.org/terms/problem/credentials-blocked-by-policy",
+  "title": "Blocked by library policy.",
+  "status": 403,
+  "detail": "Please sign in at your local library instead.",
+  "show_title": "false"
+}

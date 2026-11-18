@@ -34,6 +34,8 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertEquals("You do not have enough credit.", status.title)
     Assertions.assertEquals("Your current balance is 30, but that costs 50.", status.detail)
     Assertions.assertEquals(200, status.status)
+
+    Assertions.assertTrue(status.showTitle)
   }
 
   @Test
@@ -49,6 +51,106 @@ abstract class LSHTTPProblemReportParserContract {
     Assertions.assertEquals(null, status.title)
     Assertions.assertEquals(null, status.detail)
     Assertions.assertEquals(null, status.status)
+    Assertions.assertTrue(status.showTitle)
+  }
+
+  @Test
+  fun testShowTitleFalse() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleFalse.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertFalse(status.showTitle)
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+  }
+
+  @Test
+  fun testShowTitleTrue() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleTrue.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertTrue(status.showTitle)
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+  }
+
+  @Test
+  fun testShowTitleNotABoolean() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleInvalid.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertTrue(status.showTitle)
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+    Assertions.assertEquals(403, status.status)
+  }
+
+  @Test
+  fun testShowTitleNull() {
+    val parsers = this.parsers()
+    val status =
+      parsers.createParser(
+        "urn:test",
+        resourceStreamOf(
+          LSHTTPTestDirectories::class.java,
+          this.testDirectory,
+          "showTitleNull.json",
+        ),
+      ).use(LSHTTPProblemReportParserType::execute)
+
+    Assertions.assertTrue(status.showTitle)
+
+    Assertions.assertEquals("Blocked by library policy.", status.title)
+    Assertions.assertEquals("Please sign in at your local library instead.", status.detail)
+  }
+
+  @Test
+  fun testToMapOmitsShowTitle() {
+    val parsers = this.parsers()
+
+    for (file in listOf("valid0.json", "showTitleFalse.json", "showTitleTrue.json")) {
+      val status =
+        parsers.createParser(
+          "urn:test",
+          resourceStreamOf(LSHTTPTestDirectories::class.java, this.testDirectory, file),
+        ).use(LSHTTPProblemReportParserType::execute)
+
+      Assertions.assertEquals(
+        setOf(
+          "HTTP problem detail",
+          "HTTP problem status",
+          "HTTP problem title",
+          "HTTP problem type",
+        ),
+        status.toMap().keys,
+        file,
+      )
+    }
   }
 
   @Test

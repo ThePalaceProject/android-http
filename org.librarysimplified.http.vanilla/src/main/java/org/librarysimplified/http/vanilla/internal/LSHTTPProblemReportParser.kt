@@ -41,6 +41,7 @@ class LSHTTPProblemReportParser(
     val typeNode = objectNode["type"]
     val titleNode = objectNode["title"]
     val detailNode = objectNode["detail"]
+    val showTitleNode = objectNode["show_title"]
 
     val status =
       if (statusNode != null && statusNode.canConvertToInt()) {
@@ -70,11 +71,26 @@ class LSHTTPProblemReportParser(
         null
       }
 
+    val showTitle =
+      if (showTitleNode != null && showTitleNode.isBoolean) {
+        showTitleNode.booleanValue()
+      } else {
+        if (showTitleNode != null && !showTitleNode.isNull) {
+          this.logger.warn(
+            "[{}]: ignoring non-boolean show_title of type {}",
+            this.uri,
+            showTitleNode.nodeType,
+          )
+        }
+        true
+      }
+
     return LSHTTPProblemReport(
       status = status,
       title = title,
       detail = detail,
       type = type,
+      showTitle = showTitle,
     )
   }
 
