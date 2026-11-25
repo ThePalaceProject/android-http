@@ -125,12 +125,12 @@
         <c:change date="2026-09-08T00:00:00+00:00" summary="Update build system and dependency catalog."/>
       </c:changes>
     </c:release>
-    <c:release date="2026-11-10T11:15:59+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="2.7.0">
+    <c:release date="2026-11-10T00:00:00+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="2.7.0">
       <c:changes>
         <c:change date="2026-11-10T00:00:00+00:00" summary="Allow the network availability service to be stopped."/>
       </c:changes>
     </c:release>
-    <c:release date="2026-11-17T00:00:00+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.8.0">
+    <c:release date="2026-11-25T00:00:00+00:00" is-open="false" ticket-system="org.lyrasis.jira" version="2.8.0">
       <c:changes>
         <c:change date="2026-11-17T00:00:00+00:00" summary="Parse the show_title problem report extension.">
           <c:tickets>
@@ -138,6 +138,9 @@
           </c:tickets>
         </c:change>
       </c:changes>
+    </c:release>
+    <c:release date="2026-11-25T11:49:32+00:00" is-open="true" ticket-system="org.lyrasis.jira" version="2.9.0">
+      <c:changes/>
     </c:release>
   </c:releases>
   <c:ticket-systems>
